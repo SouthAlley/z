@@ -117,7 +117,7 @@ jobs:
 
     - name: Run Python script
       run: |
-        python .github/workflows/Scripts/z.py  # 将此替换为您的 Python 脚本的实际文件名
+        python Scripts/z.py  # 将此替换为您的 Python 脚本的实际文件名
 
             
     - name: Add and Commits
