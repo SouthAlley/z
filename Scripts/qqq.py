@@ -1,5 +1,5 @@
 # 从文件中读取域名规则列表
-with open('https://raw.githubusercontent.com/SouthAlley/z/main/Surge/Rule/MyBlockAds.list', 'r') as file:
+with open('Surge/Rule/MyBlockAds.list', 'r') as file:
     rules = file.read().splitlines()
 
 # 定义规则顺序
