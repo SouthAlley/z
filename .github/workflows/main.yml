@@ -121,9 +121,6 @@ jobs:
           fi
         done
 
-    - name: Run Python
-      run: |
-        python Scripts/qqq.py
             
     - name: Add and Commits
       run: |
@@ -137,6 +134,10 @@ jobs:
         else
           echo "No changes to commit."
         fi
+
+    - name: Run Python
+      run: |
+        python Scripts/qqq.py
     
     - name: Cleanup Workflow
       uses: Mattraks/delete-workflow-runs@main
