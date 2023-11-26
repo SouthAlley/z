@@ -144,3 +144,12 @@ jobs:
       with:
         retain_days: 0
         keep_minimum_runs: 2
+
+  trigger_second_workflow:
+    needs: Fork-FLITER-list
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Second Workflow
+        uses: srt32/workflow-dispatch@v1
+        with:
+          workflow: 'maina.yml'
