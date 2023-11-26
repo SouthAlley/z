@@ -22,10 +22,6 @@ jobs:
       with:
           python-version: 3.8
 
-    - name: Run Python
-      run: |
-        python qqq.py
-
 
     - name: Download file to Surge
       run: |
@@ -120,7 +116,9 @@ jobs:
           fi
         done
 
-
+    - name: Run Python
+      run: |
+        python Scripts/qqq.py
             
     - name: Add and Commits
       run: |
