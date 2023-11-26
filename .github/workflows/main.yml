@@ -25,10 +25,11 @@ jobs:
       run: |
           python -m pip install --upgrade pip
           pip install requests lxml
+    - name: Run Python
+      run: |
+          python z.py
 
 
-
-   
     - name: Download file to Surge
       run: |
         mkdir -p z-repo/Surge/Rule
@@ -122,10 +123,6 @@ jobs:
           fi
         done
 
-
-    - name: Run Python
-      run: |
-          python Scripts/z.py
 
             
     - name: Add and Commits
