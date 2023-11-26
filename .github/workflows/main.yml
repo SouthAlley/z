@@ -145,11 +145,13 @@ jobs:
         retain_days: 0
         keep_minimum_runs: 2
 
+
   trigger_second_workflow:
-    needs: Fork-FLITER-list
     runs-on: ubuntu-latest
+    needs: Fork-FLITER-list
     steps:
-      - name: Trigger Second Workflow
-        uses: srt32/workflow-dispatch@v1
-        with:
-          workflow: 'maina.yml'
+      - name: 触发第二个工作流
+        run: echo "触发第二个工作流"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
