@@ -17,16 +17,6 @@ jobs:
         path: z-repo
 
 
-    - uses: actions/checkout@v3
-    - name: Setup Python
-      uses: actions/setup-python@v4.7.1
-      with:
-          python-version: 3.12
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests lxml
-
 
     - name: Download file to Surge
       run: |
@@ -135,9 +125,6 @@ jobs:
           echo "No changes to commit."
         fi
 
-    - name: Run Python
-      run: |
-        python Scripts/qqq.py
     
     - name: Cleanup Workflow
       uses: Mattraks/delete-workflow-runs@main
