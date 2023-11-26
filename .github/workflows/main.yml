@@ -27,7 +27,7 @@ jobs:
           pip install requests lxml
     - name: Run Python
       run: |
-          python z.py
+        python Scripts/qqq.py
 
 
     - name: Download file to Surge
