@@ -1,5 +1,8 @@
+# 定义文件路径
+file_path = 'Suge/Rule/MyBlockAds.list'
+
 # 从文件中读取域名规则列表
-with open('Surge/Rule/MyBlockAds.list', 'r') as file:
+with open(file_path, 'r') as file:
     rules = file.read().splitlines()
 
 # 定义规则顺序
@@ -11,6 +14,9 @@ sorted_rules = sorted(
     key=lambda x: rule_order.index(x.split(',')[0])
 )
 
-# 输出排序后的规则
-for rule in sorted_rules:
-    print(rule)
+# 将排序后的规则写回原文件
+with open(file_path, 'w') as file:
+    for rule in sorted_rules:
+        file.write(rule + '\n')
+
+print(f"Sorted rules have been written back to {file_path}")
