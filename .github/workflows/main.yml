@@ -16,10 +16,20 @@ jobs:
         repository: SouthAlley/z
         path: z-repo
 
-    - name: Setup Python
-      uses: actions/setup-python@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.8
+          python-version: 3.8
+    - name: Install dependencies
+      run: |
+          python -m pip install --upgrade pip
+          pip install requests lxml
+    - name: Run Python
+      run: |
+          python Scripts/z.py
+
+
    
     - name: Download file to Surge
       run: |
