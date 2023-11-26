@@ -1,7 +1,7 @@
 name: 更新
 on:
   workflow_run:
-    workflows: ["Fork-FLITER-list"]
+    workflows: ["Fork Filter lists"]
     types:
       - completed
 
