@@ -7,7 +7,7 @@ rule_order = ['DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'IP-CIDR', 'USER-AGEN
 
 # 对规则进行排序
 sorted_rules = sorted(
-    filter(lambda x: x.split(',')[0] in rule_order, rules),
+    (rule for rule in rules if rule.split(',')[0] in rule_order),
     key=lambda x: rule_order.index(x.split(',')[0])
 )
 
