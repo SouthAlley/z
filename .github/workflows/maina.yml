@@ -1,8 +1,9 @@
 name: 更新
-on: 
-  workflow_dispatch:
-  schedule:
-    - cron: "0 1 * * *"
+on:
+  workflow_run:
+    workflows: ["Fork-FLITER-list"]
+    types:
+      - completed
 
 jobs:
   build: 
