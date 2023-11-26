@@ -1,5 +1,5 @@
 # 定义文件路径
-file_path = 'Suge/Rule/MyBlockAds.list'
+file_path = 'Surge/Rule/MyBlockAds.list'
 
 # 从文件中读取域名规则列表
 with open(file_path, 'r') as file:
