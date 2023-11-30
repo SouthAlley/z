@@ -28,12 +28,12 @@ jobs:
           git checkout main
           git branch -D temp
 
-          
-    - name: Push to target repository
+
+    - name: Push Scripts to Your Repository
       run: |
-          cd Scripts/RuCu6  # 进入Scripts/RuCu6目录
-          git init
-          git add .  # 添加所有更改
-          git commit -m "Sync with RuCu6/QuanX"  # 提交更改
-          git push --force origin main  # 推送更改到目标仓库的main分支
+          mkdir -p Scripts/RuCu6  # 创建目录（如果不存在）
+          cp -r Scripts/* Scripts/RuCu6/  # 复制脚本文件到目标目录
+          git add z/Scripts/RuCu6  # 将目标目录添加到暂存区
+          git commit -m "Sync Scripts from RuCu6/QuanX"
+          git push origin main  # 推送到主分支
 
