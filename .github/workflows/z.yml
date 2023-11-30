@@ -1,0 +1,36 @@
+name: Process and Push Script
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 时间 00:00 运行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14'
+
+    - name: Fetch Remote File
+      run: |
+        curl -o filename.conf https://github.com/zZPiglet/Task/blob/master/UnblockURLinWeChat.conf
+
+    - name: Run Scripts
+      run: |
+        node Rewrite-Parser.js
+        node script-converter.js
+
+    - name: Push Changes
+      run: |
+        git config --local user.email "you@example.com"
+        git config --local user.name "Your Name"
+        git add .
+        git commit -m "Update processed file"
+        git push
