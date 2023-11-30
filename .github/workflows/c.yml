@@ -22,20 +22,17 @@ jobs:
    
     - name: Pull Scripts from RuCu6/QuanX
       run: |
-          git remote add upstream https://github.com/RuCu6/QuanX.git
-          git fetch upstream main:temp
-          git checkout temp -- Scripts
-          git checkout main
-          git branch -D temp
+        git remote add upstream https://github.com/RuCu6/QuanX.git
+        git fetch upstream main:temp
+        git checkout temp -- Scripts
+        git checkout main
+        mkdir -p Scripts/RuCu6  # 创建 Scripts/RuCu6 目录，如果不存在的话
+        mv Scripts/* Scripts/RuCu6/  # 将 Scripts 目录下的文件移动到 Scripts/RuCu6 目录下
+        git add Scripts/RuCu6/*  # 添加新的文件到暂存区
+        git commit -m "Move Scripts to Scripts/RuCu6"
+        git push origin main
+        git branch -D temp
 
-
-    - name: Push Scripts to Your Repository
-      run: |
-        mkdir -p Scripts/RuCu6  # 创建目录（如果不存在）
-        rsync -a Scripts/ Scripts/RuCu6/ --exclude RuCu6/
-        git add Scripts/RuCu6/*  # 将目标目录中的文件添加到暂存区
-        git commit -m "Sync Scripts to Scripts/RuCu6"
-        git push origin main  # 推送到主分支
 
 
 
