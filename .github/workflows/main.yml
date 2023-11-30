@@ -23,11 +23,17 @@ jobs:
         run: |
           npm install -g @open-wa/wa-automate # 安装自动化脚本的依赖
           npm install -g @open-wa/wa-automate-cli # 安装自动化脚本的 CLI 工具
-
+          
+          
       - name: Run Conversion Script
         run: |
-          # 执行自动化脚本
-          wa-automate-cli convert-remote-resources --input-url "https://example.com/resource.js" --output-file "converted.js"
+         # 执行自动化脚本
+          wa-automate-cli convert-remote-resources \
+            --input-url "https://example.com/resource.js" \ # 输入远程资源的 URL
+            --output-file "converted.js" # 输出文件的名称，可以根据需要自定义
+
+
+
 
       - name: Commit Changes
         run: |
