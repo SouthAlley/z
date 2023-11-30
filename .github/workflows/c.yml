@@ -2,9 +2,6 @@ name: Sync Repository
 
 on:
   workflow_dispatch:
-  schedule:
-    # 设置定时触发，这里是每天的 UTC 时间 0:00（可根据需要调整）
-    - cron: '0 0 * * *'
 
 jobs:
   Fork-Filter-list:
