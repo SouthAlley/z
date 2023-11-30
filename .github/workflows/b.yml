@@ -1,0 +1,36 @@
+name: Combined Sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  Sync-Repositories:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout target repository
+      uses: actions/checkout@v4.1.0
+
+    - name: Copy lodepuly Scripts
+      run: |
+        mkdir -p Scripts
+        git clone https://gitlab.com/lodepuly/vpn_tool.git lodepuly_Tmp
+        cp -r lodepuly_Tmp/Resource/Script/* Scripts/lodepuly
+        rm -rf lodepuly_Tmp
+
+    - name: Copy RuCu6 Scripts
+      run: |
+        mkdir -p Scripts
+        git clone https://github.com/RuCu6/QuanX.git RuCu6_Tmp
+        cp -r RuCu6_Tmp/Scripts/* Scripts/RuCu6
+        rm -rf RuCu6_Tmp
+      
+    - name: Commit and push changes
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add -A
+        git commit -m "Copy lodepuly and RuCu6 Scripts"
+        git push
