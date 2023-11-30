@@ -23,8 +23,8 @@ jobs:
         
     - name: Run Scripts
       run: |
-        node Rewrite-Parser.js
-        node script-converter.js
+        node x/Rewrite-Parser.js
+        node x/script-converter.js
 
     - name: Push Changes
       run: |
