@@ -24,13 +24,12 @@ jobs:
       run: |
           git remote add upstream https://github.com/RuCu6/QuanX.git
           git fetch upstream main:temp
-          mkdir temp_scripts  # 创建临时目录
-          git --work-tree=temp_scripts checkout temp -- Scripts
+          git checkout temp -- Scripts
           
     - name: Push Scripts to Your Repository
       run: |
         mkdir -p Scripts/RuCu6
-        rsync -a temp_scripts/Scripts/RuCu6/
+        rsync -a Scripts/ Scripts/RuCu6/
         git add Scripts/RuCu6/*
         git commit -m "Sync Scripts to Scripts/RuCu6"
         git push origin main
