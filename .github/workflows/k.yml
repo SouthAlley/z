@@ -14,7 +14,7 @@ jobs:
     - name: Checkout target repository
       uses: actions/checkout@v4.1.0
 
-    - name: Copy RuCu6 Scripts
+    - name: Copy lodepuly Scripts
       run: |
         mkdir -p Scripts
         git clone https://gitlab.com/lodepuly/vpn_tool.git lodepuly_Tmp
@@ -26,5 +26,5 @@ jobs:
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
         git add -A
-        git commit -m "Copy RuCu6 Scripts"
+        git commit -m "Copy lodepuly Scripts"
         git push
