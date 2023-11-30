@@ -18,7 +18,7 @@ jobs:
       run: |
         mkdir -p Scripts
         git clone https://github.com/RuCu6/QuanX.git RuCu6_Tmp
-        cp -r RuCu6_Tmp/Scripts/* Scripts/
+        cp -r RuCu6_Tmp/Scripts/* Scripts/RuCu6
         rm -rf RuCu6_Tmp
       
     - name: Commit and push changes
