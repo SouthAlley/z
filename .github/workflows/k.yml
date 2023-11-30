@@ -1,0 +1,30 @@
+name: Sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 设置定时触发，这里是每天的 UTC 时间 0:00（可根据需要调整）
+    - cron: '0 0 * * *'
+
+jobs:
+  Fork-Filter-list:
+    runs-on: ubuntu-latest
+    
+    steps: 
+    - name: Checkout target repository
+      uses: actions/checkout@v4.1.0
+
+    - name: Copy RuCu6 Scripts
+      run: |
+        mkdir -p Scripts
+        git clone https://gitlab.com/lodepuly/vpn_tool.git lodepuly_Tmp
+        cp -r lodepuly_Tmp/Resource/Script/* Scripts/lodepuly
+        rm -rf lodepuly_Tmp
+      
+    - name: Commit and push changes
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add -A
+        git commit -m "Copy RuCu6 Scripts"
+        git push
