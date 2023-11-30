@@ -30,7 +30,7 @@ jobs:
     - name: Push Scripts to Your Repository
       run: |
         mkdir -p Scripts/RuCu6
-        rsync -a temp_scripts/Scripts/ Scripts/RuCu6/
+        rsync -a temp_scripts/Scripts/RuCu6/
         git add Scripts/RuCu6/*
         git commit -m "Sync Scripts to Scripts/RuCu6"
         git push origin main
