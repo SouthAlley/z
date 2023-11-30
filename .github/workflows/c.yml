@@ -1,0 +1,20 @@
+name: Sync Repository
+
+on:
+  schedule:
+    # 设置定时触发，这里是每天的 UTC 时间 0:00（可根据需要调整）
+    - cron: '0 0 * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Pull remote repository
+        run: |
+          git remote add upstream https://github.com/RuCu6/QuanX.git
+          git pull upstream main/Scripts
+          git push origin HEAD:z/Scripts
