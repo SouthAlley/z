@@ -1,8 +1,7 @@
 name: Process and Push Script
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'  # 每天 UTC 时间 00:00 运行
 
@@ -20,8 +19,8 @@ jobs:
 
     - name: Fetch Remote File
       run: |
-        curl -o filename.conf https://github.com/zZPiglet/Task/blob/master/UnblockURLinWeChat.conf
-
+        curl -o filename.conf https://raw.githubusercontent.com/zZPiglet/Task/master/UnblockURLinWeChat.conf
+        
     - name: Run Scripts
       run: |
         node Rewrite-Parser.js
@@ -29,8 +28,8 @@ jobs:
 
     - name: Push Changes
       run: |
-        git config --local user.email "you@example.com"
-        git config --local user.name "Your Name"
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         git add .
         git commit -m "Update processed file"
         git push
