@@ -16,6 +16,6 @@ jobs:
 
       - name: Pull remote repository
         run: |
-          git remote add upstream https://github.com/RuCu6/QuanX.git
-          git pull upstream main/Scripts
-          git push origin HEAD:z/Scripts
+          git fetch upstream main/Scripts
+          git checkout -b z/Scripts upstream/main/Scripts
+          git push origin z/Scripts
