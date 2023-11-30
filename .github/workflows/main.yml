@@ -1,148 +1,39 @@
-name: Fork Filter lists
+name: Convert Remote Resources
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 2 * * *"
-  
+    - cron: "0 */6 * * *"
+
+    
 jobs:
-  Fork-FLITER-list:
-    runs-on: ubuntu-latest
-    
-    steps: 
-    - name: Checkout target repository
-      uses: actions/checkout@v4.1.0
-      with:
-        repository: SouthAlley/z
-        path: z-repo
-      
-    - name: Setup Python
-      uses: actions/setup-python@v4.7.1
-      with:
-        python-version: 3.12
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests lxml
-          
+  convert-resources:
+    runs-on: ubuntu-latest # 使用 Ubuntu 环境运行作业
 
-    - name: Download file to Surge
-      run: |
-        mkdir -p z-repo/Surge/Rule
-        # 广告规则 
-        curl -L -o z-repo/Surge/Rule/MyBlockAds.list "https://raw.githubusercontent.com/RuCu6/QuanX/main/Rules/MyBlockAds.list"
-        
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2 # 检出仓库
 
-    - name: Edit Surge/Rule
-      run: |
-        cd z-repo/Surge/Rule
-        for file in *.list; do
-          if [ -f "$file" ]; then
-            # 修改, 为,
-            sed -i 's/, /,/g' "$file"
-            # 修改为大写
-            sed -i 's/host/HOST/g' "$file"
-            sed -i 's/suffix/SUFFIX/g' "$file"
-            sed -i 's/keyword/KEYWORD/g' "$file"
-            sed -i 's/reject/REJECT/g' "$file"
-            sed -i 's/ip-cidr/IP-CIDR/g' "$file"
-            sed -i 's/ip-dier/IP-CIDR/g' "$file"
-            # 删除不必要的部分
-            sed -i 's/,REJECT//g' "$file"
-            # 修改HOST为DOMAIN
-            sed -i 's/HOST,/DOMAIN,/g' "$file"
-            sed -i 's/HOST-/DOMAIN-/g' "$file"
-            # 修改IP6-CIDR为IP-CIDR6
-            sed -i 's/IP6-CIDR,/IP-CIDR6,/g' "$file"
-            # 如果包含IP-CIDR且不包含,no-resolve 则添加,no-resolve
-            sed -i '/IP-CIDR/ {/no-resolve/! s/$/,no-resolve/}; /IP-CIDR6/ {/no-resolve/! s/$/,no-resolve/}' "$file"
-            # 修改;为#
-            sed -i 's/;/# /g' "$file"
-          else
-            echo "$file not found."
-          fi
-        done
+      - name: Set Up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14 # 安装 Node.js 14
 
-    - name: Edit Surge/Rule to RuleSet
-      run: |
-        cd z-repo/Surge/Rule
-        for file in Advertising.list; do
-          if [ -f "$file" ]; then
-            # 删除 DOMIAN
-            awk '{sub("DOMAIN,.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            awk '{sub("DOMAIN-SUFFIX,.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            # 删除注释
-            sed -i 's/#.*//' "$file"
-            # 删除空行
-            sed -i '/^[[:space:]]*$/d' "$file"
-          else
-            echo "$file not found."
-          fi
-        done
+      - name: Install Dependencies
+        run: |
+          npm install -g @open-wa/wa-automate # 安装自动化脚本的依赖
+          npm install -g @open-wa/wa-automate-cli # 安装自动化脚本的 CLI 工具
 
-    - name: Edit Surge/Rule to Domain
-      run: |
-        cd z-repo/Surge/Rule
-        for file in *_Domain.list; do
-          if [ -f "$file" ]; then
-            # DOMAIN, 移除
-            sed -i 's/DOMAIN,//g' "$file"
-            # DOMAIN-SUFFIX, 替换为 .
-            sed -i 's/DOMAIN-SUFFIX,/./g' "$file"
-            # 删除规则
-            awk '{sub("PROCESS-NAME.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            awk '{sub("DOMAIN-KEYWORD.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            awk '{sub("IP-CIDR,.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            awk '{sub("IP-CIDR6,.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            awk '{sub("IP-ASN.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            awk '{sub("URL-REGEX.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            awk '{sub("USER-AGENT.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            awk '{sub("OR,.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            awk '{sub("AND,.*$", ""); print}' "$file" > tmpfile
-            mv tmpfile "$file"
-            # 删除注释
-            sed -i 's/#.*//' "$file"
-            # 删除空行
-            sed -i '/^[[:space:]]*$/d' "$file"
-          else
-            echo "$file not found."
-          fi
-        done
-        
-    - name: Run Python
-      run: |
-        python Scripts/qqq.py
+      - name: Run Conversion Script
+        run: |
+          # 执行自动化脚本
+          wa-automate-cli convert-remote-resources --input-url "https://example.com/resource.js" --output-file "converted.js"
 
-            
-    - name: Add and Commits
-      run: |
-        cd z-repo
-        if [[ -n $(git status -s) ]]; then
-          git config --local user.email "taylor243612@gmail.com"
-          git config --local user.name "SouthAlley"
-          git add Surge/Rule/* 
-          git commit -m "Update"
-          git push origin HEAD
-        else
-          echo "No changes to commit."
-        fi
-
-    
-    - name: Cleanup Workflow
-      uses: Mattraks/delete-workflow-runs@main
-      with:
-        retain_days: 0
-        keep_minimum_runs: 2
-
+      - name: Commit Changes
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git add converted.js
+          git commit -m "Convert remote resources"
+          git push
 
