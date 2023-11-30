@@ -31,9 +31,9 @@ jobs:
 
     - name: Push Scripts to Your Repository
       run: |
-          mkdir -p Scripts/RuCu6  # 创建目录（如果不存在）
-          cp -r Scripts/* Scripts/RuCu6/  # 复制脚本文件到目标目录
-          git add z/Scripts/RuCu6  # 将目标目录添加到暂存区
+          mkdir -p z/Scripts/RuCu6  # 创建目录（如果不存在）
+          cp -r Scripts/* z/Scripts/RuCu6/  # 复制脚本文件到目标目录
+          git add Scripts/RuCu6  # 将目标目录添加到暂存区
           git commit -m "Sync Scripts from RuCu6/QuanX"
           git push origin main  # 推送到主分支
 
