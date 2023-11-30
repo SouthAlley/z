@@ -16,7 +16,7 @@ jobs:
 
     - name: Pull content from RuCu6/QuanX
       run: |
-        git remote add upstream https://github.com/RuCu6/QuanX.git
+        git clone https://github.com/RuCu6/QuanX.git
         git pull upstream QuanX/Scripts
 
     - name: Push to your repository
