@@ -32,4 +32,4 @@ jobs:
       run: |
           git add Scripts
           git commit -m "Sync Scripts from RuCu6/QuanX"
-          git push origin main
+          git push main Scripts/RuCu6
