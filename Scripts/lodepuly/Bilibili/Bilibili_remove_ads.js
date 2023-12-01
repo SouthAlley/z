@@ -1,7 +1,7 @@
 /*
 引用地址：https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/bilibili/bili.js
 */
-// 2023-11-30 01:00
+// 2023-11-30 16:25:13
 
 const url = $request.url;
 if (!$response.body) $done({});
@@ -16,14 +16,16 @@ if (url.includes("/x/resource/show/skin")) {
   // 底部选项卡
   if (obj?.data?.bottom?.length > 0) {
     const sortLists = ["首页", "动态", "我的"];
-    obj.data.bottom = obj.data.bottom.filter((i) => sortLists?.includes(i?.name));
-    obj.data.bottom = obj.data.bottom.sort((a, b) => sortLists.indexOf(a?.name) - sortLists.indexOf(b?.name));
+    obj.data.bottom = obj.data.bottom
+      .filter((i) => sortLists?.includes(i?.name))
+      .sort((a, b) => sortLists.indexOf(a?.name) - sortLists.indexOf(b?.name));
   }
   // 首页导航栏
   if (obj?.data?.tab?.length > 0) {
     const sortLists = ["推荐", "热门", "动画", "影视", "直播"];
-    obj.data.tab = obj.data.tab.filter((i) => sortLists?.includes(i?.name));
-    obj.data.tab = obj.data.tab.sort((a, b) => sortLists.indexOf(a?.name) - sortLists.indexOf(b?.name));
+    obj.data.tab = obj.data.tab
+      .filter((i) => sortLists?.includes(i?.name))
+      .sort((a, b) => sortLists.indexOf(a?.name) - sortLists.indexOf(b?.name));
   }
   // 右上角按钮
   if (obj?.data?.top?.length > 0) {
@@ -121,33 +123,22 @@ if (url.includes("/x/resource/show/skin")) {
     }
   }
 } else if (url.includes("/x/v2/feed/index?")) {
-  // 推荐信息流
+  // 首页推荐信息流
   if (obj?.data?.items?.length > 0) {
-    obj.data.items = obj.data.items.filter((i) => {
-      if (i?.card_goto) {
-        if (i?.card_goto?.includes("banner")) {
-          // 顶部横版内容
-          return false;
-        } else if (i?.card_goto?.includes("ad_")) {
-          // 各种推广
-          return false;
-        } else if (
-          [
-            "bangumi", // 纪录片
-            "game", // 游戏
-            "live", // 直播
-            "pgc" // 纪录片
-          ]?.includes(i?.card_goto)
-        ) {
-          return false;
-        }
-      } else {
-        if (i?.hasOwnProperty("ad_info")) {
-          return false;
-        }
-      }
-      return true;
-    });
+    obj.data.items = obj.data.items.filter((i) =>
+      !(
+        i?.hasOwnProperty("ad_info") ||
+        [
+          "ad_", // 推广内容
+          "bangumi", // 纪录片
+          "banner", // 顶部横版内容
+          "game", // 游戏
+          "ketang", // 课堂
+          "live", // 直播
+          "pgc" // 纪录片
+        ]?.includes(i?.card_goto)
+      )
+    );
   }
 } else if (url.includes("/x/v2/feed/index/story")) {
   // 竖屏模式信息流
