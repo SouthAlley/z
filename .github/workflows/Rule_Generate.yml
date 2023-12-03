@@ -2,10 +2,7 @@
 
 name: Rule_Generate
 on:
-  push:
-    branches:
-      - master
-  schedule:
+  workflow_dispatch:
 
   
 # Controls when the workflow will run
