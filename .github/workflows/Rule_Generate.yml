@@ -34,9 +34,6 @@ jobs:
       - name: "下载并合并 QuantumultX 规则"
         run: python MergeScript/MergingQXRules.py
 
-      - name: "下载并合并 Stash 规则"
-        run: python MergeScript/MergingStashRules.py
-
       - name: "下载并合并 Surge 规则"
         run: python MergeScript/MergingSurgeRules.py
 
