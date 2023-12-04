@@ -103,10 +103,7 @@ DOMAIN-SUFFIX,securepaypal.info
 DOMAIN-SUFFIX,sslpaypal.org
 DOMAIN-SUFFIX,thepaypalshop.com
 DOMAIN-SUFFIX,theshoppingexpresslane.net
-DOMAIN-SUFFIX,www-paypal.info
-DOMAIN-SUFFIX,www-paypal.us
 DOMAIN-SUFFIX,xn--bnq297cix3a.cn
 DOMAIN-SUFFIX,venmo.s3.amazonaws.com
-
 DOMAIN-KEYWORD,paypal
 USER-AGENT,PayPal*
