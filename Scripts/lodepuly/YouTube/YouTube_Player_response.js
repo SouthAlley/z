@@ -2,7 +2,7 @@
 README:https://github.com/DualSubs/YouTube
 */
 
-const $ = new Env("🍿 DualSubs: ▶ YouTube v0.9.0(3) player.response.beta");
+const $ = new Env("🍿 DualSubs: ▶ YouTube v0.9.0(5) player.response");
 const URL = new URLs();
 const DataBase = {
 	"Default":{
@@ -54,9 +54,10 @@ const DataBase = {
 /***************** Processing *****************/
 // 解构URL
 let url = URL.parse($request?.url);
+$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(url)}`, "");
 // 获取连接参数
 const METHOD = $request?.method, HOST = url?.host, PATH = url?.path, PATHs = url?.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, `HOST: ${HOST}`, `PATH: ${PATH}`, `PATHs: ${PATHs}`, "");
+$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 // 获取平台
 const PLATFORM = detectPlatform(HOST);
 $.log(`⚠ ${$.name}, PLATFORM: ${PLATFORM}`, "");
@@ -88,24 +89,15 @@ $.log(`⚠ ${$.name}, FORMAT: ${FORMAT}`, "");
 				case "application/x-mpegURL":
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
-					//body = M3U8.parse($response.body);
-					//$.log(`🚧 ${$.name}`, "M3U8.parse($response.body)", JSON.stringify(body), "");
-					//$response.body = M3U8.stringify(body);
 					break;
 				case "text/xml":
 				case "text/plist":
 				case "application/xml":
 				case "application/plist":
 				case "application/x-plist":
-					//body = XML.parse($response.body);
-					//$.log(body);
-					//$response.body = XML.stringify(body);
 					break;
 				case "text/vtt":
 				case "application/vtt":
-					//body = VTT.parse($response.body);
-					//$.log(body);
-					//$response.body = VTT.stringify(body);
 					break;
 				case "text/json":
 				case "application/json":
@@ -180,18 +172,6 @@ $.log(`⚠ ${$.name}, FORMAT: ${FORMAT}`, "");
 							/******************  initialization finish  *******************/
 							body = Player.fromBinary(rawBody);
 							$.log(`🚧 ${$.name}`, `body: ${JSON.stringify(body)}`, "");
-							let UF = UnknownFieldHandler.list(body?.streamingData?.adaptiveFormats[body?.streamingData?.adaptiveFormats?.length - 2]);
-							//$.log(`🚧 ${$.name}`, `UF: ${JSON.stringify(UF)}`, "");
-							if (UF) {
-								UF = UF.map(uf => {
-									//uf.no; // 22
-									//uf.wireType; // WireType.Varint
-									// use the binary reader to decode the raw data:
-									let reader = new BinaryReader(uf.data);
-									let addedNumber = reader.int32(); // 7777
-									$.log(`🚧 ${$.name}`, `no: ${uf.no}, wireType: ${uf.wireType}, reader: ${reader}, addedNumber: ${addedNumber}`, "");
-								});
-							};
 							// 找功能
 							if (body?.captions) { // 有基础字幕
 								$.log(`⚠ ${$.name}, Captions`, "");
@@ -252,7 +232,6 @@ $.log(`⚠ ${$.name}, FORMAT: ${FORMAT}`, "");
 	.finally(() => {
 		switch ($response) {
 			default: { // 有回复数据，返回回复数据
-				//const FORMAT = ($response?.headers?.["Content-Type"] ?? $response?.headers?.["content-type"])?.split(";")?.[0];
 				$.log(`🎉 ${$.name}, finally`, `$response`, `FORMAT: ${FORMAT}`, "");
 				//$.log(`🚧 ${$.name}, finally`, `$response: ${JSON.stringify($response)}`, "");
 				if ($response?.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
@@ -322,7 +301,7 @@ function setENV(name, platforms, database) {
 	/***************** Settings *****************/
 	if (!Array.isArray(Settings?.Types)) Settings.Types = (Settings.Types) ? [Settings.Types] : []; // 只有一个选项时，无逗号分隔
 	if ($.isLoon() && platforms.includes("YouTube")) {
-		Settings.AutoCC = $persistentStore.read("自动显示字幕译文") ?? Settings.AutoCC;
+		Settings.AutoCC = $persistentStore.read("自动显示翻译字幕") ?? Settings.AutoCC;
 		switch (Settings.AutoCC) {
 			case "是":
 				Settings.AutoCC = true;
@@ -377,8 +356,7 @@ function setENV(name, platforms, database) {
 function detectFormat(url, body) {
 	let format = undefined;
 	$.log(`☑️ ${$.name}`, `detectFormat`, "");
-	$.log(`🚧 ${$.name}`, `detectFormat, format: ${url?.type ?? url?.query?.fmt ?? url?.query?.format}`, "");
-	switch (url?.type ?? url?.query?.fmt ?? url?.query?.format) {
+	switch (url?.format ?? url?.query?.fmt ?? url?.query?.format) {
 		case "txt":
 			format = "text/plain";
 			break;
@@ -453,4 +431,4 @@ function Env(t,e){class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==
 function getENV(key,names,database){let BoxJs=$.getjson(key,database),Argument={};if("undefined"!=typeof $argument&&Boolean($argument)){let arg=Object.fromEntries($argument.split("&").map((item=>item.split("="))));for(let item in arg)setPath(Argument,item,arg[item])}const Store={Settings:database?.Default?.Settings||{},Configs:database?.Default?.Configs||{},Caches:{}};Array.isArray(names)||(names=[names]);for(let name of names)Store.Settings={...Store.Settings,...database?.[name]?.Settings,...BoxJs?.[name]?.Settings,...Argument},Store.Configs={...Store.Configs,...database?.[name]?.Configs},BoxJs?.[name]?.Caches&&"string"==typeof BoxJs?.[name]?.Caches&&(BoxJs[name].Caches=JSON.parse(BoxJs?.[name]?.Caches)),Store.Caches={...Store.Caches,...BoxJs?.[name]?.Caches};return function traverseObject(o,c){for(var t in o){var n=o[t];o[t]="object"==typeof n&&null!==n?traverseObject(n,c):c(t,n)}return o}(Store.Settings,((key,value)=>("true"===value||"false"===value?value=JSON.parse(value):"string"==typeof value&&(value?.includes(",")?value=value.split(","):value&&!isNaN(value)&&(value=parseInt(value,10))),value))),Store;function setPath(object,path,value){path.split(".").reduce(((o,p,i)=>o[p]=path.split(".").length===++i?value:o[p]||{}),object)}}
 
 // https://github.com/VirgilClyne/GetSomeFries/blob/main/function/URL/URLs.embedded.min.js
-function URLs(t){return new class{constructor(t=[]){this.name="URL v1.2.4",this.opts=t,this.json={scheme:"",host:"",path:"",type:"",query:{}}}parse(t){let s=t.match(/(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/)?.groups??null;return s?.path?s.paths=s.path.split("/"):s.path="",s?.paths?.at(-1)?.includes(".")&&(s.type=s.paths.at(-1).split(".").at(-1)),s?.query&&(s.query=Object.fromEntries(s.query.split("&").map((t=>t.split("="))))),s}stringify(t=this.json){let s="";return t?.scheme&&t?.host&&(s+=t.scheme+"://"+t.host),t?.path&&(s+=t?.host?"/"+t.path:t.path),t?.query&&(s+="?"+Object.entries(t.query).map((t=>t.join("="))).join("&")),s}}(t)}
+function URLs(t){return new class{constructor(t=[]){this.name="URL v1.2.5",this.opts=t,this.json={scheme:"",host:"",path:"",query:{}}}parse(t){let s=t.match(/(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/)?.groups??null;if(s?.path?s.paths=s.path.split("/"):s.path="",s?.paths){const t=s.paths[s.paths.length-1];if(t?.includes(".")){const e=t.split(".");s.format=e[e.length-1]}}return s?.query&&(s.query=Object.fromEntries(s.query.split("&").map((t=>t.split("="))))),s}stringify(t=this.json){let s="";return t?.scheme&&t?.host&&(s+=t.scheme+"://"+t.host),t?.path&&(s+=t?.host?"/"+t.path:t.path),t?.query&&(s+="?"+Object.entries(t.query).map((t=>t.join("="))).join("&")),s}}(t)}

@@ -2,13 +2,13 @@
 README: https://github.com/DualSubs/Universal
 */
 
-const $ = new Env("🍿️ DualSubs: 🎦 Universal v0.9.13(3) Subtitles.Translate.response");
+const $ = new Env("🍿️ DualSubs: 🎦 Universal v0.9.14(16) Subtitles.Translate.response");
 const URL = new URLs();
 const XML = new XMLs();
 const VTT = new WebVTT(["milliseconds", "timeStamp", "singleLine", "\n"]); // "multiLine"
 const DataBase = {
 	"Default":{
-		"Settings":{"Switch":true,"Type":"Translate","Types":["Official","Translate"],"Languages":["EN","ZH"],"CacheSize":100}
+		"Settings":{"Switch":true,"Type":"Translate","Types":["Official","Translate"],"Languages":["EN","ZH"],"CacheSize":50}
 	},
 	"Universal":{
 		"Settings":{"Switch":true,"Types":["Official","Translate"],"Languages":["EN","ZH"]},
@@ -33,7 +33,7 @@ const DataBase = {
 		}
 	},
 	"Official":{
-		"Settings":{"CacheSize":100,"Position":"Reverse","Offset":0,"Tolerance":1000}
+		"Settings":{"CacheSize":50,"Position":"Reverse","Offset":0,"Tolerance":1000}
 	},
 	"Translate":{
 		"Settings":{"Vendor":"Google","ShowOnly":false,"Position":"Forward","CacheSize":10,"Method":"Part","Times":3,"Interval":500,"Exponential":true},
@@ -49,16 +49,17 @@ const DataBase = {
 		"Settings":{"URL":undefined,"ShowOnly":false,"Position":"Forward","Offset":0,"Tolerance":1000}
 	},
 	"API":{
-		"Settings":{"GoogleCloud":{"Version":"v2","Mode":"Key","Auth":undefined},"Azure":{"Version":"Azure","Region":undefined,"Mode":"Key","Auth":undefined},"DeepL":{"Version":"Free","Auth":undefined}}
+		"Settings":{"GoogleCloud":{"Version":"v2","Mode":"Key","Auth":undefined},"Azure":{"Version":"Azure","Region":undefined,"Mode":"Key","Auth":undefined},"DeepL":{"Version":"Free","Auth":undefined},"DeepLX":{"Endpoint":undefined,"Key":undefined}}
 	}
 };
 
 /***************** Processing *****************/
 // 解构URL
 let url = URL.parse($request?.url);
+$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(url)}`, "");
 // 获取连接参数
 const METHOD = $request?.method, HOST = url?.host, PATH = url?.path, PATHs = url?.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, `HOST: ${HOST}`, `PATH: ${PATH}`, `PATHs: ${PATHs}`, "");
+$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 // 获取平台
 const PLATFORM = detectPlatform(HOST);
 $.log(`⚠ ${$.name}, PLATFORM: ${PLATFORM}`, "");
@@ -90,6 +91,7 @@ $.log(`⚠ ${$.name}, FORMAT: ${FORMAT}`, "");
 				case "application/x-mpegURL":
 				case "application/x-mpegurl":
 				case "application/vnd.apple.mpegurl":
+				case "audio/mpegurl":
 					break;
 				case "text/xml":
 				case "text/plist":
@@ -170,7 +172,6 @@ $.log(`⚠ ${$.name}, FORMAT: ${FORMAT}`, "");
 	.finally(() => {
 		switch ($response) {
 			default: { // 有回复数据，返回回复数据
-				const FORMAT = ($response?.headers?.["Content-Type"] ?? $response?.headers?.["content-type"])?.split(";")?.[0];
 				$.log(`🎉 ${$.name}, finally`, `$response`, `FORMAT: ${FORMAT}`, "");
 				//$.log(`🚧 ${$.name}, finally`, `$response: ${JSON.stringify($response)}`, "");
 				if ($response?.headers?.["Content-Encoding"]) $response.headers["Content-Encoding"] = "identity";
@@ -295,8 +296,7 @@ function setENV(name, platforms, database) {
 function detectFormat(url, body) {
 	let format = undefined;
 	$.log(`☑️ ${$.name}`, `detectFormat`, "");
-	$.log(`🚧 ${$.name}`, `detectFormat, format: ${url?.type ?? url?.query?.fmt ?? url?.query?.format}`, "");
-	switch (url?.type ?? url?.query?.fmt ?? url?.query?.format) {
+	switch (url?.format ?? url?.query?.fmt ?? url?.query?.format) {
 		case "txt":
 			format = "text/plain";
 			break;
@@ -400,6 +400,9 @@ async function Translate(text = [], method = "Part", vendor = "Google", source =
 			break;
 		case "DeepL":
 			length = 49;
+			break;
+		case "DeepLX":
+			length = 20;
 			break;
 	};
 	let Translation = [];
@@ -582,7 +585,7 @@ async function Translator(type = "Google", source = "", target = "", text = "", 
 				}]);
 				*/
 				break;
-			case "DeepL":
+			case "DeepL": {
 				switch (api?.Version) {
 					case "Free":
 					default:
@@ -592,7 +595,7 @@ async function Translator(type = "Google", source = "", target = "", text = "", 
 						BaseURL = "https://api.deepl.com";
 						break;
 				};
-				request.url = `${BaseURL}/v2/translate`
+				request.url = `${BaseURL}/v2/translate`;
 				request.headers = {
 					"Accept": "*/*",
 					"User-Agent": "DualSubs",
@@ -609,6 +612,29 @@ async function Translator(type = "Google", source = "", target = "", text = "", 
 				texts = await Promise.all(text?.map(async item => `&text=${encodeURIComponent(item)}`))
 				request.body = BaseBody + texts.join("");
 				break;
+			}
+			case "DeepLX": {
+				BaseURL = api?.Endpoint;
+				request.url = BaseURL;
+				request.headers = {
+					"Accept": "*/*",
+					"User-Agent": "DualSubs",
+					"Content-Type": "application/json"
+				};
+				if (api?.Key) request.headers.Authorization = `Bearer ${api.Key}`;
+				const source_lang = (database.DeepL[source].includes("EN")) ? "EN"
+					: (database.DeepL[source].includes("PT")) ? "PT"
+						: database.DeepL[source];
+				const target_lang = (database.DeepL[target] == "EN") ? "EN-US"
+					: (database.DeepL[target] == "PT") ? "PT-PT"
+						: database.DeepL[target];
+				request.body = JSON.stringify({
+					"text": (Array.isArray(text)) ? text.join("||") : text,
+					"source_lang": source_lang,
+					"target_lang": target_lang,
+				});
+				break;
+			}
 			case "BaiduFanyi":
 				// https://fanyi-api.baidu.com/doc/24
 				BaseURL = "https://fanyi-api.baidu.com";
@@ -663,7 +689,7 @@ async function Translator(type = "Google", source = "", target = "", text = "", 
 							default:
 							case "Google":
 								if (Array.isArray(_data?.[0])) texts = _data?.[0]?.map(item => item?.[0] ?? `翻译失败, 类型: ${type}`);
-								else if (Array.isArray(_data)) texts = _data ?? `翻译失败, 类型: ${type}`;
+								else if (Array.isArray(_data)) texts = _data;
 								else if (_data?.sentences) texts = _data?.sentences?.map(item => item?.trans ?? `翻译失败, 类型: ${type}`);
 								break;
 						};
@@ -673,19 +699,23 @@ async function Translator(type = "Google", source = "", target = "", text = "", 
 					case "Bing":
 					case "Azure":
 					case "DeepL":
+					case "DeepLX":
 					case "BaiduFanyi":
 					case "YoudaoAI":
 						switch (type) {
 							default:
 							case "GoogleCloud":
-								texts = _data?.data?.translations?.map(item => item?.translatedText ?? `翻译失败, 类型: ${type}`)
+								texts = _data?.data?.translations?.map(item => item?.translatedText ?? `翻译失败, 类型: ${type}`);
 								break;
 							case "Bing":
 							case "Azure":
-								texts = _data?.map(item => item?.translations?.[0]?.text ?? `翻译失败, 类型: ${type}`)
+								texts = _data?.map(item => item?.translations?.[0]?.text ?? `翻译失败, 类型: ${type}`);
 								break;
 							case "DeepL":
-								texts = _data?.translations?.map(item => item?.text ?? `翻译失败, 类型: ${type}`)
+								texts = _data?.translations?.map(item => item?.text ?? `翻译失败, 类型: ${type}`);
+								break;
+							case "DeepLX":
+								texts = _data?.data?.split("||") ?? _data?.data;
 								break;
 							case "BaiduFanyi":
 								break;
@@ -715,20 +745,20 @@ async function Fetch(request = {}) {
 	$.log(`⚠ ${$.name}, Fetch Ruled Reqeust`, `FORMAT: ${FORMAT}`, "");
 	if ($.isQuanX()) {
 		switch (FORMAT) {
-			case "application/json":
-			case "text/xml":
+			case undefined: // 视为无body
+				// 返回普通数据
+				break;
 			default:
 				// 返回普通数据
 				delete request.bodyBytes;
 				break;
 			case "application/x-protobuf":
 			case "application/grpc":
+			case "application/grpc+proto":
+			//case "applecation/octet-stream":
 				// 返回二进制数据
 				delete request.body;
 				if (ArrayBuffer.isView(request.bodyBytes)) request.bodyBytes = request.bodyBytes.buffer.slice(request.bodyBytes.byteOffset, request.bodyBytes.byteLength + request.bodyBytes.byteOffset);
-				break;
-			case undefined: // 视为无body
-				// 返回普通数据
 				break;
 		};
 	};
@@ -827,7 +857,7 @@ function Env(t,e){class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==
 function getENV(key,names,database){let BoxJs=$.getjson(key,database),Argument={};if("undefined"!=typeof $argument&&Boolean($argument)){let arg=Object.fromEntries($argument.split("&").map((item=>item.split("="))));for(let item in arg)setPath(Argument,item,arg[item])}const Store={Settings:database?.Default?.Settings||{},Configs:database?.Default?.Configs||{},Caches:{}};Array.isArray(names)||(names=[names]);for(let name of names)Store.Settings={...Store.Settings,...database?.[name]?.Settings,...BoxJs?.[name]?.Settings,...Argument},Store.Configs={...Store.Configs,...database?.[name]?.Configs},BoxJs?.[name]?.Caches&&"string"==typeof BoxJs?.[name]?.Caches&&(BoxJs[name].Caches=JSON.parse(BoxJs?.[name]?.Caches)),Store.Caches={...Store.Caches,...BoxJs?.[name]?.Caches};return function traverseObject(o,c){for(var t in o){var n=o[t];o[t]="object"==typeof n&&null!==n?traverseObject(n,c):c(t,n)}return o}(Store.Settings,((key,value)=>("true"===value||"false"===value?value=JSON.parse(value):"string"==typeof value&&(value?.includes(",")?value=value.split(","):value&&!isNaN(value)&&(value=parseInt(value,10))),value))),Store;function setPath(object,path,value){path.split(".").reduce(((o,p,i)=>o[p]=path.split(".").length===++i?value:o[p]||{}),object)}}
 
 // https://github.com/VirgilClyne/GetSomeFries/blob/main/function/URL/URLs.embedded.min.js
-function URLs(t){return new class{constructor(t=[]){this.name="URL v1.2.2",this.opts=t,this.json={scheme:"",host:"",path:"",type:"",query:{}}}parse(t){let s=t.match(/(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/)?.groups??null;return s?.path?s.paths=s?.path?.split("/"):s.path="",s?.paths&&(s.type=s?.paths?.[s?.paths?.length-1]?.split(".")?.[1]),s?.query&&(s.query=Object.fromEntries(s.query.split("&").map((t=>t.split("="))))),s}stringify(t=this.json){let s="";return t?.scheme&&t?.host&&(s+=t.scheme+"://"+t.host),t?.path&&(s+=t?.host?"/"+t.path:t.path),t?.query&&(s+="?"+Object.entries(t.query).map((t=>t.join("="))).join("&")),s}}(t)}
+function URLs(t){return new class{constructor(t=[]){this.name="URL v1.2.5",this.opts=t,this.json={scheme:"",host:"",path:"",query:{}}}parse(t){let s=t.match(/(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/)?.groups??null;if(s?.path?s.paths=s.path.split("/"):s.path="",s?.paths){const t=s.paths[s.paths.length-1];if(t?.includes(".")){const e=t.split(".");s.format=e[e.length-1]}}return s?.query&&(s.query=Object.fromEntries(s.query.split("&").map((t=>t.split("="))))),s}stringify(t=this.json){let s="";return t?.scheme&&t?.host&&(s+=t.scheme+"://"+t.host),t?.path&&(s+=t?.host?"/"+t.path:t.path),t?.query&&(s+="?"+Object.entries(t.query).map((t=>t.join("="))).join("&")),s}}(t)}
 
 // https://github.com/DualSubs/WebVTT/blob/main/WebVTT.embedded.min.js
 function WebVTT(opts){return new class{constructor(opts=["milliseconds","timeStamp","singleLine","\n"]){this.name="WebVTT v2.1.4",this.opts=opts,this.lineBreak=this.opts.includes("\n")?"\n":this.opts.includes("\r")?"\r":this.opts.includes("\r\n")?"\r\n":"\n",this.vtt=new String,this.json={headers:{},comments:[],style:"",body:[]}}parse(vtt=this.vtt){const WebVTT_cue_Regex=this.opts.includes("milliseconds")?/^((?<index>\d+)(\r\n|\r|\n))?(?<timing>(?<startTime>[0-9:.,]+) --> (?<endTime>[0-9:.,]+)) ?(?<settings>.+)?[^](?<text>[\s\S]*)?$/:/^((?<index>\d+)(\r\n|\r|\n))?(?<timing>(?<startTime>[0-9:]+)[0-9.,]+ --> (?<endTime>[0-9:]+)[0-9.,]+) ?(?<settings>.+)?[^](?<text>[\s\S]*)?$/,Array=vtt.split(/\r\n\r\n|\r\r|\n\n/),Json={headers:{},comments:[],style:"",body:[]};return Array.forEach((item=>{switch((item=item.trim()).substring(0,5).trim()){case"WEBVT":{let cues=item.split(/\r\n|\r|\n/);Json.headers.type=cues.shift(),Json.headers.options=cues;break}case"NOTE":Json.comments.push(item);break;case"STYLE":{let cues=item.split(/\r\n|\r|\n/);cues.shift(),Json.style=cues.join(this.lineBreak);break}default:let cue=item.match(WebVTT_cue_Regex)?.groups;if(cue){if("WEBVTT"!==Json.headers?.type&&(cue.timing=cue?.timing?.replace?.(",","."),cue.startTime=cue?.startTime?.replace?.(",","."),cue.endTime=cue?.endTime?.replace?.(",",".")),this.opts.includes("timeStamp")){let ISOString=cue?.startTime?.replace?.(/(.*)/,"1970-01-01T$1Z");cue.timeStamp=this.opts.includes("milliseconds")?Date.parse(ISOString):Date.parse(ISOString)/1e3}cue.text=cue?.text?.trimEnd?.(),this.opts.includes("singleLine")?cue.text=cue?.text?.replace?.(/\r\n|\r|\n/," "):this.opts.includes("multiLine")&&(cue.text=cue?.text?.split?.(/\r\n|\r|\n/)),Json.body.push(cue)}}})),Json}stringify(json=this.json){return[json.headers=[json.headers?.type||"",json.headers?.options||""].flat(1/0).join(this.lineBreak),json.comments=json?.comments?.join?.(this.lineBreak),json.style=json?.style?.length>0?["STYLE",json.style].join(this.lineBreak):"",json.body=json.body.map((item=>(Array.isArray(item.text)&&(item.text=item.text.join(this.lineBreak)),item=`${item.index?item.index+this.lineBreak:""}${item.timing} ${item?.settings??""}${this.lineBreak}${item.text}`))).join(this.lineBreak+this.lineBreak)].join(this.lineBreak+this.lineBreak).trim()+this.lineBreak+this.lineBreak}}(opts)}

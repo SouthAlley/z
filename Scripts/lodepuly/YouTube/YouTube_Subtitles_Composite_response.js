@@ -2,13 +2,13 @@
 README: https://github.com/DualSubs
 */
 
-const $ = new Env("🍿️ DualSubs: 🎦 Universal v0.9.3(4) Subtitles.Composite.response");
+const $ = new Env("🍿️ DualSubs: 🎦 Universal v0.9.3(9) Subtitles.Composite.response");
 const URL = new URLs();
 const XML = new XMLs();
 const VTT = new WebVTT(["milliseconds", "timeStamp", "singleLine", "\n"]); // "multiLine"
 const DataBase = {
 	"Default":{
-		"Settings":{"Switch":true,"Type":"Translate","Types":["Official","Translate"],"Languages":["EN","ZH"],"CacheSize":100}
+		"Settings":{"Switch":true,"Type":"Translate","Types":["Official","Translate"],"Languages":["EN","ZH"],"CacheSize":50}
 	},
 	"Universal":{
 		"Settings":{"Switch":true,"Types":["Official","Translate"],"Languages":["EN","ZH"]},
@@ -33,7 +33,7 @@ const DataBase = {
 		}
 	},
 	"Official":{
-		"Settings":{"CacheSize":100,"Position":"Reverse","Offset":0,"Tolerance":1000}
+		"Settings":{"CacheSize":50,"Position":"Reverse","Offset":0,"Tolerance":1000}
 	},
 	"Translate":{
 		"Settings":{"Vendor":"Google","ShowOnly":false,"Position":"Forward","CacheSize":10,"Method":"Part","Times":3,"Interval":500,"Exponential":true},
@@ -56,9 +56,10 @@ const DataBase = {
 /***************** Processing *****************/
 // 解构URL
 let url = URL.parse($request?.url);
+$.log(`⚠ ${$.name}`, `URL: ${JSON.stringify(url)}`, "");
 // 获取连接参数
 const METHOD = $request?.method, HOST = url?.host, PATH = url?.path, PATHs = url?.paths;
-$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, `HOST: ${HOST}`, `PATH: ${PATH}`, `PATHs: ${PATHs}`, "");
+$.log(`⚠ ${$.name}`, `METHOD: ${METHOD}`, "");
 // 获取平台
 const PLATFORM = detectPlatform(HOST);
 $.log(`⚠ ${$.name}, PLATFORM: ${PLATFORM}`, "");
@@ -111,6 +112,7 @@ $.log(`⚠ ${$.name}, FORMAT: ${FORMAT}`, "");
 									// 设置参数
 									Settings.Offset = 0;
 									Settings.Tolerance = 100;
+									Settings.Position = (Settings.Position === "Reverse") ? "Forward" : "Reverse";
 									switch (Settings.ShowOnly) {
 										case true:
 											$.log(`⚠ ${$.name}, 仅显示翻译后字幕，跳过`, "");
@@ -178,7 +180,7 @@ $.log(`⚠ ${$.name}, FORMAT: ${FORMAT}`, "");
 					for await (let request of requests) {
 						SecondSub = await $.http.get(request).then(response => response.body);
 						SecondSub = XML.parse(SecondSub);
-						OriginSub = CombineDualSubs(OriginSub, SecondSub, FORMAT, url?.query?.kind, Settings.Offset, Settings.Tolerance, [Settings.Position]);
+						OriginSub = CombineDualSubs(OriginSub, SecondSub, FORMAT, url?.query?.kind, Settings.Offset, Settings.Tolerance, Settings.Position);
 					};
 					$response.body = XML.stringify(OriginSub);
 					break;
@@ -188,7 +190,7 @@ $.log(`⚠ ${$.name}, FORMAT: ${FORMAT}`, "");
 					for await (let request of requests) {
 						SecondSub = await $.http.get(request).then(response => response.body);
 						SecondSub = VTT.parse(SecondSub);
-						OriginSub = CombineDualSubs(OriginSub, SecondSub, FORMAT, url?.query?.kind, Settings.Offset, Settings.Tolerance, [Settings.Position]);
+						OriginSub = CombineDualSubs(OriginSub, SecondSub, FORMAT, url?.query?.kind, Settings.Offset, Settings.Tolerance, Settings.Position);
 					};
 					$response.body = VTT.stringify(OriginSub);
 					break;
@@ -198,7 +200,7 @@ $.log(`⚠ ${$.name}, FORMAT: ${FORMAT}`, "");
 					for await (let request of requests) {
 						SecondSub = await $.http.get(request).then(response => response.body);
 						SecondSub = JSON.parse(SecondSub);
-						OriginSub = CombineDualSubs(OriginSub, SecondSub, FORMAT, url?.query?.kind, Settings.Offset, Settings.Tolerance, [Settings.Position]);
+						OriginSub = CombineDualSubs(OriginSub, SecondSub, FORMAT, url?.query?.kind, Settings.Offset, Settings.Tolerance, Settings.Position);
 					};
 					$response.body = JSON.stringify(OriginSub);
 					break;
@@ -330,8 +332,7 @@ function setENV(name, platforms, database) {
 function detectFormat(url, body) {
 	let format = undefined;
 	$.log(`☑️ ${$.name}`, `detectFormat`, "");
-	$.log(`🚧 ${$.name}`, `detectFormat, format: ${url?.type ?? url?.query?.fmt ?? url?.query?.format}`, "");
-	switch (url?.type ?? url?.query?.fmt ?? url?.query?.format) {
+	switch (url?.format ?? url?.query?.fmt ?? url?.query?.format) {
 		case "txt":
 			format = "text/plain";
 			break;
@@ -593,11 +594,11 @@ function constructSubtitlesQueue(request, fileName, VTTs1 = [], VTTs2 = []) {
  * @param {Array} Kind - options = ["asr", "captions"]
  * @param {Number} Offset - Offset
  * @param {Number} Tolerance - Tolerance
- * @param {Array} Options - options = ["Forward", "Reverse", "ShowOnly"]
+ * @param {Array} Position - Position = ["Forward", "Reverse"]
  * @return {String} DualSub
  */
-function CombineDualSubs(Sub1 = {}, Sub2 = {}, Format = "text/vtt", Kind = "captions", Offset = 0, Tolerance = 0, Options = ["Forward"]) {
-	$.log(`⚠ ${$.name}, Combine Dual Subtitles`, `Offset:${Offset}, Tolerance:${Tolerance}, Options:${Options}`, "");
+function CombineDualSubs(Sub1 = {}, Sub2 = {}, Format = "text/vtt", Kind = "captions", Offset = 0, Tolerance = 0, Position = "Forward") {
+	$.log(`⚠ ${$.name}, Combine Dual Subtitles`, `Offset:${Offset}, Tolerance:${Tolerance}, Position:${Position}`, "");
 	let DualSub = Sub1;
 	// 有序数列 用不着排序
 	let index0 = 0, index1 = 0, index2 = 0;
@@ -635,7 +636,7 @@ function CombineDualSubs(Sub1 = {}, Sub2 = {}, Format = "text/vtt", Kind = "capt
 							index0 = index1;
 							// 处理普通字幕
 							const text1 = Sub1.events[index1]?.segs?.[0].utf8 ?? "", text2 = Sub2.events[index2]?.segs?.[0].utf8 ?? "";
-							DualSub.events[index0].segs = [{ "utf8": Options.includes("Reverse") ? `${text2}\n${text1}` : `${text1}\n${text2}` }];
+							DualSub.events[index0].segs = [{ "utf8": (Position === "Reverse") ? `${text2}\n${text1}` : `${text1}\n${text2}` }];
 						};
 						if (timeStamp2 > timeStamp1) index1++
 						else if (timeStamp2 < timeStamp1) index2++
@@ -679,7 +680,7 @@ function CombineDualSubs(Sub1 = {}, Sub2 = {}, Format = "text/vtt", Kind = "capt
 							index0 = index1;
 							// 处理普通字幕
 							const text1 = Sub1.timedtext.body.p[index1]?.["#"] ?? "", text2 = Sub2.timedtext.body.p[index2]?.["#"] ?? "";
-							DualSub.timedtext.body.p[index0]["#"] = Options.includes("Reverse") ? `${text2}&#x000A;${text1}` : `${text1}&#x000A;${text2}`;
+							DualSub.timedtext.body.p[index0]["#"] = (Position === "Reverse") ? `${text2}&#x000A;${text1}` : `${text1}&#x000A;${text2}`;
 						};
 						if (timeStamp2 > timeStamp1) index1++
 						else if (timeStamp2 < timeStamp1) index2++
@@ -707,7 +708,7 @@ function CombineDualSubs(Sub1 = {}, Sub2 = {}, Format = "text/vtt", Kind = "capt
 						if (Math.abs(timeStamp1 - timeStamp2) <= Tolerance) {
 							index0 = index1;
 							// 处理普通字幕
-							DualSub.body[index0].text = Options.includes("Reverse") ? `${text2}\n${text1}`: `${text1}\n${text2}`;
+							DualSub.body[index0].text = (Position === "Reverse") ? `${text2}\n${text1}`: `${text1}\n${text2}`;
 						};
 						if (timeStamp2 > timeStamp1) index1++
 						else if (timeStamp2 < timeStamp1) index2++
@@ -740,7 +741,7 @@ function Env(t,e){class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==
 function getENV(key,names,database){let BoxJs=$.getjson(key,database),Argument={};if("undefined"!=typeof $argument&&Boolean($argument)){let arg=Object.fromEntries($argument.split("&").map((item=>item.split("="))));for(let item in arg)setPath(Argument,item,arg[item])}const Store={Settings:database?.Default?.Settings||{},Configs:database?.Default?.Configs||{},Caches:{}};Array.isArray(names)||(names=[names]);for(let name of names)Store.Settings={...Store.Settings,...database?.[name]?.Settings,...BoxJs?.[name]?.Settings,...Argument},Store.Configs={...Store.Configs,...database?.[name]?.Configs},BoxJs?.[name]?.Caches&&"string"==typeof BoxJs?.[name]?.Caches&&(BoxJs[name].Caches=JSON.parse(BoxJs?.[name]?.Caches)),Store.Caches={...Store.Caches,...BoxJs?.[name]?.Caches};return function traverseObject(o,c){for(var t in o){var n=o[t];o[t]="object"==typeof n&&null!==n?traverseObject(n,c):c(t,n)}return o}(Store.Settings,((key,value)=>("true"===value||"false"===value?value=JSON.parse(value):"string"==typeof value&&(value?.includes(",")?value=value.split(","):value&&!isNaN(value)&&(value=parseInt(value,10))),value))),Store;function setPath(object,path,value){path.split(".").reduce(((o,p,i)=>o[p]=path.split(".").length===++i?value:o[p]||{}),object)}}
 
 // https://github.com/VirgilClyne/GetSomeFries/blob/main/function/URL/URLs.embedded.min.js
-function URLs(t){return new class{constructor(t=[]){this.name="URL v1.2.2",this.opts=t,this.json={scheme:"",host:"",path:"",type:"",query:{}}}parse(t){let s=t.match(/(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/)?.groups??null;return s?.path?s.paths=s?.path?.split("/"):s.path="",s?.paths&&(s.type=s?.paths?.[s?.paths?.length-1]?.split(".")?.[1]),s?.query&&(s.query=Object.fromEntries(s.query.split("&").map((t=>t.split("="))))),s}stringify(t=this.json){let s="";return t?.scheme&&t?.host&&(s+=t.scheme+"://"+t.host),t?.path&&(s+=t?.host?"/"+t.path:t.path),t?.query&&(s+="?"+Object.entries(t.query).map((t=>t.join("="))).join("&")),s}}(t)}
+function URLs(t){return new class{constructor(t=[]){this.name="URL v1.2.5",this.opts=t,this.json={scheme:"",host:"",path:"",query:{}}}parse(t){let s=t.match(/(?:(?<scheme>.+):\/\/(?<host>[^/]+))?\/?(?<path>[^?]+)?\??(?<query>[^?]+)?/)?.groups??null;if(s?.path?s.paths=s.path.split("/"):s.path="",s?.paths){const t=s.paths[s.paths.length-1];if(t?.includes(".")){const e=t.split(".");s.format=e[e.length-1]}}return s?.query&&(s.query=Object.fromEntries(s.query.split("&").map((t=>t.split("="))))),s}stringify(t=this.json){let s="";return t?.scheme&&t?.host&&(s+=t.scheme+"://"+t.host),t?.path&&(s+=t?.host?"/"+t.path:t.path),t?.query&&(s+="?"+Object.entries(t.query).map((t=>t.join("="))).join("&")),s}}(t)}
 
 // https://github.com/DualSubs/WebVTT/blob/main/WebVTT.embedded.min.js
 function WebVTT(opts){return new class{constructor(opts=["milliseconds","timeStamp","singleLine","\n"]){this.name="WebVTT v2.1.4",this.opts=opts,this.lineBreak=this.opts.includes("\n")?"\n":this.opts.includes("\r")?"\r":this.opts.includes("\r\n")?"\r\n":"\n",this.vtt=new String,this.json={headers:{},comments:[],style:"",body:[]}}parse(vtt=this.vtt){const WebVTT_cue_Regex=this.opts.includes("milliseconds")?/^((?<index>\d+)(\r\n|\r|\n))?(?<timing>(?<startTime>[0-9:.,]+) --> (?<endTime>[0-9:.,]+)) ?(?<settings>.+)?[^](?<text>[\s\S]*)?$/:/^((?<index>\d+)(\r\n|\r|\n))?(?<timing>(?<startTime>[0-9:]+)[0-9.,]+ --> (?<endTime>[0-9:]+)[0-9.,]+) ?(?<settings>.+)?[^](?<text>[\s\S]*)?$/,Array=vtt.split(/\r\n\r\n|\r\r|\n\n/),Json={headers:{},comments:[],style:"",body:[]};return Array.forEach((item=>{switch((item=item.trim()).substring(0,5).trim()){case"WEBVT":{let cues=item.split(/\r\n|\r|\n/);Json.headers.type=cues.shift(),Json.headers.options=cues;break}case"NOTE":Json.comments.push(item);break;case"STYLE":{let cues=item.split(/\r\n|\r|\n/);cues.shift(),Json.style=cues.join(this.lineBreak);break}default:let cue=item.match(WebVTT_cue_Regex)?.groups;if(cue){if("WEBVTT"!==Json.headers?.type&&(cue.timing=cue?.timing?.replace?.(",","."),cue.startTime=cue?.startTime?.replace?.(",","."),cue.endTime=cue?.endTime?.replace?.(",",".")),this.opts.includes("timeStamp")){let ISOString=cue?.startTime?.replace?.(/(.*)/,"1970-01-01T$1Z");cue.timeStamp=this.opts.includes("milliseconds")?Date.parse(ISOString):Date.parse(ISOString)/1e3}cue.text=cue?.text?.trimEnd?.(),this.opts.includes("singleLine")?cue.text=cue?.text?.replace?.(/\r\n|\r|\n/," "):this.opts.includes("multiLine")&&(cue.text=cue?.text?.split?.(/\r\n|\r|\n/)),Json.body.push(cue)}}})),Json}stringify(json=this.json){return[json.headers=[json.headers?.type||"",json.headers?.options||""].flat(1/0).join(this.lineBreak),json.comments=json?.comments?.join?.(this.lineBreak),json.style=json?.style?.length>0?["STYLE",json.style].join(this.lineBreak):"",json.body=json.body.map((item=>(Array.isArray(item.text)&&(item.text=item.text.join(this.lineBreak)),item=`${item.index?item.index+this.lineBreak:""}${item.timing} ${item?.settings??""}${this.lineBreak}${item.text}`))).join(this.lineBreak+this.lineBreak)].join(this.lineBreak+this.lineBreak).trim()+this.lineBreak+this.lineBreak}}(opts)}
