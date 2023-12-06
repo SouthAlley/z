@@ -7,6 +7,8 @@ DOMAIN-KEYWORD,microsoft
 USER-AGENT,Microsoft*
 
 # > Azure
+DOMAIN-SUFFIX,azure.com
+DOMAIN-SUFFIX,azure.net
 DOMAIN-SUFFIX,azure-apim.net
 DOMAIN-SUFFIX,azure-mobile.net
 DOMAIN-SUFFIX,azure-sphere.com
@@ -41,6 +43,8 @@ DOMAIN-SUFFIX,bethesdagamestudios.com
 DOMAIN-SUFFIX,bethsoft.com
 
 # > Bing
+DOMAIN-SUFFIX,bing.com
+DOMAIN-SUFFIX,bing.net
 DOMAIN-SUFFIX,bbing.com
 DOMAIN-SUFFIX,bibg.com
 DOMAIN-SUFFIX,biing.com
@@ -79,7 +83,6 @@ DOMAIN-SUFFIX,myhomemsn.com
 DOMAIN-SUFFIX,osdinfra.net
 DOMAIN-SUFFIX,sprinklesapp.com
 DOMAIN-SUFFIX,working-bing-int.com
-DOMAIN-SUFFIX,emoi-cncdn.bing.com
 
 # > Cortana
 DOMAIN-SUFFIX,cortana.ai
@@ -120,6 +123,8 @@ DOMAIN-SUFFIX,minecraftshop.com
 DOMAIN-SUFFIX,mojang.com
 
 # > MSN
+DOMAIN-SUFFIX,msn.cn
+DOMAIN-SUFFIX,msn.com
 DOMAIN-SUFFIX,msnkids.com
 DOMAIN-SUFFIX,winmp.cn
 
@@ -176,6 +181,7 @@ DOMAIN-SUFFIX,microsoft365.com
 DOMAIN-KEYWORD,office
 
 # > OneDrive & Sharepoint
+DOMAIN-SUFFIX,onedrive.com
 DOMAIN-SUFFIX,sharepoint.com
 DOMAIN-SUFFIX,sharepoint.cn
 DOMAIN-SUFFIX,sharepointonline.com
@@ -184,8 +190,12 @@ USER-AGENT,OneDrive*
 USER-AGENT,OneDriveiOSApp*
 
 # > OneNote
+DOMAIN-SUFFIX,onenote.com
+DOMAIN-SUFFIX,onenote.net
 
 # > Skype
+DOMAIN-SUFFIX,skype.com
+DOMAIN-SUFFIX,skypeassets.com
 DOMAIN-SUFFIX,skypeforbusiness.com
 
 # > Store
