@@ -1,7 +1,4 @@
 # > Microsoft
-DOMAIN-SUFFIX,microsoft.com
-DOMAIN-SUFFIX,microsoftonline.com
-DOMAIN-SUFFIX,microsoft-tst.com
 DOMAIN-KEYWORD,windows
 DOMAIN-KEYWORD,microsoft
 USER-AGENT,Microsoft*
