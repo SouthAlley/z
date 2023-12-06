@@ -617,10 +617,10 @@ noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";n
 		rwBox[i].noteK = rwBox[i].noteK ? "#" : "";
 		mark = rwBox[i].mark ? rwBox[i].mark+"\n" : "";	
 		if (/(?:reject|302|307|header)$/.test(rwBox[i].rwtype)) 	URLRewrite.push(mark+rwBox[i].noteK+rwBox[i].rwptn+" "+rwBox[i].rwvalue+" "+rwBox[i].rwtype);
-		if (/reject-dict/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"');
-		if (/reject-array/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-array.json"');
-		if (/reject-200/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-200.txt"');
-		if (/reject-(?:img|tinygif|video)/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-img.gif"');
+		if (/reject-dict/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-dict.json"');
+		if (/reject-array/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-array.json"');
+		if (/reject-200/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-200.txt"');
+		if (/reject-(?:img|tinygif|video)/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-img.gif"');
 	}
 	break;
 }//reject redirect输出结束
