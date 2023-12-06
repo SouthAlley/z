@@ -7,6 +7,7 @@ DOMAIN-KEYWORD,microsoft
 USER-AGENT,Microsoft*
 
 # > Azure
+DOMAIN-SUFFIX,azure.cn
 DOMAIN-SUFFIX,azure.com
 DOMAIN-SUFFIX,azure.net
 DOMAIN-SUFFIX,azure-apim.net
@@ -162,13 +163,8 @@ DOMAIN-SUFFIX,sqlserveronlinux.com
 DOMAIN-SUFFIX,timelinestoryteller.com
 DOMAIN-SUFFIX,uwpcommunitytoolkit.com
 DOMAIN-SUFFIX,xamarin.com
-DOMAIN-SUFFIX,skype.com
 DOMAIN-SUFFIX,spoprod-a.akamaihd.net
-DOMAIN-SUFFIX,storage.msn.com
 DOMAIN-SUFFIX,svc.ms
-DOMAIN-SUFFIX,visualstudio.com
-DOMAIN-SUFFIX,xbox.com
-DOMAIN-SUFFIX,xboxlive.com
 
 # > Office 365
 DOMAIN-SUFFIX,o365cn.com
@@ -206,8 +202,9 @@ DOMAIN-SUFFIX,sway-extensions.com
 DOMAIN-SUFFIX,sway.com
 
 # > VisualStudio
-DOMAIN-SUFFIX,visualstudio-staging.com
 DOMAIN-SUFFIX,vsassets.io
+DOMAIN-SUFFIX,visualstudio.com
+DOMAIN-SUFFIX,visualstudio-staging.com
 
 # > Xiaobing
 DOMAIN-SUFFIX,aicscience.com
@@ -218,6 +215,8 @@ DOMAIN-SUFFIX,msxiaona.cn
 DOMAIN-SUFFIX,renlifang.com
 
 # > Xbox 
+DOMAIN-SUFFIX,xbox.com
+DOMAIN-SUFFIX,xboxlive.com
 DOMAIN-SUFFIX,forzamotorsport.net
 DOMAIN-SUFFIX,forzaracingchampionship.com
 DOMAIN-SUFFIX,forzarc.com
@@ -367,10 +366,6 @@ DOMAIN-SUFFIX,wbd.ms
 DOMAIN-SUFFIX,what-fan.net
 DOMAIN-SUFFIX,yammer.com
 DOMAIN-SUFFIX,yammerusercontent.com
-
-# > Microsoft Domestics
-DOMAIN-SUFFIX,bj1.api.bing.com
-DOMAIN-SUFFIX,azure.cn
 
 # > Microsoft CDNs
 DOMAIN-SUFFIX,aka.ms
