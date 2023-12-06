@@ -1,7 +1,7 @@
 /*
 引用脚本https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/cnftp.js
 */
-// 2023-10-01 21:35
+// 2023-12-05 20:30
 
 const url = $request.url;
 if (!$response.body) $done({});
@@ -17,9 +17,7 @@ if (isIQY) {
       let card = obj.cards[0];
       if (card?.items?.length > 0) {
         // 29首页 31会员中心 34我的 35发现 184随刻视频
-        card.items = card.items.filter((i) =>
-          ["29", "31", "34"]?.includes(i?._id)
-        );
+        card.items = card.items.filter((i) => ["29", "31", "34"]?.includes(i?._id));
         // 修复位置
         for (let i = 0; i < card.items.length; i++) {
           card.items[i].show_order = i + 1;
@@ -29,7 +27,7 @@ if (isIQY) {
   } else if (url.includes("/common_switch?")) {
     // 爱奇艺 通用配置
     if (obj?.content?.resource) {
-      const item = [
+      const items = [
         "activities",
         "ai_guide", // ai指引
         "cast_device_ad",
@@ -44,7 +42,7 @@ if (isIQY) {
         "vipgrowth_value", // 播放器 会员成长体系
         "vr"
       ];
-      for (let i of item) {
+      for (let i of items) {
         delete obj.content.resource[i];
       }
     }
@@ -58,11 +56,7 @@ if (isIQY) {
     if (obj?.data?.length > 0) {
       let newMenus = [];
       for (let item of obj.data) {
-        if (
-          ["wd_liebiao_2", "wd_liebiao_3", "wd_liebiao_4"]?.includes(
-            item?.statistic?.block
-          )
-        ) {
+        if (["wd_liebiao_2", "wd_liebiao_3", "wd_liebiao_4"]?.includes(item?.statistic?.block)) {
           continue;
         } else {
           if (item?.menuList?.length > 0) {
@@ -90,9 +84,7 @@ if (isIQY) {
       let card = obj.cards[0];
       if (card?.items?.length > 0) {
         // 1017直播 8196热点 4525518866820370中国梦
-        card.items = card.items.filter(
-          (i) => !["1017", "8196", "4525518866820370"]?.includes(i?._id)
-        );
+        card.items = card.items.filter((i) => !["1017", "8196", "4525518866820370"]?.includes(i?._id));
         for (let i = 0; i < card.items.length; i++) {
           card.items[i].show_order = i + 1;
         }
@@ -100,15 +92,13 @@ if (isIQY) {
     } else if (obj?.nav_group_data?.length > 0) {
       // 右上角菜单 仅保留我的频道
       // 好像不生效
-      obj.nav_group_data = obj.nav_group_data.filter(
-        (i) => i?.group_key === "default_group"
-      );
+      obj.nav_group_data = obj.nav_group_data.filter((i) => i?.group_key === "default_group");
     }
   } else if (url.includes("/mixer?")) {
     // 爱奇艺 开屏广告 播放广告
     if (obj?.errorCode === 0) {
-      const item = ["adSlots", "splashLottieFile", "splashUiConfig"];
-      for (let i of item) {
+      const items = ["adSlots", "splashLottieFile", "splashUiConfig"];
+      for (let i of items) {
         delete obj[i];
       }
     }
@@ -163,10 +153,7 @@ if (isIQY) {
       obj.cards = obj.cards.filter(
         (i) =>
           i?.hasOwnProperty("alias_name") &&
-          ![
-            "comment_resource_card",
-            "comment_resource_convention_card"
-          ]?.includes(i?.alias_name)
+          !["comment_resource_card", "comment_resource_convention_card"]?.includes(i?.alias_name)
       );
     }
   } else if (url.includes("/views_home/")) {
@@ -206,9 +193,9 @@ if (isIQY) {
   } else if (url.includes("/views_plt/")) {
     // 爱奇艺 播放详情页组件
     if (obj?.kv_pair) {
-      // 云影院卡片 vip优惠购买卡片
-      const item = ["cloud_cinema", "vip_fixed_card"];
-      for (let i of item) {
+      // 活动tab 云影院卡片 vip优惠购买卡片
+      const items = ["activity_tab", "cloud_cinema", "vip_fixed_card"];
+      for (let i of items) {
         delete obj.kv_pair[i];
       }
     }
@@ -216,6 +203,7 @@ if (isIQY) {
       obj.cards = obj.cards.filter(
         (i) =>
           ![
+            "bi_playlist", // 必播单 当下最热电影推荐
             // "cloud_cinema_detail_character", // 云影院演员列表
             // "cloud_cinema_detail_synopsis", // 云影院详情简介
             // "cloud_cinema_play_detail_tag", // 云影院详情标签
@@ -321,7 +309,29 @@ if (isIQY) {
     }
   }
 } else if (isMG) {
-  if (url.includes("/dynamic/v1/channel/index/")) {
+  if (url.includes("/GetUserInfo?")) {
+    // 芒果 我的页面 会员伪装
+    if (obj?.isVip) {
+      obj.isVip = 1;
+    }
+    if (obj?.vipExpiretime) {
+      obj.vipExpiretime = 3818419199; // Unix 时间戳 2090-12-31 23:59:59
+    }
+    if (obj?.data?.vipinfo) {
+      const fake = {
+        vip_end_time: 3818419199,
+        growth: {
+          score: 0,
+          level: 9
+        },
+        platform: "mpp",
+        isvip: 1,
+        type: "2",
+        vipdetail: null
+      };
+      obj.data.vipinfo = fake;
+    }
+  } else if (url.includes("/dynamic/v1/channel/index/")) {
     // 芒果 首页信息流
     if (obj?.adInfo) {
       delete obj.adInfo;
@@ -341,9 +351,11 @@ if (isIQY) {
                   if (ii?.id === 0) {
                     // 正在追模块下的商品推广
                     continue;
-                  } else {
-                    newII.push(ii);
                   }
+                  if (["热门", "推荐"]?.includes(ii?.cornerTitle)) {
+                    continue;
+                  }
+                  newII.push(ii);
                 }
                 i.data.items = newII;
                 newLists.push(i);
@@ -366,9 +378,7 @@ if (isIQY) {
       obj.data = newItems;
     }
     if (obj?.moduleIDS?.length > 0) {
-      obj.moduleIDS = obj.moduleIDS.filter(
-        (i) => ["842", "2237", "5418"]?.includes(i?.moduleEntityId)
-      );
+      obj.moduleIDS = obj.moduleIDS.filter((i) => ["842", "2237", "5418"]?.includes(i?.moduleEntityId));
     }
   } else if (url.includes("/dynamic/v1/channel/vrsList/")) {
     // 芒果 顶部tab
@@ -389,7 +399,7 @@ if (isIQY) {
     }
   } else if (url.includes("/mobile/config?")) {
     // 芒果 底部tab
-    const item = [
+    const items = [
       "XmVideoB",
       "XmsellSwitch",
       "damang_duanju_tab",
@@ -398,7 +408,7 @@ if (isIQY) {
       "relative_ads",
       "second_floor_guide_switch"
     ];
-    for (let i of item) {
+    for (let i of items) {
       if (obj?.data?.[i]) {
         obj.data[i] = "0";
       }
@@ -444,9 +454,7 @@ if (isIQY) {
     }
     if (obj?.data?.tabs?.length > 0) {
       // 播放tab 1视频 2讨论
-      obj.data.tabs = obj.data.tabs.filter((i) =>
-        ["1", "2"]?.includes(i?.type)
-      );
+      obj.data.tabs = obj.data.tabs.filter((i) => ["1", "2"]?.includes(i?.type));
     }
     if (obj?.data?.template?.modules?.length > 0) {
       // 播放页组件
@@ -526,17 +534,15 @@ if (isIQY) {
       // 1正片 2花絮片段 6设备信息 7未知 8看了还会看 9精华打包 10未知 14vip
       // 15未知 17周边大放送 18未知 20出品人 22未知 30未知 31系列推荐
       // 35音乐fm入口 36为你推荐 37音乐fm入口
-      obj.data.categoryList = obj.data.categoryList.filter(
-        (i) => ![2, 8, 9, 14, 17]?.includes(i?.dataType)
-      );
+      obj.data.categoryList = obj.data.categoryList.filter((i) => ![2, 8, 9, 14, 17]?.includes(i?.dataType));
     }
   }
 } else if (isYK) {
   if (url.includes("/collect-api/get_push_interval_config_wx?")) {
     // 优酷 热剧弹窗
     if (obj?.data) {
-      const item = ["tipContent", "tipContentNew"];
-      for (let i of item) {
+      const items = ["tipContent", "tipContentNew"];
+      for (let i of items) {
         delete obj.data[i];
       }
     }
@@ -548,10 +554,9 @@ if (isIQY) {
         let config = objData.data.global;
         if (config?.PHONE_DETAIL_TOP_TAB?.pageTabs?.length > 0) {
           // detail视频 list热门 planet讨论
-          config.PHONE_DETAIL_TOP_TAB.pageTabs =
-            config.PHONE_DETAIL_TOP_TAB.pageTabs.filter((i) =>
-              ["detail", "planet"]?.includes(i?.code)
-            );
+          config.PHONE_DETAIL_TOP_TAB.pageTabs = config.PHONE_DETAIL_TOP_TAB.pageTabs.filter((i) =>
+            ["detail", "planet"]?.includes(i?.code)
+          );
         }
       }
       if (objData?.nodes?.length > 0) {
@@ -882,8 +887,8 @@ if (isIQY) {
   } else if (url.includes("play.ups.appinfo.get/")) {
     // 优酷 开屏广告 播放广告
     if (obj?.data?.data) {
-      const item = ["ad", "watermark", "ykad"];
-      for (let i of item) {
+      const items = ["ad", "watermark", "ykad"];
+      for (let i of items) {
         delete obj.data.data[i];
       }
     }
