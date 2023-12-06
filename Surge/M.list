@@ -1,13 +1,9 @@
-DOMAIN-KEYWORD,1drv
-DOMAIN-KEYWORD,office
-DOMAIN-KEYWORD,outlook
-DOMAIN-KEYWORD,hotmail
-DOMAIN-KEYWORD,windows
-DOMAIN-KEYWORD,microsoft
-# > Main
+# > Microsoft
 DOMAIN-SUFFIX,microsoft.com
 DOMAIN-SUFFIX,microsoftonline.com
 DOMAIN-SUFFIX,microsoft-tst.com
+DOMAIN-KEYWORD,windows
+DOMAIN-KEYWORD,microsoft
 USER-AGENT,Microsoft*
 
 # > Azure
@@ -77,7 +73,6 @@ DOMAIN-SUFFIX,flipwithsurface.com
 DOMAIN-SUFFIX,mapblast.com
 DOMAIN-SUFFIX,mappoint.com
 DOMAIN-SUFFIX,masalladeloslimites.com
-
 DOMAIN-SUFFIX,msnmaps.com
 DOMAIN-SUFFIX,msunlimitedcloudsummit.com
 DOMAIN-SUFFIX,myhomemsn.com
@@ -108,6 +103,8 @@ DOMAIN-SUFFIX,femalefounderscomp.com
 DOMAIN-SUFFIX,m12.vc
 
 # > Hotmail & Outlook
+DOMAIN-KEYWORD,outlook
+DOMAIN-KEYWORD,hotmail
 
 # > Live
 DOMAIN-SUFFIX,live.com
@@ -176,11 +173,13 @@ DOMAIN-SUFFIX,o365weve-ppe.com
 DOMAIN-SUFFIX,o365weve.com
 DOMAIN-SUFFIX,office365.com
 DOMAIN-SUFFIX,microsoft365.com
+DOMAIN-KEYWORD,office
 
 # > OneDrive & Sharepoint
 DOMAIN-SUFFIX,sharepoint.com
 DOMAIN-SUFFIX,sharepoint.cn
 DOMAIN-SUFFIX,sharepointonline.com
+DOMAIN-KEYWORD,1drv
 USER-AGENT,OneDrive*
 USER-AGENT,OneDriveiOSApp*
 
