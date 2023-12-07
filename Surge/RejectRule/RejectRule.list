@@ -1,4 +1,4 @@
-# 更新时间： 2023-12-05 06:17:47
+# 更新时间： 2023-12-08 06:18:01
 DOMAIN,*default.ixigua.com
 DOMAIN,*novelapp.ixigua.com
 DOMAIN,118.89.204.198
@@ -547,7 +547,6 @@ DOMAIN-KEYWORD,keplerapi.jd.com
 DOMAIN-KEYWORD,kgipadstat.kugou.com
 DOMAIN-KEYWORD,kgipadstatbak.kugou.com
 DOMAIN-KEYWORD,kgstaticdlbssdlbig.tx.kugou.com
-DOMAIN-KEYWORD,knockout
 DOMAIN-KEYWORD,lieyou
 DOMAIN-KEYWORD,lkme.cc
 DOMAIN-KEYWORD,log-api.pangolin-sdk-toutiao-b.com
@@ -3211,6 +3210,7 @@ DOMAIN-SUFFIX,creative.kbnmnl.com
 DOMAIN-SUFFIX,creative.live.missav.com
 DOMAIN-SUFFIX,creative.ltheanine.cn
 DOMAIN-SUFFIX,creative.mnaspm.com
+DOMAIN-SUFFIX,creative.myavlive.com
 DOMAIN-SUFFIX,creative.xlviirdr.com
 DOMAIN-SUFFIX,creatives.cliphunter.com
 DOMAIN-SUFFIX,creatives.ftchinese.com
@@ -4491,6 +4491,7 @@ DOMAIN-SUFFIX,go.gotourls.bid
 DOMAIN-SUFFIX,go.hangzhou.com.cn
 DOMAIN-SUFFIX,go.mmstat.com
 DOMAIN-SUFFIX,go.mnaspm.com
+DOMAIN-SUFFIX,go.myavlive.com
 DOMAIN-SUFFIX,go.onclasrv.com
 DOMAIN-SUFFIX,go.sohu.com
 DOMAIN-SUFFIX,go.util.zlibs.com
@@ -4537,6 +4538,7 @@ DOMAIN-SUFFIX,growingio.com
 DOMAIN-SUFFIX,gs.getui.com
 DOMAIN-SUFFIX,gs307.com
 DOMAIN-SUFFIX,gscxs.cn
+DOMAIN-SUFFIX,gsjln04hd.com
 DOMAIN-SUFFIX,gso0.com
 DOMAIN-SUFFIX,gstat.bitauto.com
 DOMAIN-SUFFIX,gt.yy.com
@@ -8745,6 +8747,7 @@ DOMAIN-SUFFIX,victorjx.com
 DOMAIN-SUFFIX,vid.applovin.com
 DOMAIN-SUFFIX,video-ad-stats.googlesyndication.com
 DOMAIN-SUFFIX,video.cooguo.com
+DOMAIN-SUFFIX,video.ktkjmp.com
 DOMAIN-SUFFIX,video.ureport.push.qq.com
 DOMAIN-SUFFIX,video.wap.mpush.qq.com
 DOMAIN-SUFFIX,videojj.com
