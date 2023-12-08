@@ -1,6 +1,6 @@
 /*
 注意：此脚本仅支持Surge和Loon
-符号：🅳电信 🅻联通 🆈移动 🅶广电 🅲公司 🆉直连 🎮游戏
+符号：🅳电信 🅻联通 🆈移动 🅶广电 🅲公司 🆉直连 🆇境外 🎮游戏
 接口：入口查询[ip-api] 落地查询[ip-api]
 功能：根据接口返回的真实结果，重新对节点命名。添加入口城市、落地国家或地区、国内运营商信息，并对这些数据做持久化缓存（48小时有效期），减少API请求次数，提高运行效率。
 异常：如遇问题，Loon可以进入[配置]→[持久化缓存]→[删除指定数据]→输入Key[sub-store-cached-script-resource][sub-store-nodes][sub-store-proxies]并删除缓存。Surge需要进入[脚本编辑器]→左下角[设置]→[$persistentStore]→[sub-store-cached-script-resource][sub-store-nodes][sub-store-proxies]删除缓存数据。
