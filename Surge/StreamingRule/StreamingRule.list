@@ -1,4 +1,4 @@
-# 更新时间： 2023-12-08 09:45:47
+# 更新时间： 2023-12-08 15:46:39
 DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com
 DOMAIN,amp-api.podcasts.apple.com//Podcasts
 DOMAIN,aod-dash-uk-live.akamaized.net
@@ -143,6 +143,7 @@ DOMAIN-KEYWORD,epicgames
 DOMAIN-KEYWORD,facebook
 DOMAIN-KEYWORD,fbcdn
 DOMAIN-KEYWORD,github
+DOMAIN-KEYWORD,gitlab
 DOMAIN-KEYWORD,gmail
 DOMAIN-KEYWORD,google
 DOMAIN-KEYWORD,googlesource
