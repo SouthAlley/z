@@ -1,7 +1,7 @@
 /*
 引用脚本https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/cnftp.js
 */
-// 2023-12-06 16:25
+// 2023-12-09 23:25
 
 const url = $request.url;
 if (!$response.body) $done({});
@@ -342,18 +342,15 @@ if (isIQY) {
       obj.data = newItems;
     }
     if (obj?.moduleIDS?.length > 0) {
-      obj.moduleIDS = obj.moduleIDS.filter((i) => ["842", "2237", "5418"]?.includes(i?.moduleEntityId));
+      obj.moduleIDS = obj.moduleIDS.filter((i) => !["842", "2237", "5418"]?.includes(i?.moduleEntityId));
     }
   } else if (url.includes("/dynamic/v1/channel/vrsList/")) {
     // 芒果 顶部tab
     if (obj?.data?.length > 0) {
       let newItems = [];
       for (let item of obj.data) {
-        if (item?.vclassType === 15) {
-          // 短视频
-          continue;
-        } else if ([100042, 100055]?.includes(item?.vclassId)) {
-          // 100042暗里着迷 100055澳门奇妙游
+        if (item?.vclassId > 100033 && item?.vclassId !== 100160) {
+          // 100033热门 100043短剧 100160会员频道精选 100308短视频
           continue;
         } else {
           newItems.push(item);
@@ -424,9 +421,23 @@ if (isIQY) {
       // 播放页组件
       // 101简介 102点赞评论收藏 201正片列表 205会员衍生模块 206音频有声剧
       // 202精彩短片 203精选特辑 301热门内容 601周边大放送 701通栏广告 702大风车浮层广告
-      obj.data.template.modules = obj.data.template.modules.filter(
-        (i) => ![202, 203, 301, 601, 701, 702]?.includes(i?.dataType)
-      );
+      let newMods = [];
+      for (let item of obj.data.template.modules) {
+        if ([202, 203, 301, 601, 701, 702]?.includes(item?.dataType)) {
+          continue;
+        } else {
+          if (item?.clipInfo?.rcInfo) {
+            // 播放界面推荐语
+            delete item.clipInfo.rcInfo;
+          }
+          newMods.push(item);
+        }
+      }
+      obj.data.template.modules = newMods;
+    }
+    if (obj?.data?.template?.theme) {
+      // 播放页主题皮肤
+      delete obj.data.template.theme;
     }
   } else if (url.includes("/v3/module/list?")) {
     // 芒果 我的页面组件
