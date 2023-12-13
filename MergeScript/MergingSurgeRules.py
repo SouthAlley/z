@@ -110,16 +110,15 @@ def remove_old_files_except_merged(path):
 def merge_and_deduplicate_files(path):
     output_file_path = os.path.join(path, f"{os.path.basename(path)}.list")
     with open(output_file_path, 'w', encoding='utf8') as out_f:
-        # 插入当前时间行
-        china_timezone = pytz.timezone('Asia/Shanghai')
-        current_time = datetime.datetime.now(china_timezone).strftime("%Y-%m-%d %H:%M:%S")
-        out_f.write(f"# 更新时间： {current_time}\n")
         data_set = set()  # 使用集合去重
         for file_name in os.listdir(path):
             file_path = os.path.join(path, file_name)
             if os.path.isfile(file_path):
                 with open(file_path, 'r', encoding='utf8') as in_f:
                     lines = [line.strip() for line in in_f.readlines() if not (line.startswith("#") or line.startswith(";"))]
+
+
+
                     
                     # 使用正则表达式替换和过滤
                     modified_lines = []  # 创建新的列表来存储修改后的行
