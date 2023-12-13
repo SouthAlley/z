@@ -1,20 +1,31 @@
 /*
-引用地址https://raw.githubusercontent.com/wf021325/qx/main/js/qimao.js
+引用地址
 */
-if ($request.url.includes("/api/v1/extra/init")) {
-    var obj = JSON.parse($response.body);
-    obj.data.reader_floats = [];
-    obj.data.reader_top_banner = [];
-    $done({body : JSON.stringify(obj)});
-  }else if ($request.url.includes("/api/v3/user/my-center")) {
-    var obj = JSON.parse($response.body);
-   obj.data.func_area.forEach((element, index, array) => {
-      if (index !== 0 && index !== array.length - 1) {
-          obj.data.func_area[index].list = [];
-      obj.data.func_area[index].first_title = "";
-      }else if(index == array.length - 1){
-     obj.data.func_area[index].list = obj.data.func_area[index].list.filter((_, _index) => ![2, 3, 5, 6].includes(_index));
-    }
-   });
-    $done({body : JSON.stringify(obj)});
+// 2023-12-12 11:00
+
+const url = $request.url;
+if (!$response.body) $done({});
+let obj = JSON.parse($response.body);
+
+if (url.includes("/user/my-center")) {
+  // 我的页面
+  if (obj?.data?.user_area?.vip_info) {
+    // 开通会员卡片
+    obj.data.user_area.vip_info = {};
   }
+  if (obj?.data?.func_area?.length > 0) {
+    let newFuncs = [];
+    for (let func of obj.data.func_area) {
+      if (["ads", "banner"]?.includes(func?.type)) {
+        continue;
+      } else {
+        newFuncs.push(func);
+      }
+    }
+    obj.data.func_area = newFuncs;
+  }
+} else {
+  $done({});
+}
+
+$done({ body: JSON.stringify(obj) });
