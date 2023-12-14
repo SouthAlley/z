@@ -2,8 +2,6 @@
 
 name: JS_Update
 on:
-  schedule:
-    - cron: '0 22 */3 * *'
   workflow_dispatch:
 
   
