@@ -31,7 +31,7 @@ RULES = {
         "Block": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list"
     },
     "ProxyRule": {
-        "Proxy": "https://ruleset.isagood.day/global_domain.conf"
+        "Proxy": "https://ispip.clang.cn/all_cn_ipv6.txt"
     },
     "cn6Rule": {
         "Apple": "https://ispip.clang.cn/hk_ipv6.txt",
