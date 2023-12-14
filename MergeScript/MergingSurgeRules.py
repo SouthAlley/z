@@ -30,11 +30,6 @@ RULES = {
         "MyRejectRule": "https://raw.githubusercontent.com/dler-io/Rules/main/Surge/Surge%203/Provider/Reject.list",
         "Block": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list"
     },
-    "cnRule": {
-        "OpenAI": "https://ispip.clang.cn/hk.txt",
-        "Claude": "https://ispip.clang.cn/mo.txt",
-        "PayPal": "https://ispip.clang.cn/tw.txt",
-    },
     "StreamingRule": {
         "Netflix": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/PayPal.list",
         "Disney": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/OpenAI.list",
