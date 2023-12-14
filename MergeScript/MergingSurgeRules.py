@@ -33,12 +33,10 @@ RULES = {
     "ProxyRule": {
         "Proxy": "https://ruleset.isagood.day/global_domain.conf"
     },
-    "DirectRule": {
-        "Apple": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple.list",
-        "Microsoft": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Microsoft/Microsoft.list",
-        "Speedtest": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Speedtest/Speedtest.list",
-        "China": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/China/China.list",
-        "ChinaASN": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaASN/ChinaASN.list",
+    "cn6Rule": {
+        "Apple": "https://ispip.clang.cn/hk_ipv6.txt",
+        "Microsoft": "https://ispip.clang.cn/mo_ipv6.txt",
+        "Speedtest": "https://ispip.clang.cn/tw_ipv6.txt",
     },
     "cnRule": {
         "OpenAI": "https://ispip.clang.cn/hk.txt",
