@@ -30,14 +30,6 @@ RULES = {
         "MyRejectRule": "https://raw.githubusercontent.com/dler-io/Rules/main/Surge/Surge%203/Provider/Reject.list",
         "Block": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list"
     },
-    "ProxyRule": {
-        "Proxy": "https://ispip.clang.cn/all_cn_ipv6.txt"
-    },
-    "cn6Rule": {
-        "Apple": "https://ispip.clang.cn/hk_ipv6.txt",
-        "Microsoft": "https://ispip.clang.cn/mo_ipv6.txt",
-        "Speedtest": "https://ispip.clang.cn/tw_ipv6.txt",
-    },
     "cnRule": {
         "OpenAI": "https://ispip.clang.cn/hk.txt",
         "Claude": "https://ispip.clang.cn/mo.txt",
