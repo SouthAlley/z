@@ -1,7 +1,7 @@
 /*
 引用地址https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/xiaohongshu.js
 */
-// 2023-12-14 20:15
+// 2023-12-15 22:25
 
 const url = $request.url;
 const isQuanX = typeof $task !== "undefined";
@@ -66,7 +66,7 @@ if (url.includes("/v1/note/live_photo/save")) {
       delete obj.data[i];
     }
   }
-} else if (url.includes("/v2/note/feed")) {
+} else if (url.includes("/v2/note/feed") || url.includes("/v1/note/imagefeed")) {
   // 信息流 图片
   if (obj?.data?.length > 0) {
     let data0 = obj.data[0];
