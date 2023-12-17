@@ -26,6 +26,13 @@ jobs:
         git clone https://github.com/RuCu6/QuanX.git RuCu6_Tmp
         cp -r RuCu6_Tmp/Scripts/* Scripts/RuCu6
         rm -rf RuCu6_Tmp
+
+    - name: Copy fmz200 Scripts
+      run: |
+        mkdir -p Scripts
+        git clone https://github.com/fmz200/wool_scripts.git fmz200_Tmp
+        cp -r fmz200_Tmp/Scripts/* Scripts/fmz200
+        rm -rf fmz200_Tmp
       
     - name: Commit and push changes
       run: |
