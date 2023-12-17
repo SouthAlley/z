@@ -15,21 +15,21 @@ jobs:
 
     - name: Copy lodepuly Scripts
       run: |
-        mkdir -p Scripts
+        mkdir -p Scripts/lodepuly
         git clone https://gitlab.com/lodepuly/vpn_tool.git lodepuly_Tmp
         cp -r lodepuly_Tmp/Resource/Script/* Scripts/lodepuly
         rm -rf lodepuly_Tmp
 
     - name: Copy RuCu6 Scripts
       run: |
-        mkdir -p Scripts
+        mkdir -p Scripts/RuCu6
         git clone https://github.com/RuCu6/QuanX.git RuCu6_Tmp
         cp -r RuCu6_Tmp/Scripts/* Scripts/RuCu6
         rm -rf RuCu6_Tmp
 
     - name: Copy fmz200 Scripts
       run: |
-        mkdir -p Scripts
+        mkdir -p Scripts/fmz200
         git clone https://github.com/fmz200/wool_scripts.git fmz200_Tmp
         cp -r fmz200_Tmp/Scripts/* Scripts/fmz200
         rm -rf fmz200_Tmp
