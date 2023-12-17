@@ -1,7 +1,7 @@
 /*
 引用地址https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/xiaohongshu.js
 */
-// 2023-12-15 22:25
+// 2023-12-16 15:15
 
 const url = $request.url;
 const isQuanX = typeof $task !== "undefined";
@@ -30,11 +30,12 @@ if (url.includes("/v1/note/live_photo/save")) {
       }
     }
     // 交换url数据
-    obj.data.datas.forEach((itemA) => {
-      const matchingItemB = newDatas.find((itemB) => itemB.file_id === itemA.file_id);
-      if (matchingItemB) {
-        itemA.url = itemA.url.replace(/(.*)\.mp4/, `${matchingItemB.url.match(/(.*)\.mp4/)[1]}.mp4`);
-      }
+    obj.data.datas.forEach(itemA => {
+      newDatas.forEach(matchingItemB => {
+        if (matchingItemB.file_id === itemA.file_id && itemA.url.includes(".mp4")) {
+          itemA.url = itemA.url.replace(/^https?:\/\/.*?\.mp4$/g, matchingItemB.url);
+        }
+      });
     });
     $done({ body: JSON.stringify(obj) });
   } else {
