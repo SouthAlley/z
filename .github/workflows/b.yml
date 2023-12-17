@@ -29,9 +29,9 @@ jobs:
 
     - name: Copy fmz200 Scripts
       run: |
-        mkdir -p Scripts/fmz200
+        mkdir -p Scripts/fmz20
         git clone https://github.com/fmz200/wool_scripts.git fmz200_Tmp
-        cp -r fmz200_Tmp/Scripts/* Scripts/fmz200
+        cp -r fmz200_Tmp/Scripts/* Scripts/fmz20
         rm -rf fmz200_Tmp
 
     - name: Commit and push changes
