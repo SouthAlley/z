@@ -17,6 +17,7 @@ replacements = [
     (r'ip-cidr', 'IP-CIDR'),
     (r'^(?:host|HOST)', 'DOMAIN'),
     (r'IP6-CIDR', 'IP-CIDR6'),
+    (r'//.*', ''),
 ]
 
 RULES = {
