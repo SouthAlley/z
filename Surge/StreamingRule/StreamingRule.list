@@ -1,5 +1,5 @@
 DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com
-DOMAIN,amp-api.podcasts.apple.com//Podcasts
+DOMAIN,amp-api.podcasts.apple.com
 DOMAIN,aod-dash-uk-live.akamaized.net
 DOMAIN,aod-hls-uk-live.akamaized.net
 DOMAIN,api-abematv.bucketeer.jp
@@ -15,9 +15,9 @@ DOMAIN,bahamut.akamaized.net
 DOMAIN,bcbolt446c5271-a.akamaihd.net
 DOMAIN,bcbolthboa-a.akamaihd.net
 DOMAIN,beta.apple.com
-DOMAIN,beta.music.apple.com//AppleMusicWeb
+DOMAIN,beta.music.apple.com
 DOMAIN,books.apple.com
-DOMAIN,books.itunes.apple.com//iBooksStoredownload
+DOMAIN,books.itunes.apple.com
 DOMAIN,browser-intake-datadoghq.com
 DOMAIN,cdn.honey.io
 DOMAIN,cdn.registerdisney.go.com
@@ -43,7 +43,7 @@ DOMAIN,dl.steam.ksyna.com
 DOMAIN,dmqdd6hw24ucf.cloudfront.net
 DOMAIN,edge.api.brightcove.com
 DOMAIN,f3b7q2p3.ssl.hwcdn.net
-DOMAIN,facetime.apple.com//FaceTimeLinks
+DOMAIN,facetime.apple.com
 DOMAIN,fls-na.amazon.com
 DOMAIN,fonts.googleapis.com
 DOMAIN,fonts.gstatic.com
@@ -66,7 +66,7 @@ DOMAIN,itvpnpmobile-a.akamaihd.net
 DOMAIN,kktv-theater.kk.stream
 DOMAIN,ktpx.amazon.com
 DOMAIN,litvfreemobile-hichannel.cdn.hinet.net
-DOMAIN,lookup-api.apple.com//LookUp
+DOMAIN,lookup-api.apple.com
 DOMAIN,music.youtube.com
 DOMAIN,mytvsuperlimited.hb.omtrdc.net
 DOMAIN,mytvsuperlimited.sc.omtrdc.net
@@ -81,7 +81,7 @@ DOMAIN,ocsp.pki.goog
 DOMAIN,originasserts.akamaized.net
 DOMAIN,play-edge.itunes.apple.com
 DOMAIN,players.brightcove.net
-DOMAIN,radio.itunes.apple.com//AppleMusicRadio
+DOMAIN,radio.itunes.apple.com
 DOMAIN,redirector.c.bigcache.googleapis.com
 DOMAIN,redirector.gvt1.com
 DOMAIN,s3-ap-southeast-1.amazonaws.com
@@ -172,6 +172,7 @@ DOMAIN-KEYWORD,spotify.com
 DOMAIN-KEYWORD,steambroadcast
 DOMAIN-KEYWORD,steamstore
 DOMAIN-KEYWORD,steamuserimages
+DOMAIN-KEYWORD,swiftgram
 DOMAIN-KEYWORD,telegram
 DOMAIN-KEYWORD,testflight
 DOMAIN-KEYWORD,tiktok
@@ -242,7 +243,7 @@ DOMAIN-SUFFIX,apple.com
 DOMAIN-SUFFIX,apple.com.cn
 DOMAIN-SUFFIX,apple.news
 DOMAIN-SUFFIX,applemusic.com
-DOMAIN-SUFFIX,appsto.re//AppleURLShortener
+DOMAIN-SUFFIX,appsto.re
 DOMAIN-SUFFIX,appstore.com
 DOMAIN-SUFFIX,apzones.com
 DOMAIN-SUFFIX,aria.ms
@@ -414,7 +415,7 @@ DOMAIN-SUFFIX,cm.steampowered.com
 DOMAIN-SUFFIX,cms-twdigitalassets.com
 DOMAIN-SUFFIX,codethemicrobit.com
 DOMAIN-SUFFIX,cognito-identity.us-east-1.amazonaws.com
-DOMAIN-SUFFIX,comments.app//@CommentsBot
+DOMAIN-SUFFIX,comments.app
 DOMAIN-SUFFIX,convrgencegame.com
 DOMAIN-SUFFIX,cortana.ai
 DOMAIN-SUFFIX,cortanaanalytics.com
@@ -953,7 +954,7 @@ DOMAIN-SUFFIX,skyking.com.tw
 DOMAIN-SUFFIX,skype.com
 DOMAIN-SUFFIX,skypeassets.com
 DOMAIN-SUFFIX,skypeforbusiness.com
-DOMAIN-SUFFIX,smoot.apple.com//Spotlight
+DOMAIN-SUFFIX,smoot.apple.com
 DOMAIN-SUFFIX,sndcdn.com
 DOMAIN-SUFFIX,sony.com
 DOMAIN-SUFFIX,sonyentertainmentnetwork.com
@@ -1037,8 +1038,8 @@ DOMAIN-SUFFIX,tailwindtraders.com
 DOMAIN-SUFFIX,take2games.com
 DOMAIN-SUFFIX,tdesktop.com
 DOMAIN-SUFFIX,techhub.ms
-DOMAIN-SUFFIX,telegra.ph//Telegraph
-DOMAIN-SUFFIX,telesco.pe//Telescope
+DOMAIN-SUFFIX,telegra.ph
+DOMAIN-SUFFIX,telesco.pe
 DOMAIN-SUFFIX,tellapart.com
 DOMAIN-SUFFIX,tellmewhygame.com
 DOMAIN-SUFFIX,tenor.com
@@ -1194,12 +1195,12 @@ DOMAIN-SUFFIX,yt.be
 DOMAIN-SUFFIX,ytimg.com
 IP-ASN,14061
 IP-ASN,20473
-IP-ASN,211157//TelegramMessengerInc
+IP-ASN,211157
 IP-ASN,31898
-IP-ASN,44907//TelegramMessengerInc
-IP-ASN,59930//TelegramMessengerInc
-IP-ASN,62014//TelegramMessengerInc
-IP-ASN,62041//TelegramMessengerInc
+IP-ASN,44907
+IP-ASN,59930
+IP-ASN,62014
+IP-ASN,62041
 IP-CIDR,1.201.0.0/24
 IP-CIDR,101.32.118.0/23
 IP-CIDR,101.32.96.0/20
@@ -1213,7 +1214,7 @@ IP-CIDR,103.87.204.0/22
 IP-CIDR,104.244.42.0/21
 IP-CIDR,108.168.174.0/16
 IP-CIDR,108.175.32.0/20
-IP-CIDR,109.239.140.0/24//TelegramMessengerLLP
+IP-CIDR,109.239.140.0/24
 IP-CIDR,110.76.140.0/22
 IP-CIDR,113.61.104.0/22
 IP-CIDR,119.235.224.0/21
@@ -1330,7 +1331,7 @@ IP-CIDR,37.77.184.0/21
 IP-CIDR,38.72.126.0/24
 IP-CIDR,45.57.0.0/17
 IP-CIDR,45.64.40.0/22
-IP-CIDR,5.28.192.0/18//IPFFM-InternetProviderFrankfurtGmbH
+IP-CIDR,5.28.192.0/18
 IP-CIDR,50.22.198.204/30
 IP-CIDR,52.200.0.0/13
 IP-CIDR,52.58.0.0/15
