@@ -1,3 +1,6 @@
+/*
+脚本引用https://raw.githubusercontent.com/Maasea/sgmodule/master/Script/Bilibili/dist/bilibili.helper.v2.beta.js
+*/
 // Build: 2023/6/11 12:50:51
 (() => {
   console.time = function (e) {
