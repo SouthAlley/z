@@ -1,4 +1,4 @@
-// 2024-01-02 17:15
+// 2024-01-03 15:35
 
 const url = $request.url;
 if (!$response.body) $done({});
@@ -347,7 +347,7 @@ if (url.includes("/interface/sdk/sdkad.php")) {
         } else if (item?.category === "group") {
           // 遍历group,保留置顶微博
           if (item?.header?.data?.icon) {
-            // 置顶微博背景图
+            // 置顶微博皇冠背景图
             delete item.header.data.icon;
           }
           if (item?.itemId?.includes("INTEREST_PEOPLE")) {
@@ -368,8 +368,21 @@ if (url.includes("/interface/sdk/sdkad.php")) {
                 if (ii?.data?.enable_comment_guide) {
                   ii.data.enable_comment_guide = false;
                 }
-                newII.push(ii);
+              } else if (ii?.category === "card") {
+                if ([48, 176]?.includes(ii?.data?.card_type)) {
+                  // 最近关注与互动过的博主
+                  continue;
+                }
+                if (ii?.data?.rightImage) {
+                  // 新版置顶微博皇冠背景图
+                  delete ii.data.rightImage;
+                }
+                if (ii?.data?.backgroundImage) {
+                  // 新版置顶微博背景图
+                  delete ii.data.backgroundImage;
+                }
               }
+              newII.push(ii);
             }
             item.items = newII;
           }
@@ -396,11 +409,11 @@ if (url.includes("/interface/sdk/sdkad.php")) {
       }
       obj.items = newItems;
     }
-  } else if (url.includes("/2/profile/dealatt") || url.includes("/2/friendships/destroy")) {
+  } else if (url.includes("/2/profile/dealatt") || url.includes("/2/friendships/")) {
     // 个人主页点击关注后展示菜单
-    if (obj?.cards) {
+    if (obj?.cards?.length > 0) {
       // 相关推荐卡片
-      delete obj.cards;
+      obj.cards = [];
     }
     if (obj?.toolbar_menus_new?.items?.length > 0) {
       // 底部菜单
