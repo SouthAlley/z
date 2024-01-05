@@ -1,7 +1,7 @@
 /*
 脚本引用https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js
 */
-// 2023-12-13 22:50:13
+// 2023-12-28 00:10
 const url = $request.url;
 
 if (!$response.body) {
@@ -14,12 +14,16 @@ if (url.includes("/vip") && obj.data.big_banner) {
   delete obj.data.big_banner;
 }
 
-if (obj.data.functions) {
+if (url.includes("/publish/get_bubble") && obj.data) {
+  delete obj.data;
+}
+
+if (obj.data && obj.data.functions) {
   obj.data.functions = obj.data.functions.filter((item) => item.type === "message");
   fixPos(obj.data.functions);
 }
 
-if (obj.data.services) {
+if (obj.data && obj.data.services) {
   obj.data.services = obj.data.services.filter((item) => item.type === "articel_manage" || item.type === "199794" || item.type === "199796");
   fixPos(obj.data.services);
 }
@@ -35,15 +39,25 @@ if (url.includes("/v3/home")) {
   fixPos(obj.data.component);
 }
 
-if (url.includes("/util/update") && obj.data.ad_black_list) {
-  delete obj.data.ad_black_list;
+if (url.includes("/util/update") && obj.data) {
+  if (obj.data.ad_black_list) {
+    delete obj.data.ad_black_list;
+  }
+  
+  if (obj.data.operation_float_7_0) {
+    delete obj.data.operation_float_7_0;
+  }
+
+  if (obj.data.haojia_widget) {
+    delete obj.data.haojia_widget;
+  }
 }
 
-if (obj.data.widget) {
+if (obj.data && obj.data.widget) {
   delete obj.data.widget;
 }
 
-if (obj.data.operation_float_screen) {
+if (obj.data && obj.data.operation_float_screen) {
   delete obj.data.operation_float_screen;
 }
 
@@ -57,7 +71,7 @@ if (obj?.data?.rows?.length > 0) {
   );
 }
 
-if (url.includes("/publish") && obj.data.hongbao) {
+if (url.includes("/publish") && obj.data && obj.data.hongbao) {
   delete obj.data.hongbao;
 }
 
@@ -65,9 +79,11 @@ if (url.includes("/loading") && obj.data) {
   delete obj.data;
 }
 
-if (url.includes("/util/update") &&
-obj.data.operation_float_7_0) {
-  delete obj.data.operation_float_7_0;
+if (url.includes("/v1/app/home") && obj.data) {
+if (obj.data) {
+  obj.data = obj.data.filter((item) => item.id === "40" || item.id === "20");
+  fixPos(obj.data);
+ }
 }
 
 $done({ body: JSON.stringify(obj) });
