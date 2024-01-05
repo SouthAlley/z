@@ -1,44 +1,53 @@
-name: Convert Remote Resources
+name: fork
 
 on:
   workflow_dispatch:
-
-
-    
+  
 jobs:
-  convert-resources:
-    runs-on: ubuntu-latest # 使用 Ubuntu 环境运行作业
+  Fork-Filter-list:
+    runs-on: ubuntu-latest
+    
+    steps: 
+    - name: Checkout target repository
+      uses: actions/checkout@v4.1.0
+      with:
+        repository: SouthAlley/z
+        path: z-repo
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2 # 检出仓库
+    - name: Download file to Surge
+      run: |
+        mkdir -p z-repo/x
 
-      - name: Set Up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14 # 安装 Node.js 14
-
-      - name: Install Dependencies
-        run: |
-          npm install -g @open-wa/wa-automate # 安装自动化脚本的依赖
-          npm install -g @open-wa/wa-automate-cli # 安装自动化脚本的 CLI 工具
-          
-          
-      - name: Run Conversion Script
-        run: |
-         # 执行自动化脚本
-          wa-automate-cli convert-remote-resources \
-            --input-url "https://example.com/resource.js" \ # 输入远程资源的 URL
-            --output-file "converted.js" # 输出文件的名称，可以根据需要自定义
+        # 广告规则 
+        curl -L -o z-repo/x/text.txt "https://raw.githubusercontent.com/SouthAlley/z/main/x/ts.list"
 
 
 
+    - name: Edit rule/ad
+      run: |
+        cd z-repo/x
+        for file in text.txt; do
+          if [ -f "$file" ]; then
+            # 修改, 为,
+            sed -i 's/, /,/g' "$file"
+            # 在非注释后添加PROXY
+            awk '!/\/\/|#|,PROXY|,DIRECT|,REJECT|^ *$/ {print $0",REJECT"; next} {print}' "$file" > tmpfile
+            mv tmpfile "$file"
+          else
+            echo "$file not found."
+          fi
+        done
 
-      - name: Commit Changes
-        run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-          git add converted.js
-          git commit -m "Convert remote resources"
-          git push
 
+    - name: Add and Commits
+      run: |
+        cd z-repo
+        if [[ -n $(git status -s) ]]; then
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add x/* 
+          git commit -m "Update"
+          git push origin HEAD
+        else
+          echo "No changes to commit."
+        fi
