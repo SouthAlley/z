@@ -623,10 +623,10 @@ noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";n
 	
 	case "surge-module":
 		if (/(?:reject|302|307|header)$/.test(rwtype)) 	URLRewrite.push(mark+noteK+rwptn+" "+rwvalue+" "+rwtype);
-		if (/reject-dict/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"');
-		if (/reject-array/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-array.json"');
-		if (/reject-200/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-200.txt"');
-		if (/reject-(?:img|tinygif|video)/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-img.gif"');
+		if (/reject-dict/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-dict.json"');
+		if (/reject-array/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-array.json"');
+		if (/reject-200/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-200.txt"');
+		if (/reject-(?:img|tinygif|video)/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-img.gif"');
 	break;
 }//switch
 };//reject redirect输出for
