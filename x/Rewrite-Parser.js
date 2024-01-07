@@ -13,15 +13,16 @@
 项目地址:
 https://github.com/Script-Hub-Org/Script-Hub
 ***************************/
+const JS_NAME = "Script Hub: 重写转换";
 
-const $ = new Env(`Script Hub: 重写转换`)
+const $ = new Env(JS_NAME);
 
 const url = $request.url;
-var req = url.split(/file\/_start_\//)[1].split(/\/_end_\//)[0];
-var reqArr = req.match("%F0%9F%98%82") ? req.split("%F0%9F%98%82") : [req];
+const req = url.split(/file\/_start_\//)[1].split(/\/_end_\//)[0];
+const reqArr = req.match("%F0%9F%98%82") ? req.split("%F0%9F%98%82") : [req];
 	//$.log("原始链接：" + req);
 
-var urlArg = url.split(/\/_end_\//)[1];
+const urlArg = url.split(/\/_end_\//)[1];
 
 //获取参数
 const queryObject = parseQueryString(urlArg);
@@ -35,55 +36,62 @@ const isStashiOS = targetApp == "stash-stoverride";
 const isLooniOS = targetApp == "loon-plugin";
 const isShadowrocket = targetApp == "shadowrocket-module";
 
-var evJsori = queryObject.evalScriptori;
-var evJsmodi = queryObject.evalScriptmodi;
-var evUrlori = queryObject.evalUrlori;
-var evUrlmodi = queryObject.evalUrlmodi;
+const evJsori = queryObject.evalScriptori;
+const evJsmodi = queryObject.evalScriptmodi;
+const evUrlori = queryObject.evalUrlori;
+const evUrlmodi = queryObject.evalUrlmodi;
 
-var noNtf = queryObject.noNtf ? istrue(queryObject.noNtf) : false;//默认开启通知
-var localsetNtf = $.getdata("ScriptHub通知");
+let noNtf = queryObject.noNtf ? istrue(queryObject.noNtf) : false;//默认开启通知
+let localsetNtf = $.getdata("ScriptHub通知");
 noNtf = localsetNtf == "开启通知" ? false : localsetNtf == "关闭通知" ? true : noNtf ;
 
-var openInBoxHtml = istrue(queryObject.openInBoxHtml);
-var openOutBoxHtml = istrue(queryObject.openOutBoxHtml);
-var openOtherRuleHtml = istrue(queryObject.openOtherRuleHtml);
+let openInBoxHtml = istrue(queryObject.openInBoxHtml);
+let openOutBoxHtml = istrue(queryObject.openOutBoxHtml);
+let openOtherRuleHtml = istrue(queryObject.openOtherRuleHtml);
 
 noNtf = openInBoxHtml ||openOutBoxHtml||openOtherRuleHtml ? true : noNtf;
 
-var nName = queryObject.n != undefined ? queryObject.n.split("+") : null;//名字简介
-var Pin0 = queryObject.y != undefined ? queryObject.y.split("+") : null;//保留
-var Pout0 = queryObject.x != undefined ? queryObject.x.split("+") : null;//排除
-var hnAdd = queryObject.hnadd != undefined ? queryObject.hnadd.split(/ *, */) : null;//加
-var hnDel = queryObject.hndel != undefined ? queryObject.hndel.split(/ *, */) : null;//减
-var synMitm = istrue(queryObject.synMitm);//将force与mitm同步
-var delNoteSc = istrue(queryObject.del);
-var nCron = queryObject.cron != undefined ? queryObject.cron.split("+") : null;//替换cron目标
-var nCronExp = queryObject.cronexp != undefined ? queryObject.cronexp.replace(/\./g," ").split("+") : null;//新cronexp
-var nArgTarget = queryObject.arg != undefined ? queryObject.arg.split("+") : null;//arg目标
-var nArg = queryObject.argv != undefined ? queryObject.argv.split("+") : null;//arg参数
-var nTilesTarget = queryObject.tiles != undefined ? queryObject.tiles.split("+") : null;
-var nTilesColor = queryObject.tcolor != undefined ? queryObject.tcolor.split("+") : null;
-var jsConverter = queryObject.jsc != undefined ? queryObject.jsc.split("+") : null;//脚本转换1
-var jsConverter2 = queryObject.jsc2 != undefined ? queryObject.jsc2.split("+") : null;//脚本转换2
-var compatibilityOnly = istrue(queryObject.compatibilityOnly);//兼容转换
-var keepHeader = istrue(queryObject.keepHeader);//保留mock header
-var jsDelivr = istrue(queryObject.jsDelivr);//开启jsDelivr
-var localText = queryObject.localtext != undefined ? "\n" + queryObject.localtext : "";//纯文本输入
-var ipNoResolve = istrue(queryObject.nore);//ip规则不解析域名
-var sni = queryObject.sni != undefined ? queryObject.sni.split("+") : null;//sni嗅探
-var sufkeepHeader = keepHeader == true ? '&keepHeader=true' : '';//用于保留header的后缀
-var sufjsDelivr = jsDelivr == true ? '&jsDelivr=true' : '';//用于开启jsDeliver的后缀
+let nName = queryObject.n != undefined ? queryObject.n.split("+") : null;//名字简介
+let Pin0 = queryObject.y != undefined ? queryObject.y.split("+") : null;//保留
+let Pout0 = queryObject.x != undefined ? queryObject.x.split("+") : null;//排除
+let hnAdd = queryObject.hnadd != undefined ? queryObject.hnadd.split(/\s*,\s*/) : null;//加
+let hnDel = queryObject.hndel != undefined ? queryObject.hndel.split(/\s*,\s*/) : null;//减
+let hnRegDel = queryObject.hnregdel != undefined ? new RegExp(queryObject.hnregdel) : null;//正则删除hostname
+let synMitm = istrue(queryObject.synMitm);//将force与mitm同步
+let delNoteSc = istrue(queryObject.del);
+let nCron = queryObject.cron != undefined ? queryObject.cron.split("+") : null;//替换cron目标
+let ncronexp = queryObject.cronexp != undefined ? queryObject.cronexp.replace(/\./g," ").split("+") : null;//新cronexp
+let nArgTarget = queryObject.arg != undefined ? queryObject.arg.split("+") : null;//arg目标
+let nArg = queryObject.argv != undefined ? queryObject.argv.split("+") : null;//arg参数
+let nTilesTarget = queryObject.tiles != undefined ? queryObject.tiles.split("+") : null;
+let ntilescolor = queryObject.tcolor != undefined ? queryObject.tcolor.split("+") : null;
+let nPolicy = queryObject.policy != undefined ? queryObject.policy : null;
+let njsnametarget = queryObject.njsnametarget != undefined ? queryObject.njsnametarget.split("+") : null;//修改脚本名目标
+let njsname = queryObject.njsname != undefined ? queryObject.njsname.split("+") : null;//修改脚本名
+let jsConverter = queryObject.jsc != undefined ? queryObject.jsc.split("+") : null;//脚本转换1
+let jsConverter2 = queryObject.jsc2 != undefined ? queryObject.jsc2.split("+") : null;//脚本转换2
+let compatibilityOnly = istrue(queryObject.compatibilityOnly);//兼容转换
+let keepHeader = istrue(queryObject.keepHeader);//保留mock header
+let jsDelivr = istrue(queryObject.jsDelivr);//开启jsDelivr
+let localText = queryObject.localtext != undefined ? "\n" + queryObject.localtext : "";//纯文本输入
+let ipNoResolve = istrue(queryObject.nore);//ip规则不解析域名
+let sni = queryObject.sni != undefined ? queryObject.sni.split("+") : null;//sni嗅探
+let sufkeepHeader = keepHeader == true ? '&keepHeader=true' : '';//用于保留header的后缀
+let sufjsDelivr = jsDelivr == true ? '&jsDelivr=true' : '';//用于开启jsDeliver的后缀
 
 //插件图标区域
 const iconStatus = $.getval("启用插件随机图标") ?? "启用";
 const iconReplace = $.getval("替换原始插件图标");
 const iconLibrary1 = $.getval("插件随机图标合集") ?? "Doraemon(100P)";
-var iconLibrary2 = iconLibrary1.split("(")[0];
+const iconLibrary2 = iconLibrary1.split("(")[0];
 const iconFormat = iconLibrary2.search(/gif/i) == -1 ? ".png" : ".gif";
-if (iconStatus == "禁用" && iconReplace == "禁用"){iconLibrary2 = "Doraemon"};
+
+//统一前置声明变量
+let name,desc,body,jscStatus,jsc2Status,jsPre,jsSuf,mark,noteK,ruletype,rulenore,rulesni,rulePandV,rulepolicy,rulevalue,modistatus,hostdomain,hostvalue,jsurl,jsname,jsfrom,jstype,eventname,size,proto,jsptn,jsarg,rebody,wakesys,cronexp,ability,updatetime,timeout,tilesicon,tilescolor,urlInNum,noteK2,noteK4,noteKn4,noteKn6,noteKn8,rwtype,rwptn,rwvalue,ori,MITM,force,result;
+let icon = "";
+
 
 //随机插件图标
-let icon = "";
 if(isLooniOS && iconStatus == "启用"){
 	const stickerStartNum = 1001;
 const stickerSum = iconLibrary1.split("(")[1].split("P")[0];
@@ -92,11 +100,11 @@ let randomStickerNum = parseInt(stickerStartNum + Math.random() * stickerSum).to
 };
 
 //通知名区域
-var rewriteName = req.substring(req.lastIndexOf('/') + 1).split('.')[0];
-var resFile = urlArg.split("?")[0];
-var resFileName = 
+let rewriteName = req.substring(req.lastIndexOf('/') + 1).split('.')[0];
+let resFile = urlArg.split("?")[0];
+let resFileName = 
 resFile.substring(0,resFile.lastIndexOf('.'));
-var notifyName
+let notifyName
 if (nName != null && nName[0] != ""){notifyName = nName[0];}else{notifyName = resFileName;};
 
 //修改名字和简介
@@ -108,15 +116,6 @@ if (nName === null){
 	desc = nName[1] != undefined ? nName[1] : name;
 };
 
-let modInfoBackup;
-if (isLooniOS) modInfoBackup = `#!name=${name}
-#!desc=${desc}
-${icon}`;
-if (isSurgeiOS || isShadowrocket) modInfoBackup = `#!name=${name}
-#!desc=${desc}`;
-if (isStashiOS) modInfoBackup = `name: "${name}"
-desc: "${desc}"`;
-
 //信息中转站
 let bodyBox = [];      //存储待转换的内容
 let otherRule = [];    //不支持的规则&脚本
@@ -124,6 +123,7 @@ let inBox = [];        //被释放的重写或规则
 let outBox = [];       //被排除的重写或规则
 let modInfoBox = [];   //模块简介等信息
 let modInputBox = [];  //loon插件的可交互按钮
+let hostBox = [];      //host
 let ruleBox = [];      //规则
 let rwBox = [];        //重写
 let rwhdBox = [];      //HeaderRewrite
@@ -133,13 +133,20 @@ let hnBox = [];        //MITM主机名
 let fheBox = [];       //force-http-engine
 let skipBox = [];      //skip-ip
 let realBox = [];      //real-ip
+let hndelBox = [];     //正则剔除的主机名
+
+let hnaddMethod = "%APPEND%";
+let fheaddMethod = "%APPEND%";
+let skipaddMethod = "%APPEND%";
+let realaddMethod = "%APPEND%";
 
 //待输出
 let modInfo = [];      //模块简介
-let httpFrame = [];    //Stash的http:父框架
+let httpFrame = "";    //Stash的http:父框架
 let tiles = [];        //磁贴覆写
 let General = [];      
-let Panel = [];        
+let Panel = [];
+let host = [];        
 let rules = [];
 let URLRewrite = [];
 let HeaderRewrite = [];
@@ -150,11 +157,11 @@ let providers = [];
 
 hnBox = hnAdd != null ? hnAdd : [];
 
-const jsRegx = /[=,] *script-path *=|[=,] *pattern *=|[=,] *timeout *=|[=,] *argument *=|[=,] *script-update-interval *=|[=,] *requires-body *=|[=,] *max-size *=|[=,] *ability *=|[=,] *binary-body-mode *=|[=,] *cronexpr? *=|[=,] *wake-system *=|[=,] *enable *=|[=,] *tag *=|[=,] *type *=|[=,] *img-url *=|[=,] *debug *=|[=,] *event-name *=/;
+const jsRegx = /[=,]\s*(?:script-path|pattern|timeout|argument|script-update-interval|requires-body|max-size|ability|binary-body-mode|cronexpr?|wake-system|enabled?|tag|type|img-url|debug|event-name|desc)\s*=/;
 
 //查询js binarymode相关
 let binaryInfo = $.getval("Parser_binary_info");
-if (binaryInfo != null && binaryInfo !=""){
+if (binaryInfo != null && binaryInfo.length > 0){
 	binaryInfo = $.toObj(binaryInfo);
 }else{binaryInfo = [];};
 
@@ -164,7 +171,11 @@ if (req == 'http://local.text'){
 	body = localText;
 }else{
 	for (let i=0; i<reqArr.length; i++){
-		body = (await $.http.get(reqArr[i])).body;
+		let bodyobj = await $.http.get(reqArr[i]);
+		let bodystatus = bodyobj.status;
+		body = bodystatus == 200 ? bodyobj.body : bodystatus == 404 ? "#!error=404: Not Found" : "";
+		bodystatus == 404 && $.msg(JS_NAME,"来源链接已失效","404: Not Found ---> "+reqArr[i],'');
+		
 		if (body.match(/^(?:\s)*\/\*[\s\S]*?(?:\r|\n)\s*\*+\//)){
 
 body = body.match(/^(?:\n|\r)*\/\*([\s\S]*?)(?:\r|\n)\s*\*+\//)[1];
@@ -173,25 +184,27 @@ body = body.match(/^(?:\n|\r)*\/\*([\s\S]*?)(?:\r|\n)\s*\*+\//)[1];
 		}else{bodyBox.push(body)}
 		
 	};//for
-	body = bodyBox.join("\n\n")+localText;};
+	body = bodyBox.join("\n\n")+localText;
+};
 
 eval(evJsori);
 eval(evUrlori);
 
     body = body.match(/[^\r\n]+/g);
 
-for await (var [y, x] of body.entries()) {
+for await (let [y, x] of body.entries()) {
 
 //简单处理方便后续操作
-	x = x.replace(/^ *(#|;|\/\/) */,'#').replace(/\x20.+url-and-header\x20/,' url ').replace(/(^[^#].+)\x20+\/\/.+/,"$1");
+	x = x.replace(/^\s*(#|;|\/\/)\s*/,'#').replace(/\s+[^\s]+\s+url-and-header\s+/,' url ').replace(/(^[^#].+)\x20+\/\/.+/,"$1").replace(/^#!PROFILE-VERSION-REQUIRED\s+[0-9]+\s+/i,'').replace(/^(#)?host-wildcard\s*,.+/i,'').replace(/^(#)?host(-suffix|-keyword|)?\s*,\s*/i,'$1DOMAIN$2,').replace(/^(#)?ip6-cidr\s*,\s*/i,'$1IP-CIDR6,');
 	
 //去掉注释
 if (Pin0 != null) {
 	for (let i=0; i < Pin0.length; i++) {
-  const elem = Pin0[i];
+  const elem = Pin0[i].trim();
 	if (x.indexOf(elem) != -1&&/^#/.test(x)){
 		x = x.replace(/^#/,"")
 		inBox.push(x);
+		break;
 	};
 };//循环结束
 };//去掉注释结束
@@ -199,38 +212,37 @@ if (Pin0 != null) {
 //增加注释
 if (Pout0 != null){
 	for (let i=0; i < Pout0.length; i++) {
-  const elem = Pout0[i];
-	if (x.indexOf(elem) != -1 && x.search(/^(hostname|force-http-engine-hosts|skip-proxy|always-real-ip|real-ip) *=/) == -1&&!/^#/.test(x)){
+  const elem = Pout0[i].trim();
+	if (x.indexOf(elem) != -1 && x.search(/^(hostname|force-http-engine-hosts|skip-proxy|always-real-ip|real-ip)\s*=/) == -1&&!/^#/.test(x)){
 		x = "#" + x;
 		outBox.push(x);
+		break;
 	};
 };//循环结束
 };//增加注释结束
 
 //剔除被注释的重写
-if (delNoteSc === true && x.match(/^#/) && x.indexOf("#!") == -1){
+if (delNoteSc == true && /^#/.test(x) && !/^#!/.test(x)){
 		x = "";
 };
 
 //sni嗅探
 if (sni != null){
 	for (let i=0; i < sni.length; i++) {
-  const elem = sni[i];
-	if (x.indexOf(elem) != -1 && /^(DOMAIN|RULE-SET)/i.test(x) && !/, *extended-matching/i.test(x)){
+  const elem = sni[i].trim();
+	if (x.indexOf(elem) != -1 && /^(DOMAIN|RULE-SET)/i.test(x) && !/,\s*extended-matching/i.test(x)){
 		x = x + ",extended-matching";
+		break;
 	};
 };//循环结束
 };//启用sni嗅探结束
 
 //ip规则不解析域名
-if(ipNoResolve === true){
-	if (/^(?:ip-[ca]|RULE-SET)/i.test(x) && !/, *no-resolve/.test(x)){
+if(ipNoResolve == true){
+	if (/^(?:ip-[ca]|RULE-SET)/i.test(x) && !/,\s*no-resolve/.test(x)){
 		x = x + ",no-resolve";
 	};
 };//增加ip规则不解析域名结束
-
-jscStatus = false;
-jsc2Status = false;
 
 if (jsConverter != null){
 	jscStatus = isJsCon(x, jsConverter);}
@@ -240,15 +252,13 @@ if (jsc2Status == true){jscStatus = false};
 
 jsPre = "";
 jsSuf = "";
-jsTarget = targetApp.split("-")[0];
-
 if (jscStatus == true || jsc2Status == true){
 jsPre = "http://script.hub/convert/_start_/";
 };
 if (jscStatus == true){
-jsSuf = `/_end_/_yuliu_.js?type=_js_from_-script&target=${jsTarget}-script`;
+jsSuf = `/_end_/_yuliu_.js?type=_js_from_-script&target=${app}-script`;
 }else if (jsc2Status == true){
-jsSuf = `/_end_/_yuliu_.js?type=_js_from_-script&target=${jsTarget}-script&wrap_response=true`;
+jsSuf = `/_end_/_yuliu_.js?type=_js_from_-script&target=${app}-script&wrap_response=true`;
 };
 
 if (compatibilityOnly == true && (jscStatus == true || jsc2Status == true)){
@@ -256,180 +266,155 @@ jsSuf = jsSuf + "&compatibilityOnly=true"
 };
 
 //模块信息 
-if (/^#!.+?= *$/.test(x)){
+if (/^#!.+?=\s*$/.test(x)){
 	
-} else if (isLooniOS&&/^#!(?:select|input) *= *.+/.test(x)){
+} else if (isLooniOS&&/^#!(?:select|input)\s*=\s*.+/.test(x)){
 	getModInfo(x,modInputBox);
-}else if (reqArr.length>1&&/^#!(?:name|desc|date) *=.+/.test(x) && (isSurgeiOS || isShadowrocket || isStashiOS)){getModInfo(x,modInfoBox);
+}else if (reqArr.length>1&&/^#!(?:name|desc|date|author|error)\s*=.+/.test(x) && !isLooniOS){getModInfo(x,modInfoBox);
 	
-}else if (reqArr.length==1&&/^#!(?:name|desc|date|system) *=.+/.test(x) && (isSurgeiOS || isShadowrocket || isStashiOS)) {
+}else if (reqArr.length==1&&/^#!(?:name|desc|date|author|system|error)\s*=.+/.test(x) && !isLooniOS) {
 	getModInfo(x,modInfoBox);
 }else if (isLooniOS && /^#!.+?=.+/.test(x)){
 	getModInfo(x,modInfoBox);
 };
 
 //hostname
-if (/^hostname *=.+/.test(x)) getHn(x,hnBox);
+if (/^hostname\s*=.+/.test(x)) hnaddMethod=getHn(x,hnBox,hnaddMethod);
 
-if (/^force-http-engine-hosts *=.+/.test(x)) getHn(x,fheBox);
+if (/^force-http-engine-hosts\s*=.+/.test(x)) fheaddMethod=getHn(x,fheBox,fheaddMethod);
 
-if (/^skip-proxy *=.+/.test(x)) getHn(x,skipBox);
+if (/^skip-proxy\s*=.+/.test(x)) skipaddMethod=getHn(x,skipBox,skipaddMethod);
 
-if (/^(?:always-)?real-ip *=.+/.test(x)) getHn(x,realBox);
+if (/^(?:always-)?real-ip\s*=.+/.test(x)) realaddMethod=getHn(x,realBox,realaddMethod);
 
 //reject 解析
-	if (/^#?(?!DOMAIN.*? *,|IP-CIDR6? *,|IP-ASN *,|OR *,|AND *,|NOT *,|USER-AGENT *,|URL-REGEX *,|RULE-SET *,|DE?ST-PORT *,|PROTOCOL *,).+reject(?:-\w+)?$/i.test(x)) {
-		mark = body[y - 1]?.match(/^#/) ? body[y - 1] : "";
+	if (/.+reject(?:-\w+)?$/i.test(x) && !/^#?(DOMAIN.*?\s*,|IP-CIDR6?\s*,|IP-ASN\s*,|OR\s*,|AND\s*,|NOT\s*,|USER-AGENT\s*,|URL-REGEX\s*,|RULE-SET\s*,|DE?ST-PORT\s*,|PROTOCOL\s*,)/i.test(x) && !/^#!/.test(x)) {
+		mark = getMark(y,body);
 		rw_reject(x,mark);
 	};
 	
 //重定向 解析
-	if (/(?: (?:302|307|header)(?:$| )|url 30(?:2|7) )/.test(x)) {
-		mark = body[y - 1]?.match(/^#/) ? body[y - 1] : "";
+	if (/(?:\s(?:302|307|header)(?:$|\s)|url\s+30(?:2|7)\s)/.test(x)) {
+		mark = getMark(y,body);
 		rw_redirect(x,mark);
 	};
 	
 //header rewrite 解析
-	if (/ header-(?:del|add|replace|replace-regex) /.test(x)) {
-		mark = body[y - 1]?.match(/^#/) ? body[y - 1] : "";
-		rwhdBox.push(mark,x);
+	if (/\sheader-(?:del|add|replace|replace-regex)\s/.test(x)) {
+		mark = getMark(y,body);
+		noteK = isNoteK(x);
+		x = x.replace(/^#/,"");
+		rwhdBox.push({mark,noteK,x});
 };
 
 //(request|response)-(header|body) 解析
-if (/ url *(?:request|response)-(?:header|body) /i.test(x)) {
-		mark = body[y - 1]?.match(/^#/) ? body[y - 1] : "";
+if (/\surl\s+(?:request|response)-(?:header|body)\s/i.test(x)) {
+		mark = getMark(y,body);
 		getQxReInfo(x,y,mark);
 };
 
 //rule解析
-if (/^#?(?:domain(?:-suffix|-keyword|-set)?|ip-cidr6?|ip-asn|rule-set|user-agent|url-regex|de?st-port|and|not|or|protocol) *,.+/i.test(x)){
-		mark = body[y - 1]?.match(/^#/) ? body[y - 1] : "";
-	x = x.replace(/ /g,"");
-	noteK = /^#/.test(x) ? "#" : "";
-	if (/^#?(and|or|not|protocol|domain-set|rule-set),/i.test(x)){
-	ruletype = x.split(/ *, */)[0].replace(/^#/,"");
-	rulevalue = x;
-	ruleBox.push({mark,ruletype,rulevalue})
-	
-	}else{
-	ruletype = x.split(/ *, */)[0].replace(/^#/,"");
+if (/^#?(?:domain(?:-suffix|-keyword|-set)?|ip-cidr6?|ip-asn|rule-set|user-agent|url-regex|de?st-port|and|not|or|protocol)\s*,.+/i.test(x)){
+	mark = getMark(y,body);
+	x = x.replace(/\s/g,"");
+	noteK = isNoteK(x);
+	ruletype = x.split(/\s*,\s*/)[0].replace(/^#/,"");
 	rulenore = /,no-resolve/.test(x) ? ",no-resolve" : "";
 	rulesni = /,extended-matching/.test(x) ? ",extended-matching" : "";
 	rulePandV = x.replace(/^#/,'').replace(ruletype,'').replace(rulenore,'').replace(rulesni,'').replace(/^,/,'');
 	rulepolicy = rulePandV.substring(rulePandV.lastIndexOf(',') + 1);
+	rulepolicy = /\)|\}/.test(rulepolicy) ? "" : rulepolicy;
 	rulevalue = rulePandV.replace(rulepolicy,'').replace(/,$/,'').replace(/"/g,'');
-	ruleBox.push({mark,noteK,ruletype,rulevalue,rulepolicy,rulenore,rulesni,"ori":x})
+	if (rulepolicy != '' && rulevalue == '') {
+		rulevalue = rulepolicy;
+		rulepolicy = ''
 	};
-};//rule解析
+	
+	if (nPolicy!=null&&!/direct|reject/.test(rulepolicy)){
+		rulepolicy = nPolicy;
+		modistatus = "yes";
+	}else{modistatus = "no";}
+	ruleBox.push({mark,noteK,ruletype,rulevalue,rulepolicy,rulenore,rulesni,"ori":x,modistatus})
 
-//脚本 解析
-	if (/script-path *=.+/.test(x)){
-		mark = body[y - 1]?.match(/^#/) ? body[y - 1] : "";
-		noteK = /^#/.test(x) ? "#" : "";
-		jsUrl = getJsInfo(x, /script-path *= */);
-		jsName = /[=,] *type *= */.test(x) ? x.split(/ *=/)[0].replace(/^#/,"") : /, *tag *= */.test(x) ? getJsInfo(x, /, *tag *= */) : jsUrl.substring(jsUrl.lastIndexOf('/') + 1, jsUrl.lastIndexOf('.') );
+};//rule解析结束
+
+//host解析
+if (/^#?(?:\*|localhost|[-*?0-9a-z]+\.[-*.?0-9a-z]+)\s*=\s*(?:sever\s*:\s*|script\s*:\s*)?[\s0-9a-z:/,.]+$/g.test(x)) {
+		noteK = isNoteK(x);
+		mark = getMark(y,body);
+		hostdomain = x.split(/\s*=\s*/)[0];
+		hostvalue = x.split(/\s*=\s*/)[1];
+		hostBox.push({mark,noteK,hostdomain,hostvalue,"ori":x})
+};
+
+//脚本解析
+	if (/script-path\s*=.+/.test(x)){
+		mark = getMark(y,body);
+		noteK = isNoteK(x);
+		jsurl = getJsInfo(x, /script-path\s*=\s*/);
+		jsname = /[=,]\s*type\s*=\s*/.test(x) ? x.split(/\s*=/)[0].replace(/^#/,"") : /,\s*tag\s*=\s*/.test(x) ? getJsInfo(x, /,\s*tag\s*=\s*/) : jsurl.substring(jsurl.lastIndexOf('/') + 1, jsurl.lastIndexOf('.') );
 		jsfrom = "surge";
-		jsUrl = toJsc(jsUrl,jscStatus,jsc2Status,jsfrom);
-		jsType = /[=,] *type *= */.test(x) ? getJsInfo(x, /[=,] *type *=/) : x.split(/ +/)[0].replace(/^#/,"");
-		eventName = getJsInfo(x, /[=, ] *event-name *= */);
-		size = getJsInfo(x, /[=, ] *max-size *= */);
-		proto = getJsInfo(x, /[=, ] *binary-body-mode *= */);
-		jsPtn = /[=,] *pattern *= */.test(x) ? getJsInfo(x, /[=,] *pattern *= */).replace(/"/g,'') : x.split(/ +/)[1];
-		jsArg = getJsInfo(x, /[=, ] *argument *= */);
-		reBody = getJsInfo(x, /[=, ] *requires-body *= */);
-		wakeSys = getJsInfo(x, /[=, ] *wake-system *= */);
-		cronExp = getJsInfo(x, /[=, ] *cronexpr? *= */);
-		ability = getJsInfo(x, /[=, ] *ability *= */);
-		updateTime = getJsInfo(x, /[=, ] *script-update-interval *= */);
-		timeOut = getJsInfo(x, /[=, ] *timeout *= */);
-		tilesIcon = (jsType=="generic"&&/icon=/.test(x)) ? x.split("icon=")[1].split("&")[0] : "";
-		tilesColor = (jsType=="generic"&&/icon-color=/.test(x)) ? x.split("icon-color=")[1].split("&")[0] : "";
-		if (nTilesTarget != null){
-	for (let i=0; i < nTilesTarget.length; i++) {
-  const elem = nTilesTarget[i];
-	if (x.indexOf(elem) != -1){
-        tilesColor = nTilesColor[i].replace(/@/g,"#");   
-            };};};
-			
-		if (nArgTarget != null){
-	for (let i=0; i < nArgTarget.length; i++) {
-  const elem = nArgTarget[i];
-	if (x.indexOf(elem) != -1){
-        jsArg = nArg[i].replace(/t;amp;/g,"&").replace(/t;add;/g,"+");   
-            };};};
-			
-			if (nCron != null){
-	for (let i=0; i < nCron.length; i++) {
-  const elem = nCron[i];
-	if (x.indexOf(elem) != -1){
-        cronExp = nCronExp[i];   
-            };};};
-			jsBox.push({mark,"noteK":noteK,"jsname":jsName+`_${y}`,"jstype":jsType,"jsptn":jsPtn,"jsurl":jsUrl,"rebody":reBody,"proto":proto,"size":size,"ability":ability,"updatetime":updateTime,"timeout":timeOut,"jsarg":jsArg,"cronexp":cronExp,"wakesys":wakeSys,"tilesicon":tilesIcon,"tilescolor":tilesColor,"eventname":eventName,"ori":x})
+		jsurl = toJsc(jsurl,jscStatus,jsc2Status,jsfrom);
+		jstype = /[=,]\s*type\s*=\s*/.test(x) ? getJsInfo(x, /[=,]\s*type\s*=/) : x.split(/\s+/)[0].replace(/^#/,"");
+		eventname = getJsInfo(x, /[=,\s]\s*event-name\s*=\s*/);
+		size = getJsInfo(x, /[=,\s]\s*max-size\s*=\s*/);
+		proto = getJsInfo(x, /[=,\s]\s*binary-body-mode\s*=\s*/);
+		jsptn = /[=,]\s*pattern\s*=\s*/.test(x) ? getJsInfo(x, /[=,]\s*pattern\s*=\s*/).replace(/"/g,'') : x.split(/\s+/)[1];
+		jsptn = /cron|event|network-changed|generic|dns|rule/i.test(jstype) ? "" : jsptn;
+		jsarg = getJsInfo(x, /[=,\s]\s*argument\s*=\s*/);
+		rebody = getJsInfo(x, /[=,\s]\s*requires-body\s*=\s*/);
+		wakesys = getJsInfo(x, /[=,\s]\s*wake-system\s*=\s*/);
+		cronexp = /cronexpr?\s*=\s*/.test(x) ? getJsInfo(x, /[=,\s]\s*cronexpr?\s*=\s*/) : /cron\s*"/.test(x) ? x.split('"')[1] : '';
+		ability = getJsInfo(x, /[=,\s]\s*ability\s*=\s*/);
+		updatetime = getJsInfo(x, /[=,\s]\s*script-update-interval\s*=\s*/);
+		timeout = getJsInfo(x, /[=,\s]\s*timeout\s*=\s*/);
+		tilesicon = (jstype=="generic"&&/icon=/.test(x)) ? x.split("icon=")[1].split("&")[0] : "";
+		tilescolor = (jstype=="generic"&&/icon-color=/.test(x)) ? x.split("icon-color=")[1].split("&")[0] : "";
+			jsBox.push({mark,noteK,jsname,jstype,jsptn,jsurl,rebody,proto,size,ability,updatetime,timeout,jsarg,cronexp,wakesys,tilesicon,tilescolor,eventname,"ori":x,"num":y})
 
 };//脚本解析结束
 
 //qx脚本解析
-if (/ url +script-/.test(x)){
-	x = x.replace(/ {2,}/g," ");
-	mark = body[y - 1]?.match(/^#/) ? body[y - 1] : "";
-	noteK = /^#/.test(x) ? "#" : "";
-	jsType = x.match(' url script-response') ? 'http-response' : 'http-request';
-	urlInNum = x.split(" ").indexOf("url");
-	jsPtn = x.split(" ")[urlInNum - 1].replace(/^#/,"");
-	jsUrl = x.split(" ")[urlInNum + 2];
+if (/\surl\s+script-/.test(x)){
+	x = x.replace(/\s{2,}/g," ");
+	mark = getMark(y,body);
+	noteK = isNoteK(x);
+	jstype = x.match(' url script-response') ? 'http-response' : 'http-request';
+	urlInNum = x.split(/\s/).indexOf("url");
+	jsptn = x.split(/\s/)[urlInNum - 1].replace(/^#/,"");
+	jsurl = x.split(/\s/)[urlInNum + 2];
 	jsfrom = "qx";
-	jsName = jsUrl.substring(jsUrl.lastIndexOf('/') + 1, jsUrl.lastIndexOf('.') );
-	jsArg = "";
-		jsUrl = toJsc(jsUrl,jscStatus,jsc2Status,jsfrom);
-	reBody = x.match(/ script[^ ]*(-body|-analyze)/) ? 'true' : '';
-	size = x.match(/ script[^ ]*(-body|-analyze)/) ? '-1' : '';
-	proto = await isBinaryMode(jsUrl);
-			
-		if (nArgTarget != null){
-	for (let i=0; i < nArgTarget.length; i++) {
-  const elem = nArgTarget[i];
-	if (x.indexOf(elem) != -1){
-        jsArg = nArg[i].replace(/t;amp;/g,"&").replace(/t;add;/g,"+");   
-            };};};
-	jsBox.push({mark,"noteK":noteK,"jsname":jsName+`_${y}`,"jstype":jsType,"jsptn":jsPtn,"jsurl":jsUrl,"rebody":reBody,"proto":proto,"size":size,"updatetime":"0","timeout":"60","jsarg":jsArg,"ori":x})
+	jsname = jsurl.substring(jsurl.lastIndexOf('/') + 1, jsurl.lastIndexOf('.') );
+	jsarg = "";
+	proto = await isBinaryMode(jsurl,jsname);
+		jsurl = toJsc(jsurl,jscStatus,jsc2Status,jsfrom);
+	rebody = /\sscript[^\s]*(-body|-analyze)/.test(x) ? 'true' : '';
+	size = rebody == 'true' ? '-1' : '';
+	jsBox.push({mark,noteK,jsname,jstype,jsptn,jsurl,rebody,proto,size,"timeout":"60",jsarg,"ori":x,"num":y})
 };//qx脚本解析结束
 
 //qx cron脚本解析
-if (/[^ ]+ [^u ]+ [^ ]+ [^ ]+ [^ ]+ ([^ ]+ )?(https?|ftp|file):\/\//.test(x)){
-	mark = body[y - 1]?.match(/^#/) ? body[y - 1] : "";
-	noteK = /^#/.test(x) ? "#" : "";
-	cronExp = x.replace(/ {2,}/g," ").split(/\x20(https?|ftp|file)/)[0].replace(/^#/,'');
-	jsUrl = x.replace(/^#/,"")
+if (/^[^\s]+\s+[^u\s]+\s+[^\s]+\s+[^\s]+\s+[^\s]+\s+([^\s]+\s+)?(https?|ftp|file):\/\//.test(x)){
+	mark = getMark(y,body);
+	noteK = isNoteK(x);
+	cronexp = x.replace(/\s{2,}/g," ").split(/\s(https?|ftp|file)/)[0].replace(/^#/,'');
+	jsurl = x.replace(/^#/,"")
 				.replace(/\x20{2,}/g," ")
-				.replace(cronExp,"")
-				.split(/ *, */)[0]
+				.replace(cronexp,"")
+				.split(/\s*,\s*/)[0]
 				.trim();
-	jsName = jsUrl.substring(jsUrl.lastIndexOf('/') + 1, jsUrl.lastIndexOf('.') );
+	jsname = jsurl.substring(jsurl.lastIndexOf('/') + 1, jsurl.lastIndexOf('.') );
 	jsfrom = "qx";
-	jsUrl = toJsc(jsUrl,jscStatus,jsc2Status,jsfrom);
-	jsArg = "";
-		
-		if (nCron != null){
-	for (let i=0; i < nCron.length; i++) {
-  const elem = nCron[i];
-	if (x.indexOf(elem) != -1){
-        cronExp = nCronExp[i];   
-            };};};
-			
-			if (nArgTarget != null){
-	for (let i=0; i < nArgTarget.length; i++) {
-  const elem = nArgTarget[i];
-	if (x.indexOf(elem) != -1){
-        jsArg = nArg[i].replace(/t;amp;/g,"&").replace(/t;add;/g,"+");   
-            };};};
-	jsBox.push({mark,"noteK":noteK,"jsname":jsName+`_${y}`,"jstype":"cron","cronexp":cronExp,"jsurl":jsUrl,"wakesys":"1","updatetime":"0","timeout":"60","jsarg":jsArg,"ori":x})
+	jsurl = toJsc(jsurl,jscStatus,jsc2Status,jsfrom);
+	jsarg = "";
+	jsBox.push({mark,noteK,jsname,"jstype":"cron","jsptn":"",cronexp,jsurl,"wakesys":"1","timeout":"60",jsarg,"ori":x,"num":y})
 
 };//qx cron 脚本解析结束
 
 //mock 解析
-if (/url +echo-response | data *= *"/.test(x)){
-		mark = body[y - 1]?.match(/^#/) ? body[y - 1] : "";
-		getMockInfo(x,mark);
+if (/url\s+echo-response\s|\sdata\s*=\s*"/.test(x)){
+		mark = getMark(y,body);
+		getMockInfo(x,mark,y);
 };
 
 };//for await循环结束
@@ -464,9 +449,9 @@ if (/url +echo-response | data *= *"/.test(x)){
       return curr;
     }, []);
 	
-    jsBox = jsBox.reduce((curr, next) => {
+    hostBox = hostBox.reduce((curr, next) => {
       /*判断对象中是否已经有该属性  没有的话 push 到 curr数组*/
-      obj[next.jstype + next.jsptn + next.jsurl] ? '' : obj[next.jstype + next.jsptn + next.jsurl] = curr.push(next);
+      obj[next.hostdomain] ? '' : obj[next.hostdomain] = curr.push(next);
       return curr;
     }, []);
 	
@@ -476,22 +461,38 @@ if (/url +echo-response | data *= *"/.test(x)){
       return curr;
     }, []);
 	
+    jsBox = jsBox.reduce((curr, next) => {
+      /*判断对象中是否已经有该属性  没有的话 push 到 curr数组*/
+      obj[next.jstype + next.jsptn + next.jsurl] ? '' : obj[next.jstype + next.jsptn + next.jsurl] = curr.push(next);
+      return curr;
+    }, []);
+	
     mockBox = mockBox.reduce((curr, next) => {
       /*判断对象中是否已经有该属性  没有的话 push 到 curr数组*/
       obj[next.mockptn] ? '' : obj[next.mockptn] = curr.push(next);
       return curr;
     }, []);//去重结束
 
+//$.log($.toStr(hnBox))
+	
 inBox = (inBox[0] || '') && `已根据关键词保留以下内容:\n${inBox.join("\n\n")}`;
 outBox = (outBox[0] || '') && `已根据关键词排除以下内容:\n${outBox.join("\n")}`;
 
-inBox.length != 0 && noNtf == false && $.msg('Script Hub: 重写转换','点击通知查看详情',`${inBox}`,{url:url+'&openInBoxHtml=true'});
-outBox.length != 0 && noNtf == false && $.msg('Script Hub: 重写转换','点击通知查看详情',`${outBox}`,{url:url+'&openOutBoxHtml=true'});
+inBox.length > 0 && noNtf == false && $.msg(JS_NAME,notifyName+' 点击通知查看详情',`${inBox}`,{url:url+'&openInBoxHtml=true'});
+outBox.length > 0 && noNtf == false && $.msg(JS_NAME,notifyName+' 点击通知查看详情',`${outBox}`,{url:url+'&openOutBoxHtml=true'});
 
 //mitm删除主机名
-if (hnDel != null && hnBox.length != 0) hnBox=hnBox.filter(function(item) {
-    return hnDel.indexOf(item) == -1
-});
+if (hnDel != null && hnBox.length > 0) hnBox=hnBox.filter(item => hnDel.indexOf(item) == -1);
+
+//mitm正则删除主机名
+if (hnRegDel != null) {
+	
+	hndelBox=hnBox.filter(item => hnRegDel.test(item));
+	hnBox=hnBox.filter(item => !hnRegDel.test(item)
+);
+};
+hndelBox.length > 0 && noNtf == false && $.msg(JS_NAME,notifyName+' 已根据正则剔除主机名',`${hndelBox}`);
+
 	hnBox = pieceHn(hnBox);
 	fheBox = pieceHn(fheBox);
 	skipBox = pieceHn(skipBox);
@@ -505,9 +506,9 @@ switch (targetApp){
 	case "loon-plugin":
 	for (let i=0;i<modInfoBox.length;i++){
 		info = "#!"+modInfoBox[i].a+modInfoBox[i].b;
-		if (nName!=null && /#!name *=/.test(info)) info = "#!name="+name;
-		if (nName!=null && /#!desc *=/.test(info)) info = "#!desc="+desc;
-		if (isLooniOS && iconReplace=="启用" && /#!icon *=.+/.test(info)) info = icon;
+		if (nName!=null && /#!name\s*=/.test(info)) info = "#!name="+name;
+		if (nName!=null && /#!desc\s*=/.test(info)) info = "#!desc="+desc;
+		if (isLooniOS && iconReplace=="启用" && /#!icon\s*=.+/.test(info)) info = icon;
 		modInfo.push(info);
 	};//for
 
@@ -516,41 +517,46 @@ switch (targetApp){
 		modInfo.push(info);
 	};//for
 
-	if (isLooniOS && modInfo !="" && $.toStr(modInfo).search(/#!icon=/) == -1) modInfo.push(icon);
+	if ($.toStr(modInfo).search(/#!name=/) == -1) modInfo.push("#!name="+name);
+	if ($.toStr(modInfo).search(/#!desc=/) == -1) modInfo.push("#!desc="+desc);
+	if (isLooniOS && modInfo.length > 0 && $.toStr(modInfo).search(/#!icon=/) == -1) modInfo.push(icon);
 	break;
 	
 	case "stash-stoverride":
 	for (let i=0;i<modInfoBox.length;i++){
-		info = modInfoBox[i].a.replace(/ *= */,'')+': "'+modInfoBox[i].b+'"';
-		if (nName!=null && /^name: *"/.test(info)) info = 'name: "'+name+'"';
-		if (nName!=null && /^desc: *"/.test(info)) info = 'desc: "'+desc+'"';
+		info = modInfoBox[i].a.replace(/\s*=\s*/,'')+': "'+modInfoBox[i].b+'"';
+		if (nName!=null && /^name:\s*"/.test(info)) info = 'name: "'+name+'"';
+		if (nName!=null && /^desc:\s*"/.test(info)) info = 'desc: "'+desc+'"';
 		modInfo.push(info);
 		};//for
+	if ($.toStr(modInfo).search(/name:\s/) == -1) modInfo.push('name: "'+name+'"');
+	if ($.toStr(modInfo).search(/desc:\s/) == -1) modInfo.push('desc: "'+desc+'"');
+
 	break;
 };//模块信息输出结束
 
 //rule输出 switch不适合
 	for (let i=0;i<ruleBox.length;i++){
 		noteK = ruleBox[i].noteK ? "#" : "";
-		mark = ruleBox[i].mark ? ruleBox[i].mark+"\n" : "";	
+		mark = ruleBox[i].mark ? ruleBox[i].mark : "";	
 		if (noteK != "#" && isStashiOS){
 noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";noteK2 = "  ";
 	}else{noteKn8 = "\n#        ";noteKn6 = "\n#      ";noteKn4 = "\n#    ";noteK4 = "#    ";noteK2 = "#  ";};
-		ruletype = ruleBox[i].ruletype;
+		ruletype = ruleBox[i].ruletype.toUpperCase();
 		rulevalue = ruleBox[i].rulevalue ? ruleBox[i].rulevalue : "";
 		rulepolicy = ruleBox[i].rulepolicy ? ruleBox[i].rulepolicy : "";
-		rulepolicy = rulepolicy.toUpperCase();
-		ruletype = ruletype.toUpperCase();
+		rulepolicy = /direct|reject/i.test(rulepolicy) ? rulepolicy.toUpperCase() : rulepolicy;
 		rulenore = ruleBox[i].rulenore ? ruleBox[i].rulenore : "";
 		rulesni = ruleBox[i].rulesni ? ruleBox[i].rulesni : "";
 		rulesni = isLooniOS ||isStashiOS ? "" : rulesni;
+		modistatus = ruleBox[i].modistatus;
 		if (/de?st-port/i.test(ruletype)){
 			ruletype = isSurgeiOS ? "DEST-PORT" : "DST-PORT";
 		};
 		if (/reject-video/i.test(rulepolicy)&& !isLooniOS){
 			rulepolicy = "REJECT-TINYGIF";
 		};
-		if (/reject-tinygif|reject-no-dorp/i.test(rulepolicy)&& isLooniOS){
+		if (/reject-tinygif|reject-no-drop/i.test(rulepolicy)&& isLooniOS){
 			rulepolicy = "REJECT-IMG";
 		};
 		if (/reject-(?:dict|array|img)/i.test(rulepolicy)&&isSurgeiOS){
@@ -560,21 +566,22 @@ noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";n
 			rulepolicy = "REJECT";
 		};
 
-		if (/^(?:and|or|not|protocol|domain-set|rule-set)$/i.test(ruletype) && isSurgeiOS) {
-			rules.push(mark+rulevalue)
-		}else if (/^(?:and|or|not|domain-set|rule-set)$/i.test(ruletype) && isShadowrocket) {
-			rules.push(mark+rulevalue)
-		}else if (rulepolicy==""){
+		if (rulevalue=="" || rulepolicy==""){
 			otherRule.push(ruleBox[i].ori)
-		} else if(/proxy/i.test(rulepolicy)&&(isSurgeiOS||isStashiOS)){
+		} else if(/proxy/i.test(rulepolicy)&&modistatus=="no"&&(isSurgeiOS||isStashiOS||isShadowrocket)){
 otherRule.push(ruleBox[i].ori)
-		} else if (/proxy/i.test(rulepolicy)&&(isLooniOS||isShadowrocket)) {
-rules.push(mark+ruletype+","+rulevalue+","+rulepolicy)
+		} else if(!/direct|reject|proxy/i.test(rulepolicy)&&modistatus=="no"){
+otherRule.push(ruleBox[i].ori)
+		} else if (/^(?:and|or|not|protocol|domain-set|rule-set)$/i.test(ruletype) && isSurgeiOS) {
+			rules.push(mark+noteK+ruletype+","+rulevalue+","+rulepolicy+rulenore+rulesni)
+		}else if (/^(?:and|or|not|domain-set|rule-set)$/i.test(ruletype) && isShadowrocket) {
+			rules.push(mark+noteK+ruletype+","+rulevalue+","+rulepolicy+rulenore+rulesni)
 		}else if (/(?:^domain$|domain-suffix|domain-keyword|ip-|user-agent|url-regex)/i.test(ruletype)&&!isStashiOS){
 			rulevalue = /,/.test(rulevalue) ? '"'+rulevalue+'"' : rulevalue;
 			rules.push(mark+noteK+ruletype+','+rulevalue+','+rulepolicy+rulenore+rulesni)
 		}else if (/(?:^domain$|domain-suffix|domain-keyword|ip-|de?st-port)/i.test(ruletype)&&isStashiOS){
 			rules.push(mark+noteK2+'- '+ruletype+','+rulevalue+','+rulepolicy+rulenore)}else if (/de?st-port/.test(ruletype)&&(isSurgeiOS&&isShadowrocket)){rules.push(mark+noteK+ruletype+','+rulevalue+','+rulepolicy)}else if (/url-regex/i.test(ruletype)&&isStashiOS&&/reject/i.test(rulepolicy)){
+				let Urx2Reject;
 				if (/DICT/i.test(rulepolicy)){
                     Urx2Reject = '-dict';
                 }else if (/ARRAY/i.test(rulepolicy)){
@@ -587,81 +594,111 @@ rules.push(mark+ruletype+","+rulevalue+","+rulepolicy)
                     Urx2Reject = '';
                 };
 				
-				URLRewrite.push(mark+noteK4+'- >-'+noteKn6+rulevalue+' - reject'+Urx2Reject)
+				URLRewrite.push(mark+"\n"+noteK4+'- >-'+noteKn6+rulevalue+' - reject'+Urx2Reject)
 			}else{otherRule.push(ruleBox[i].ori)};
 		
 	};//for rule输出结束
 
-//reject redirect 输出
+//reject redirect输出
+for (let i=0;i<rwBox.length;i++){
+		noteK = rwBox[i].noteK ? "#" : "";
+		mark = rwBox[i].mark ? rwBox[i].mark : "";
+		rwtype = rwBox[i].rwtype;
+		rwptn = rwBox[i].rwptn;
+		rwvalue = rwBox[i].rwvalue;
+		
 switch (targetApp){
 	case "loon-plugin":
 	case "shadowrocket-module":
-	for (let i=0;i<rwBox.length;i++){
-		noteK = rwBox[i].noteK ? "#" : "";
-		mark = rwBox[i].mark ? rwBox[i].mark+"\n" : "";	URLRewrite.push(mark+noteK+rwBox[i].rwptn+" "+rwBox[i].rwvalue+" "+rwBox[i].rwtype.replace(/-video|-tinygif/,"-img"))
-	};
+	rwtype = isShadowrocket && /-video/.test(rwtype) ? 'reject-img' : isLooniOS && /-tinygif/.test(rwtype) ? 'reject-img' : rwtype;
+	URLRewrite.push(mark+noteK+rwptn+" "+rwvalue+" "+rwtype);
 	break;
 	
 	case "stash-stoverride":
-	for (let i=0;i<rwBox.length;i++){
-		mark = rwBox[i].mark ? rwBox[i].mark+"\n" : "";	
-		if (rwBox[i].noteK != "#"){
+		if (noteK != "#"){
 noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";noteK2 = "  ";
 	}else{noteKn8 = "\n#        ";noteKn6 = "\n#      ";noteKn4 = "\n#    ";noteK4 = "#    ";noteK2 = "#  ";};
-	URLRewrite.push(mark+noteK4+"- >-"+noteKn6+rwBox[i].rwptn+" "+rwBox[i].rwvalue+" "+rwBox[i].rwtype.replace(/-video|-tinygif/,"-img"))
-	};
+	URLRewrite.push(mark+"\n"+noteK4+"- >-"+noteKn6+rwptn+" "+rwvalue+" "+rwtype.replace(/-video|-tinygif/,"-img"));
 	break;
 	
 	case "surge-module":
-	for (let i=0;i<rwBox.length;i++){
-		rwBox[i].noteK = rwBox[i].noteK ? "#" : "";
-		mark = rwBox[i].mark ? rwBox[i].mark+"\n" : "";	
-		if (/(?:reject|302|307|header)$/.test(rwBox[i].rwtype)) 	URLRewrite.push(mark+rwBox[i].noteK+rwBox[i].rwptn+" "+rwBox[i].rwvalue+" "+rwBox[i].rwtype);
-		if (/reject-dict/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-dict.json"');
-		if (/reject-array/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-array.json"');
-		if (/reject-200/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-200.txt"');
-		if (/reject-(?:img|tinygif|video)/.test(rwBox[i].rwtype)) MapLocal.push(mark+rwBox[i].noteK+rwBox[i].rwptn+' data="https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/mocks/reject-img.gif"');
-	}
+		if (/(?:reject|302|307|header)$/.test(rwtype)) 	URLRewrite.push(mark+noteK+rwptn+" "+rwvalue+" "+rwtype);
+		if (/reject-dict/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"');
+		if (/reject-array/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-array.json"');
+		if (/reject-200/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-200.txt"');
+		if (/reject-(?:img|tinygif|video)/.test(rwtype)) MapLocal.push(mark+noteK+rwptn+' data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-img.gif"');
 	break;
-}//reject redirect输出结束
+}//switch
+};//reject redirect输出for
 
 //headerRewrite输出
+for (let i=0;i<rwhdBox.length;i++){
+		noteK = rwhdBox[i].noteK ? "#" : "";
+		mark = rwhdBox[i].mark ? rwhdBox[i].mark : "";
+		x = rwhdBox[i].x;
 switch (targetApp){
 	case "surge-module":
-	HeaderRewrite = rwhdBox;
+	HeaderRewrite.push(mark+noteK+x);
 	break;
 	
 	case "loon-plugin":
-	for (let i=0;i<rwhdBox.length;i++){
-		URLRewrite.push(rwhdBox[i].replace(/^(#)?http-(?:request|response) */,"$1"));
-	};//for
+	x = x.replace(/^http-(request|response)\s+/,"");
+		URLRewrite.push(mark+noteK+x);
 	break;
 	
 	case "stash-stoverride":
-	for (let i=0;i<rwhdBox.length;i++){
-		if (!/^#/.test(rwhdBox[i])){
+		if (noteK != "#"){
 noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";noteK2 = "  ";
 	}else{noteKn8 = "\n#        ";noteKn6 = "\n#      ";noteKn4 = "\n#    ";noteK4 = "#    ";noteK2 = "#  ";};
-		hdtype = /^#?http-response /.test(x) ? ' response-' : ' request-';
-		HeaderRewrite.push(`${noteK4}- >-${noteKn6}`+rwhdBox[i].replace(/^#?http-(?:request|response) */,"").replace(/ header-/,hdtype));
-	};//for
+		let hdtype = /^http-response\s/.test(x) ? ' response-' : ' request-';
+		x = x.replace(/^http-(?:request|response)\s+/,"").replace(/\s+header-/,hdtype)
+		HeaderRewrite.push(mark+"\n"+`${noteK4}- >-${noteKn6}`+x);
 	break;
 	
 	case "shadowrocket-module":
-	
-rwhdBox = (rwhdBox[0] || '') && `${rwhdBox.join("\n")}`;
-	rwhdBox.length != 0 && noNtf == false && $.msg('Script Hub: 重写转换','❌小火箭不支持HeaderRewrite',`${rwhdBox}`);
+	otherRule.push(noteK+x);
 	break;
 };//headerRewrite输出结束
+}//for
 
-//script输出
+
+//host输出
+	for (let i=0;i<hostBox.length;i++){
+		noteK = hostBox[i].noteK ? "#" : "";
+		mark = hostBox[i].mark ? hostBox[i].mark : "";
+		hostdomain = hostBox[i].hostdomain;
+		hostvalue = hostBox[i].hostvalue;
+		if (isStashiOS) {
+			otherRule.push(hostBox[i].ori)
+		}else if (isLooniOS && /script\s*:\s*/.test(hostvalue)){
+			otherRule.push(hostBox[i].ori)
+		}else if (isSurgeiOS || isShadowrocket || isLooniOS){
+	host.push(mark+noteK+hostdomain+' = '+hostvalue)
+		};
+	};//for
+
+//Mock输出
+for (let i=0;i<mockBox.length;i++){
+		noteK = mockBox[i].noteK ? "#" : "";
+		mark = mockBox[i].mark ? mockBox[i].mark : "";
+		mockptn = mockBox[i].mockptn;
+		mockurl = mockBox[i].mockurl;
+
 switch (targetApp){
 	case "surge-module":
-	case "shadowrocket-module":
-	case "loon-plugin":
-	for (let i=0;i<jsBox.length;i++){
+		mockheader = keepHeader == true && mockBox[i].mockheader && !/&contentType=/.test(mockBox[i].mockheader) ? ' header="'+mockBox[i].mockheader+'"' : "";
+	MapLocal.push(mark+noteK+mockptn+' data="'+mockurl+'"'+mockheader)
+	break;
+	
+	}//switch
+}//Mock输出for
+
+//脚本输出
+if (!isStashiOS && jsBox.length>0){
+
+for (let i=0;i<jsBox.length;i++){
 		noteK = jsBox[i].noteK ? "#" : "";
-		mark = jsBox[i].mark ? jsBox[i].mark+"\n" : "";	
+		mark = jsBox[i].mark ? jsBox[i].mark : "";	
 		jstype = jsBox[i].jstype;
 		jsptn = /generic|event|dns|rule|network-changed/.test(jstype) ? "" : jsBox[i].jsptn;
 		jsptn = isLooniOS && jsptn ? " " + jsptn : jsptn;
@@ -671,15 +708,32 @@ switch (targetApp){
 		eventname = jsBox[i].eventname ? ', event-name='+jsBox[i].eventname :', event-name=network-changed';
 		jstype = isLooniOS && /event/.test(jstype) ? 'network-changed' : !isLooniOS && /network-changed/.test(jstype) ? 'event' : jstype;
 		jsurl = jsBox[i].jsurl;
-		rebody = jsBox[i].rebody ? ", requires-body="+jsBox[i].rebody : "";
-		proto = jsBox[i].proto ? ", binary-body-mode="+jsBox[i].proto : "";
-		size = jsBox[i].size ? ", max-size="+jsBox[i].size : "";
+		rebody = jsBox[i].rebody ? istrue(jsBox[i].rebody) : "";
+		proto = jsBox[i].proto ? istrue(jsBox[i].proto) : "";
+		size = jsBox[i].size ? jsBox[i].size : "";
 		ability = jsBox[i].ability ? ", ability="+jsBox[i].ability : "";
 		updatetime = jsBox[i].updatetime ? ", script-update-interval="+jsBox[i].updatetime : "";
 		cronexp = jsBox[i].cronexp;
 		wakesys = jsBox[i].wakesys ? ", wake-system="+jsBox[i].wakesys : "";
-		timeout = jsBox[i].timeout ? ", timeout="+jsBox[i].timeout : "";
+		timeout = jsBox[i].timeout ? jsBox[i].timeout : "";
 		jsarg = jsBox[i].jsarg ? jsBox[i].jsarg : "";
+		ori = jsBox[i].ori;
+			
+		jsarg = reJsValue(nArgTarget || 'null',nArg,jsname,ori,jsarg).replace(/t;amp;/g,"&").replace(/t;add;/g,"+");
+			
+		cronexp = reJsValue(nCron || 'null',ncronexp,jsname,ori,cronexp);
+			
+		jsname = reJsValue(njsnametarget || 'null',njsname,jsname,ori,jsname);
+
+switch (targetApp){
+	case "surge-module":
+	case "shadowrocket-module":
+	case "loon-plugin":
+	
+		rebody = rebody ? ", requires-body="+rebody : "";
+		proto = proto ? ", binary-body-mode="+proto : "";
+		size = size ? ", max-size="+size : "";
+		timeout = timeout ? ", timeout="+timeout : "";
 		if (jsarg != "" && /,/.test(jsarg)) jsarg = ', argument="'+jsarg+'"';
 		if (jsarg != "" && !/,/.test(jsarg)) jsarg = ', argument='+jsarg;
 		
@@ -695,21 +749,26 @@ switch (targetApp){
 			 script.push(mark+noteK+jsname+' = type='+jstype+', cronexp="'+cronexp+'"'+', script-path='+jsurl+updatetime+timeout+wakesys+jsarg);
 		}else if (jstype =="cron" && isLooniOS){
 			script.push(mark+noteK+jstype+' "'+cronexp+'"'+" script-path="+jsurl+timeout+', tag='+jsname+jsarg);
+		}else if(/dns|rule/.test(jstype)&&(isSurgeiOS||isShadowrocket)){
+			script.push(mark+noteK+jsname+" = type="+jstype+", script-path="+jsurl+updatetime+timeout+jsarg)
 		}else{
 			otherRule.push(jsBox[i].ori)};
 			
 		if (isSurgeiOS && jstype == "generic"){
-			 Panel.push(jsname+" = script-name="+jsname+", update-interval=3600")
+			 Panel.push(noteK+jsname+" = script-name="+jsname+", update-interval=3600")
 		};
-	};//for
 	break;
-	
-	case "stash-stoverride":
+	}//switch
+}//脚本输出for
+};//不是Stash的脚本输出
+
+if (isStashiOS && jsBox.length>0) {
 //处理脚本名字
 let urlMap = {};
 
 for (let i = 0; i < jsBox.length; i++) {
   let url = jsBox[i].jsurl;
+  jsBox[i].jsname = jsBox[i].jsname + '_' + jsBox[i].num;
 
   if (urlMap[url]) {
     jsBox[i].jsname = urlMap[url];
@@ -723,7 +782,7 @@ for (let i = 0; i < jsBox.length; i++) {
 noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";noteK2 = "  ";
 	}else{noteKn8 = "\n#        ";noteKn6 = "\n#      ";noteKn4 = "\n#    ";noteK4 = "#    ";noteK2 = "#  ";};
 		jstype = jsBox[i].jstype.replace(/http-/,'');
-		mark = jsBox[i].mark ? jsBox[i].mark+"\n" : "";	
+		mark = jsBox[i].mark ? jsBox[i].mark : "";	
 		jsptn = jsBox[i].jsptn;
 		jsname = jsBox[i].jsname;
 		jsurl = jsBox[i].jsurl;
@@ -733,9 +792,19 @@ noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";n
 		cronexp = jsBox[i].cronexp;
 		timeout = jsBox[i].timeout ? noteKn6+"timeout: "+jsBox[i].timeout : "";
 		jsarg = jsBox[i].jsarg ? jsBox[i].jsarg : "";
-		jsarg = jsarg && jstype == "generic" ? noteKn4+"argument: |-"+noteKn6+jsarg : jsarg && jstype != "generic" ? noteKn6+"argument: |-"+noteKn8+jsarg : "";
 		tilesicon = jsBox[i].tilesicon ? jsBox[i].tilesicon : "";
 		tilescolor = jsBox[i].tilescolor ? jsBox[i].tilescolor : "";
+		ori = jsBox[i].ori;
+		
+		tilescolor = reJsValue(nTilesTarget || 'null',ntilescolor,jsname,ori,tilescolor).replace(/@/g,"#");
+			
+		jsarg = reJsValue(nArgTarget || 'null',nArg,jsname,ori,jsarg).replace(/t;amp;/g,"&").replace(/t;add;/g,"+");
+			
+		cronexp = reJsValue(nCron || 'null',ncronexp,jsname,ori,cronexp);
+			
+		jsname = reJsValue(njsnametarget || 'null',njsname,jsname,ori,jsname);
+			
+		jsarg = jsarg && jstype == "generic" ? noteKn4+"argument: |-"+noteKn6+jsarg : jsarg && jstype != "generic" ? noteKn6+"argument: |-"+noteKn8+jsarg : "";
 		
 		if (/request|response/.test(jstype)){
 			script.push(mark+noteKn4+'- match: '+jsptn+noteKn6+'name: "'+jsname+'"'+noteKn6+'type: '+jstype+rebody+size+proto+timeout+jsarg);
@@ -753,62 +822,8 @@ noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";n
 		};
 			/event|rule|dns/i.test(jstype) && otherRule.push(jsBox[i].ori);
 };//for循环
-break;
-};//script输出结束
 
-//Mock输出
-switch (targetApp){
-	case "surge-module":
-	for (let i=0;i<mockBox.length;i++){
-		noteK = mockBox[i].noteK ? "#" : "";
-		mark = mockBox[i].mark ? mockBox[i].mark+"\n" : "";	
-		mockptn = mockBox[i].mockptn;
-		mockurl = mockBox[i].mockurl;
-		mockheader = keepHeader == true && mockBox[i].mockheader && !/&contentType=/.test(mockBox[i].mockheader) ? ' header="'+mockBox[i].mockheader+'"' : "";
-	MapLocal.push(mark+noteK+mockptn+' data="'+mockurl+'"'+mockheader)
-	};//for
-	break;
-
-	case "shadowrocket-module":
-	case "loon-plugin":
-	case "stash-stoverride":
-	for (let i=0;i<mockBox.length;i++){
-		noteK = mockBox[i].noteK ? "#" : "";
-		mark = mockBox[i].mark ? mockBox[i].mark+"\n" : "";	
-		if (isStashiOS && noteK!="#"){
-noteKn8 = "\n        ";noteKn6 = "\n      ";noteKn4 = "\n    ";noteK4 = "    ";noteK2 = "  ";
-	}else{noteKn8 = "\n#        ";noteKn6 = "\n#      ";noteKn4 = "\n#    ";noteK4 = "#    ";noteK2 = "#  ";};
-		mockptn = mockBox[i].mockptn;
-		mockurl = mockBox[i].mockurl;
-		mockheader = mockBox[i].mockheader ? mockBox[i].mockheader : "";
-		mfile = mockurl.substring(mockurl.lastIndexOf('/') + 1);
-		mfName = mockurl.substring(mockurl.lastIndexOf('/') + 1, mockurl.lastIndexOf('.') );
-		if (/dict/i.test(mfName)) m2rType="-dict"
-		else if (/array/i.test(mfName)) m2rType="-array"
-		else if (/200|blank/i.test(mfName)) m2rType="-200"
-		else if (/img|tinygif/i.test(mfName)) m2rType="-img"
-		else m2rType = null;
-		
-		m2rType != null && !isStashiOS && URLRewrite.push(mark+noteK+mockptn+' - reject'+m2rType);
-		m2rType != null && isStashiOS && URLRewrite.push(mark+noteK4+'- >-'+noteKn6+mockptn+' - reject'+m2rType);
-		mockheader = m2rType == null && mockheader != "" && !/&contentType=/.test(mockheader) ? '&header=' + encodeURIComponent(mockheader) : m2rType == null && mockheader != "" && /&contentType=/.test(mockheader) ? mockheader : "" ;
-		if (keepHeader == false) mockheader="";
-		
-		mockurl = m2rType == null ? `http://script.hub/convert/_start_/${mockurl}/_end_/${mfile}?type=mock&target-app=${targetApp}${mockheader}${sufkeepHeader}${sufjsDelivr}` : "";
-		
-		if (isStashiOS && m2rType==null) {
-		script.push(mark+`${noteK4}- match: ${mockptn}${noteKn6}name: "${mfName}_${y}"${noteKn6}type: request${noteKn6}timeout: 60${noteKn6}binary-mode: true`)
-		
-		providers.push(`${noteK2}"${mfName}_${y}":${noteKn4}url: ${mockurl}${noteKn4}interval: 86400`)};
-		
-		if ((isLooniOS || isShadowrocket)&&m2rType==null){
-		script.push(mark+`${noteK}http-request ${mockptn} script-path=${mockurl}, timeout=60, tag=${mfName}_${y}`)
-		};
-		
-	};//for
-
-	break;
-}//Mock输出结束
+}//是Stash的脚本输出
 
 //输出内容
 switch (targetApp){
@@ -816,36 +831,36 @@ switch (targetApp){
 	case "shadowrocket-module":
 	case "loon-plugin":
 	
-	modInfo = (modInfo[0] || '') && `${modInfo.join("\n")}`;
-	
-	modInfo = modInfo == "" ? modInfoBackup : modInfo;
+	modInfo = (modInfo[0] || '') && `${modInfo.join("\n")}`.replace(/([\s\S]*)(#!desc=.+\n?)([\s\S]*)/,'$2\n$1\n$3').replace(/([\s\S]*)(#!name=.+\n?)([\s\S]*)/,'$2\n$1\n$3').replace(/\n{2,}/g,'\n');
     
-    rules = (rules[0] || '') && `[Rule]\n\n${rules.join("\n")}`;
+    rules = (rules[0] || '') && `[Rule]\n${rules.join("\n")}`;
 	
-    Panel = (Panel[0] || '') && `[Panel]\n\n${Panel.join("\n\n")}`;
+    Panel = (Panel[0] || '') && `[Panel]\n${Panel.join("\n\n")}`;
 	
-	URLRewrite = (URLRewrite[0] || '') && `[URL Rewrite]\n\n${URLRewrite.join("\n")}`;
+	URLRewrite = (URLRewrite[0] || '') && `[URL Rewrite]\n${URLRewrite.join("\n")}`;
 	
-	HeaderRewrite = (HeaderRewrite[0] || '') && `[Header Rewrite]\n\n${HeaderRewrite.join("\n")}`;
+	HeaderRewrite = (HeaderRewrite[0] || '') && `[Header Rewrite]\n${HeaderRewrite.join("\n")}`;
 	
-	MapLocal = (MapLocal[0] || '') && `[Map Local]\n\n${MapLocal.join("\n\n")}`;
+	MapLocal = (MapLocal[0] || '') && `[Map Local]\n${MapLocal.join("\n\n")}`;
 	
-    script = (script[0] || '') && `[Script]\n\n${script.join("\n\n")}`;
+    host = (host[0] || '') && `[Host]\n${host.join("\n")}`;
+	
+    script = (script[0] || '') && `[Script]\n${script.join("\n\n")}`;
 	
 	if (isLooniOS) {
-		MITM = hnBox != "" ? "[MITM]\n\nhostname = "+hnBox : "";
-		fheBox != "" && General.push('force-http-engine-hosts = '+fheBox);
-		skipBox != "" && General.push('skip-proxy = '+skipBox);
-		realBox != "" && General.push('real-ip = '+realBox);
-    General = (General[0] || '') && `[General]\n\n${General.join("\n\n")}`;
+		MITM = hnBox.length > 0 ? "[MITM]\nhostname = "+hnBox : "";
+		fheBox.length > 0 && General.push('force-http-engine-hosts = '+fheBox);
+		skipBox.length > 0 && General.push('skip-proxy = '+skipBox);
+		realBox.length > 0 && General.push('real-ip = '+realBox);
+    General = (General[0] || '') && `[General]\n${General.join("\n\n")}`;
 	};
 	
 	if (isSurgeiOS||isShadowrocket) {
-		MITM = hnBox != "" ? "[MITM]\n\nhostname = %APPEND% "+hnBox : "";
-		fheBox != "" && General.push('force-http-engine-hosts = %APPEND% '+fheBox);
-		skipBox != "" && General.push('skip-proxy = %APPEND% '+skipBox);
-		realBox != "" && General.push('always-real-ip = %APPEND% '+realBox);
-    General = (General[0] || '') && `[General]\n\n${General.join("\n\n")}`;
+		MITM = hnBox.length > 0 ? `[MITM]\nhostname = ${hnaddMethod} `+hnBox : "";
+		fheBox.length > 0 && General.push(`force-http-engine-hosts = ${fheaddMethod} `+fheBox);
+		skipBox.length > 0 && General.push(`skip-proxy = ${skipaddMethod} `+skipBox);
+		realBox.length > 0 && General.push(`always-real-ip = ${realaddMethod} `+realBox);
+    General = (General[0] || '') && `[General]\n${General.join("\n\n")}`;
 	};
 	
 
@@ -857,32 +872,31 @@ ${MITM}
 
 ${rules}
 
-${Panel}
-
 ${URLRewrite}
 
 ${HeaderRewrite}
 
 ${MapLocal}
 
+${Panel}
+
+${host}
+
 ${script}
 
-`.replace(/^(#.+\n)\n+(?!\[)/g,'$1')
-		.replace(/\n{2,}/g,'\n\n')	
+`.replace(/\n{2,}/g,'\n\n')
 	
 	break;
 	
 	case "stash-stoverride":
 	
-	modInfo = (modInfo[0] || '') && `${modInfo.join("\n")}`;
-	
-	modInfo = modInfo == "" ? modInfoBackup : modInfo;
+	modInfo = (modInfo[0] || '') && `${modInfo.join("\n")}`.replace(/([\s\S]*)(desc: .+\n?)([\s\S]*)/,'$2\n$1\n$3').replace(/([\s\S]*)(name: .+\n?)([\s\S]*)/,'$2\n$1\n$3').replace(/\n{2,}/g,'\n');;
 	
 	tiles = (tiles[0] || '') && `tiles:\n${tiles.join("\n\n")}`;
 	
-	MITM = hnBox != "" ? '  mitm:\n    - "'+hnBox+'"' : "";
+	MITM = hnBox.length > 0 ? '  mitm:\n    - "'+hnBox+'"' : "";
 	
-	force = fheBox != "" ? '  force-http-engine:\n    - "'+fheBox+'"' : "";
+	force = fheBox.length > 0 ? '  force-http-engine:\n    - "'+fheBox+'"' : "";
     
     rules = (rules[0] || '') && `rules:\n${rules.join("\n")}`;
 		
@@ -890,8 +904,8 @@ ${script}
 	
 	HeaderRewrite = (HeaderRewrite[0] || '') && `  header-rewrite:\n${HeaderRewrite.join("\n")}`;
 	script = (script[0] || '') && `  script:\n${script.join("\n\n")}`;
-	
-	if (URLRewrite != "" || script != "" || HeaderRewrite != "" || MITM != "" || force != ""){
+
+	if (URLRewrite.length > 0 || script.length > 0 || HeaderRewrite.length > 0 || MITM.length > 0 || force.length > 0){
 httpFrame = `http:
 
 ${force}
@@ -905,13 +919,13 @@ ${URLRewrite}
 ${script}
 `
 };
-	providers = [...new Set(providers)];
+
+providers = [...new Set(providers)];
 
 cron = (cron[0] || '') && `cron:\n  script:\n${cron.join("\n")}`;
 
 providers = (providers[0] || '') && `script-providers:\n${providers.join("\n")}`;
 	
-
 body = `${modInfo}
 
 ${rules}
@@ -924,8 +938,7 @@ ${cron}
 
 ${providers}
 
-`.replace(/^(#.+\n)\n+(?!\[)/g,'$1')
-		.replace(/\n{2,}/g,'\n\n')	
+`.replace(/\n{2,}/g,'\n\n')
 	
 	break;
 
@@ -936,28 +949,29 @@ eval(evUrlmodi);
 		
 otherRule = (otherRule[0] || '') && `${app}不支持以下内容:\n${otherRule.join("\n")}`;
 
-noNtf == false && otherRule.length != 0 && $.msg('Script Hub: 重写转换',`点击通知查看详情`,`${otherRule}`,{url:url+'&openOtherRuleHtml=true'});
+noNtf == false && otherRule.length > 0 && $.msg(JS_NAME,`${notifyName} 点击通知查看详情`,`${otherRule}`,{url:url+'&openOtherRuleHtml=true'});
 
 if (openInBoxHtml||openOutBoxHtml||openOtherRuleHtml){
-	$.done({
-  response: {
-    status: 200,
+	result = {
     body: inBox+'\n\n'+outBox+'\n\n'+otherRule,
-    headers: {'Content-Type': 'text/plain; charset=utf-8'},
-  },
-})
+    headers: {'Content-Type': 'text/plain; charset=utf-8'}
+	};
+	$.isQuanX() ? result.status = 'HTTP/1.1 200' : result.status = 200;
+	$.done($.isQuanX() ? result : {response:result})
 }else{
-	
-$.done({ response: { status: 200 ,body:body ,headers: {'Content-Type': 'text/plain; charset=utf-8'} } });
+	result = {
+		body:body ,headers: {'Content-Type': 'text/plain; charset=utf-8'}
+	};
+	$.isQuanX() ? result.status = 'HTTP/1.1 200' : result.status = 200;
+	$.done($.isQuanX() ? result : {response:result});
 };
 
 
 })()
 .catch((e) => {
-	noNtf == false && $.msg(`Script Hub: 重写转换`,`${notifyName}：${e}\n${url}`,'','https://t.me/zhetengsha_group');
+	noNtf == false ? $.msg(JS_NAME,`${notifyName}：${e}\n${url}`,'','https://t.me/zhetengsha_group') : $.log(e);
+	
 		result = {
-      response: {
-        status: 500,
         body: `${notifyName}：${e}\n\n\n\n\n\nScript Hub 重写转换: ❌  可自行翻译错误信息或复制错误信息后点击通知进行反馈
 `,
         headers: {
@@ -965,15 +979,29 @@ $.done({ response: { status: 200 ,body:body ,headers: {'Content-Type': 'text/pla
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'POST,GET,OPTIONS,PUT,DELETE',
           'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        },
-      },
-    }
-	$.done(result);
+        }
+    };
+	$.isQuanX() ? result.status = 'HTTP/1.1 500' : result.status = 500;
+	$.done($.isQuanX() ? result : {response:result});
 	})
+
+//判断是否被注释
+function isNoteK (x) {
+		return /^#/.test(x) ? "#" : "";
+}
+
+//获取当前内容的注释
+function getMark (index,obj) {
+		let mark = obj[index - 1]?.match(/^#(?!!)/) ? obj[index - 1] : "";
+		if (mark) {
+			mark = isStashiOS ? mark : mark + "\n";
+		};
+		return mark;
+};
 
 //名字简介解析
 function getModInfo (x,box) {
-	x = x.replace(/ *= */,'=');
+	x = x.replace(/\s*=\s*/,'=');
 	/^#!.+=.+/.test(x) ? a = x.replace(/^#!/,"").match(/.+?=/)[0] : "";
 	/^#!.+=.+/.test(x) ? b = x.replace(/^#!/,"").replace(a,"") : "";
 	box.push({a,b});
@@ -981,38 +1009,39 @@ function getModInfo (x,box) {
 
 //reject
 function rw_reject (x,mark) {
-	noteK = /^#/.test(x) ? "#" :"";
-	rwPtn = x.replace(/^#/,"").split(" ")[0];
-	rwType = x.match(/reject(-\w+)?$/i)[0].toLowerCase();
+	let noteK = isNoteK(x);
+	let rwptn = x.replace(/^#/,"").split(/\s/)[0].replace(/^"(.+)"$/,"$1");
+	let rwtype = x.match(/reject(-\w+)?$/i)[0].toLowerCase();
 	
-rwBox.push({mark,"noteK":noteK,"rwptn":rwPtn,"rwvalue":"-","rwtype":rwType});
+rwBox.push({mark,noteK,rwptn,"rwvalue":"-",rwtype});
 };
 
 //重定向
 function rw_redirect (x,mark) {
-	noteK = /^#/.test(x) ? "#" :"";
-	x = x.replace(/ {2,}/g," ");
-	redirect_type = x.match(/ 302| 307| header$/)[0].replace(" ","");
-	xArr = x.split(" ");
-	rw_typeInNum = xArr.indexOf(redirect_type);
+	let noteK = isNoteK(x);
+	x = x.replace(/\s{2,}/g," ");
+	let redirect_type = x.match(/\s302|\s307|\sheader$/)[0].replace(/\s/,"");
+	let xArr = x.split(/\s/);
+	let rw_typeInNum = xArr.indexOf(redirect_type);
+	let rwptn,rwvalue,rwtype;
 	if (rw_typeInNum == "2" && xArr.length == 3) {
-		rwPtn = xArr[0].replace(/^#/,"");
-		rwValue = xArr[1];
-		rwType = xArr[2];
+		rwptn = xArr[0].replace(/^#/,"").replace(/^"(.+)"$/,"$1");
+		rwvalue = xArr[1];
+		rwtype = xArr[2];
 	};
 	
 	if (rw_typeInNum == "1" && xArr.length == 3) {
-		rwPtn = xArr[0].replace(/^#/,"");
-		rwValue = xArr[2];
-		rwType = xArr[1];
+		rwptn = xArr[0].replace(/^#/,"").replace(/^"(.+)"$/,"$1");
+		rwvalue = xArr[2];
+		rwtype = xArr[1];
 	};
 	
 	if (rw_typeInNum == "2" && xArr.length == 4) {
-		rwPtn = xArr[0].replace(/^#/,"");
-		rwValue = xArr[3];
-		rwType = xArr[2];
+		rwptn = xArr[0].replace(/^#/,"").replace(/^"(.+)"$/,"$1");
+		rwvalue = xArr[3];
+		rwtype = xArr[2];
 	};
-rwBox.push({mark,"noteK":noteK,"rwptn":rwPtn,"rwvalue":rwValue,"rwtype":rwType});
+rwBox.push({mark,noteK,rwptn,rwvalue,rwtype});
 };
 
 //script
@@ -1022,61 +1051,75 @@ function getJsInfo (x, regx) {
 	}else{return ""}
 };
 
+function reJsValue (target,nvalue,jsname,ori,orivalue) {
+	let q = orivalue;
+			if (target != 'null'){
+	for (let i=0; i < target.length; i++) {
+  let elem = target[i].trim();
+	if (jsname.indexOf(elem) != -1 || ori.indexOf(elem) != -1){
+        q = nvalue[i];
+		return q;
+	};
+}//for
+};
+return q;
+}//reJsValue
+
 function getQxReInfo (x,y,mark) {
-	jsInNum = y;
-	noteK = /^#/.test(x) ? '#' : '';
-	retype = / url *request-/i.test(x) ? 'request' : 'response';
-	jstype = 'http-'+retype;
-	hdorbd = / url *re[^ ]+?-header /i.test(x) ? 'header' : 'body';
-	breakpoint = retype+'-'+hdorbd;
-	reptn = x.split(/ *url *re/)[0].replace(/^#/,'');
-	jsname = /body/.test(hdorbd) ? 'replaceBody_'+jsInNum : 'replaceHeader_'+jsInNum;
-	jsurl = /header/.test(hdorbd) ? 'https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/scripts/replace-header.js' : 'https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/scripts/replace-body.js';
-	rearg1 = x.split(breakpoint)[1].trim().replace(/^"(.+)"$/,"$1");
-	rearg2 = x.split(breakpoint)[2].trim().replace(/^"(.+)"$/,"$1");
-	jsarg = rearg1+'->'+rearg2;
-	rebody = /body/.test(hdorbd) ? 'true' : '';
-	size = /body/.test(hdorbd) ? '3145728' : '';
-	jsBox.push({mark,"noteK":noteK,"jsname":jsname,"jstype":jstype,"jsptn":reptn,"jsurl":jsurl,"rebody":rebody,"size":size,"timeout":"30","jsarg":jsarg})
+	let noteK = isNoteK(x);
+	let retype = /\surl\s+request-/i.test(x) ? 'request' : 'response';
+	let jstype = 'http-'+retype;
+	let hdorbd = /\surl\s+re[^\s]+?-header\s/i.test(x) ? 'header' : 'body';
+	let breakpoint = retype+'-'+hdorbd;
+	let jsptn = x.split(/\s+url\s+re/)[0].replace(/^#/,'');
+	let jsname = /body/.test(hdorbd) ? 'replaceBody' : 'replaceHeader';
+	let jsurl = /header/.test(hdorbd) ? 'https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/scripts/replace-header.js' : 'https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/scripts/replace-body.js';
+	let rearg1 = x.split(breakpoint)[1].trim().replace(/^"(.+)"$/,"$1");
+	let rearg2 = x.split(breakpoint)[2].trim().replace(/^"(.+)"$/,"$1");
+	let jsarg = rearg1+'->'+rearg2;
+	let rebody = /body/.test(hdorbd) ? 'true' : '';
+	let size = /body/.test(hdorbd) ? '-1' : '';
+	jsBox.push({mark,noteK,jsname,jstype,jsptn,jsurl,rebody,size,"timeout":"30",jsarg,"ori":x,"num":y})
 };
 
-function getHn (x,arr) {
-	hnBox2 = x.replace(/ |%.+%/g,"").split("=")[1].split(/,/);
+function getHn (x,arr,addMethod) {
+	let hnBox2 = x.replace(/\s|%.+%/g,"").split("=")[1].split(/,/);
 	for (let i=0;i<hnBox2.length;i++){
-		arr.push(hnBox2[i]);
+		hnBox2[i].length > 0 && arr.push(hnBox2[i]);
 	};//for
+	if (/%INSERT%/i.test(x)) return "%INSERT%"
+	else return addMethod;
 };
 
 function pieceHn (arr){
-	if (!isStashiOS && arr!=[]) return arr.join(',');
-	else if (isStashiOS && arr!=[]) return arr.join(`"\n    - "`);
+	if (!isStashiOS && arr.length > 0) return arr.join(', ');
+	else if (isStashiOS && arr.length > 0) return arr.join(`"\n    - "`);
 	else return [];
 };
 
 //查binary
-async function isBinaryMode(url) {
+async function isBinaryMode(url,name) {
 
-if (url.search(/proto/i) != -1) {
+if (/proto/i.test(name)) {
 	return "true"
-  } else if (url.search(/(tieba|youtube|bili|spotify)/i) != -1){
-		if (binaryInfo != "" && binaryInfo.some(item=>item.url===url)){
+  } else if (/(?:tieba|youtube|bili|spotify|wyreqparam|DualSubs\.Subtitles\.Translate\.response)/i.test(url)){
+		if (binaryInfo.length > 0 && binaryInfo.some(item=>item.url===url)){
 			for (let i = 0; i < binaryInfo.length; i++) {
   if (binaryInfo[i].url === url) {
-    binarymode = binaryInfo[i].binarymode;
-		return binarymode;
+		return binaryInfo[i].binarymode;
     break;
   }
 }
 		} else {
 			const res = (await $.http.get(url)).body;
-	if (res == undefined){
-		//$.log("Script Hub: 重写转换");
+	if (res == undefined || res == null){
+		//$.log(JS_NAME);
 		return "";
 	}else if (res.includes(".bodyBytes")){
-		binaryInfo.push({"url":url,"binarymode":"true"});
+		binaryInfo.push({url,"binarymode":"true"});
 		$.setjson(binaryInfo, "Parser_binary_info")
 		return "true";
-	}else{binaryInfo.push({"url":url,"binarymode":"false"});
+	}else{binaryInfo.push({url,"binarymode":""});
 		$.setjson(binaryInfo, "Parser_binary_info")
 		return "";}     }//没有信息或者没有url的信息
 		
@@ -1084,21 +1127,51 @@ if (url.search(/proto/i) != -1) {
 };//查binary
 
 //获取mock参数
-function getMockInfo (x,mark) {
-	noteK = /^#/.test(x) ? "#" : "";
-	if (/url +echo-response /.test(x)){
-		x = x.replace(/ {2,}/g," ");
-		mockPtn = x.split(" url ")[0];
-		mockUrl = x.split(" echo-response ")[2];
-		mockHeader = '&contentType=' + encodeURIComponent(x.split(" echo-response ")[1]);
+function getMockInfo (x,mark,y) {
+	let noteK = isNoteK(x);
+	let mockptn,mockurl,mockheader;
+	if (/url\s+echo-response\s/.test(x)){
+		mockptn = x.split(/\s+url\s+/)[0];
+		mockurl = x.split(/\s+echo-response\s+/)[2];
+		mockheader = '&contentType=' + encodeURIComponent(x.split(/\s+echo-response\s+/)[1]);
 	};
 		
-	if (/ data *= *"/.test(x)){
-		mockPtn = x.replace(/ {2,}/g," ").split(" data=")[0].replace(/^#|"/g,"");
-		mockUrl = x.split(' data="')[1].split('"')[0];
-		/ header="/.test(x) ? mockHeader = x.split(' header="')[1].split('"')[0] : mockHeader = "";
-		}
-mockBox.push({mark,"noteK":noteK,"mockptn":mockPtn,"mockurl":mockUrl,"mockheader":mockHeader});
+	if (/\sdata\s*=\s*"/.test(x)){
+		mockptn = x.split(/\s+data=/)[0].replace(/^#/g,"").replace(/^"(.+)"$/,"$1");
+		mockurl = x.split(/\sdata\s*=\s*"/)[1].split('"')[0];
+		/\sheader\s*=\s*"/.test(x) ? mockheader = x.split(/\sheader\s*=\s*"/)[1].split('"')[0] : mockheader = "";
+		};
+
+switch (targetApp){
+	case "surge-module":
+mockBox.push({mark,noteK,mockptn,mockurl,mockheader,"ori":x,"mocknum":y});
+	break;
+
+	case "shadowrocket-module":
+	case "loon-plugin":
+	case "stash-stoverride":
+		let mfile = mockurl.substring(mockurl.lastIndexOf('/') + 1);
+		let m2rType;
+		if (/dict/i.test(mfile)) m2rType="reject-dict"
+		else if (/array/i.test(mfile)) m2rType="reject-array"
+		else if (/200|blank/i.test(mfile)) m2rType="reject-200"
+		else if (/img|tinygif/i.test(mfile)) m2rType="reject-img"
+		else m2rType = null;
+		
+		let jsname = mockurl.substring(mockurl.lastIndexOf('/') + 1, mockurl.lastIndexOf('.') );
+		m2rType != null && rwBox.push({mark,noteK,"rwptn":mockptn,"rwvalue":"-","rwtype":m2rType});
+		let proto;
+		if (m2rType == null){
+		proto = isStashiOS ? "true" : "";
+		mockheader = mockheader != "" && !/&contentType=/.test(mockheader) ? '&header=' + encodeURIComponent(mockheader) : mockheader != "" && /&contentType=/.test(mockheader) ? mockheader : "" ;
+		if (keepHeader == false) mockheader="";
+		
+		mockurl = `http://script.hub/convert/_start_/${mockurl}/_end_/${mfile}?type=mock&target-app=${targetApp}${mockheader}${sufkeepHeader}${sufjsDelivr}`;
+		jsBox.push({mark,noteK,jsname,"jstype":"http-request","jsptn":mockptn,"jsurl":mockurl,proto,"timeout":"60","ori":x,"num":y});
+		};
+	break;
+	
+	}//switch
 };//获取Mock参数
 
 function istrue(str) {
@@ -1110,7 +1183,7 @@ function istrue(str) {
 function isJsCon (x, arr) {
 	if (arr != null){
 		for (let i=0; i < arr.length; i++) {
-  const elem = arr[i];
+  const elem = arr[i].trim();
 	if (x.indexOf(elem) != -1){return true};
 	};//循环结束
   };//if (arr != null)
@@ -1118,23 +1191,22 @@ function isJsCon (x, arr) {
 
 function toJsc (jsurl,jscStatus,jsc2Status,jsfrom) {
 	if (jscStatus == true || jsc2Status == true){
-				jsFileName = jsurl.substring(jsurl.lastIndexOf('/') + 1, jsurl.lastIndexOf('.') );
-                		jsfrom = jsfrom;
+				let jsFileName = jsurl.substring(jsurl.lastIndexOf('/') + 1, jsurl.lastIndexOf('.') );
 				return jsurl = jsPre + jsurl + jsSuf.replace(/_yuliu_/,jsFileName).replace(/_js_from_/,jsfrom);
 		
 	}else{return jsurl}
 };
 
 function parseQueryString(url) {
-  const queryString = url.split('?')[1]; // 获取查询字符串部分
-  const regex = /([^=&]+)=([^&]*)/g; // 匹配键值对的正则表达式
+  const queryString = url.split('?')[1]; //获取查询字符串部分
+  const regex = /([^=&]+)=([^&]*)/g; //匹配键值对的正则表达式
   const params = {};
   let match;
 
   while ((match = regex.exec(queryString))) {
-    const key = decodeURIComponent(match[1]); // 解码键
-    const value = decodeURIComponent(match[2]); // 解码值
-    params[key] = value; // 将键值对添加到对象中
+    const key = decodeURIComponent(match[1]); //解码键
+    const value = decodeURIComponent(match[2]); //解码值
+    params[key] = value; //将键值对添加到对象中
   }
 
   return params;
