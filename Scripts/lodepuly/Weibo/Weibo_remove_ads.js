@@ -1,7 +1,7 @@
 /*
 引用地址：https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/weibo.js
 */
-// 2024-01-06 14:55
+// 2024-01-11 15:50
 
 const url = $request.url;
 if (!$response.body) $done({});
@@ -489,7 +489,7 @@ if (url.includes("/interface/sdk/sdkad.php")) {
         } else if (itemId === "100505_-_chaohua" || itemId === "100505_-_recentlyuser") {
           newItems.push(item);
         } else {
-          // 其他项目全部移除
+          // 移除其他推广
           continue;
         }
       }
@@ -807,7 +807,7 @@ if (url.includes("/interface/sdk/sdkad.php")) {
             removeVoteInfo(item?.data);
             newItems.push(item);
           } else {
-            // 移除所有的推广
+            // 移除其他推广
             continue;
           }
         }
@@ -877,7 +877,7 @@ if (url.includes("/interface/sdk/sdkad.php")) {
             // 管理特别关注按钮
             newItems.push(item);
           } else {
-            // 移除所有的推广
+            // 移除其他推广
             continue;
           }
         }
@@ -918,19 +918,27 @@ if (url.includes("/interface/sdk/sdkad.php")) {
               // 超话页顶部乱七八糟
               let newII = [];
               for (let ii of item.items) {
-                if (ii?.data?.itemid?.includes("mine_topics")) {
-                  // 保留我的超话
-                  newII.push(ii);
-                } else if (ii?.data?.itemid?.includes("_tab_search_input")) {
-                  // 保留搜索框
-                  if (ii?.data?.hotwords) {
-                    // 删除热搜词
-                    ii.data.hotwords = [{ word: "搜索超话" }];
+                if (ii?.data?.hasOwnProperty("itemid")) {
+                  if (ii?.data?.itemid?.includes("mine_topics")) {
+                    // 保留我的超话
+                    newII.push(ii);
+                  } else if (ii?.data?.itemid?.includes("tab_search_input")) {
+                    // 保留搜索框
+                    if (ii?.data?.hotwords) {
+                      // 删除热搜词
+                      ii.data.hotwords = [{ word: "搜索超话" }];
+                    }
+                    newII.push(ii);
+                  } else if (ii?.data?.itemid?.includes("poiRankList")) {
+                    // 保留地点超话 地标人气榜
+                    newII.push(ii);
                   }
+                } else {
+                  // 放行无itemid字段的内容
                   newII.push(ii);
                 }
+                item.items = newII;
               }
-              item.items = newII;
             } else {
               for (let ii of item.items) {
                 if (ii?.data) {
@@ -952,7 +960,7 @@ if (url.includes("/interface/sdk/sdkad.php")) {
           }
           newItems.push(item);
         } else {
-          // 移除所有的推广
+          // 移除其他推广
           continue;
         }
       }
