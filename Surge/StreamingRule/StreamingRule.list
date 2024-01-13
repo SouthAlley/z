@@ -19,6 +19,7 @@ DOMAIN,beta.music.apple.com
 DOMAIN,books.apple.com
 DOMAIN,books.itunes.apple.com
 DOMAIN,browser-intake-datadoghq.com
+DOMAIN,cdn.auth0.com
 DOMAIN,cdn.honey.io
 DOMAIN,cdn.registerdisney.go.com
 DOMAIN,cf-images.ap-southeast-1.prod.boltdns.net
@@ -40,6 +41,7 @@ DOMAIN,dai3fd1oh325y.cloudfront.net
 DOMAIN,dfp6rglgjqszk.cloudfront.net
 DOMAIN,dmqdd6hw24ucf.cloudfront.net
 DOMAIN,edge.api.brightcove.com
+DOMAIN,events.statsigapi.net
 DOMAIN,facetime.apple.com
 DOMAIN,fls-na.amazon.com
 DOMAIN,fonts.googleapis.com
@@ -74,6 +76,7 @@ DOMAIN,news-client.apple.com
 DOMAIN,news-edge.apple.com
 DOMAIN,news-events.apple.com
 DOMAIN,np-edge.itunes.apple.com
+DOMAIN,o33249.ingest.sentry.io
 DOMAIN,ocsp.pki.goog
 DOMAIN,originasserts.akamaized.net
 DOMAIN,p-bstarstatic.akamaized.net
@@ -200,7 +203,6 @@ DOMAIN-SUFFIX,aicscience.com
 DOMAIN-SUFFIX,aiv-cdn.net
 DOMAIN-SUFFIX,aiv-delivery.net
 DOMAIN-SUFFIX,aka.ms
-DOMAIN-SUFFIX,algolia.net
 DOMAIN-SUFFIX,amazon.jobs
 DOMAIN-SUFFIX,amazontools.com
 DOMAIN-SUFFIX,amazontours.com
@@ -237,7 +239,6 @@ DOMAIN-SUFFIX,aria.ms
 DOMAIN-SUFFIX,asp.net
 DOMAIN-SUFFIX,aspnetcdn.com
 DOMAIN-SUFFIX,assets-yammer.com
-DOMAIN-SUFFIX,auth0.com
 DOMAIN-SUFFIX,autodraw.com
 DOMAIN-SUFFIX,avatargarenanow-a.akamaihd.net
 DOMAIN-SUFFIX,azure-apim.net
@@ -352,7 +353,6 @@ DOMAIN-SUFFIX,cdn-apple.com
 DOMAIN-SUFFIX,cdn-qc.content.steamchina.com
 DOMAIN-SUFFIX,cdn-ws.content.steamchina.com
 DOMAIN-SUFFIX,cdn.blz-contentstack.com
-DOMAIN-SUFFIX,cdn.cloudflare.net
 DOMAIN-SUFFIX,cdn.optimizely.com
 DOMAIN-SUFFIX,cdn.registerdisney.go.com
 DOMAIN-SUFFIX,cdngarenanow-a.akamaihd.net
@@ -360,7 +360,6 @@ DOMAIN-SUFFIX,centralvalidation.com
 DOMAIN-SUFFIX,certificate-transparency.dev
 DOMAIN-SUFFIX,certificate-transparency.org
 DOMAIN-SUFFIX,ch9.ms
-DOMAIN-SUFFIX,challenges.cloudflare.com
 DOMAIN-SUFFIX,channel4.com
 DOMAIN-SUFFIX,channel5.com
 DOMAIN-SUFFIX,charticulator.com
@@ -369,7 +368,6 @@ DOMAIN-SUFFIX,chrome.com
 DOMAIN-SUFFIX,chromeexperiments.com
 DOMAIN-SUFFIX,chromestatus.com
 DOMAIN-SUFFIX,chromium.org
-DOMAIN-SUFFIX,client-api.arkoselabs.com
 DOMAIN-SUFFIX,cloudapp.net
 DOMAIN-SUFFIX,cloudappsecurity.com
 DOMAIN-SUFFIX,cloudsync-prod.s3.amazonaws.com
@@ -451,7 +449,6 @@ DOMAIN-SUFFIX,engkoo.com
 DOMAIN-SUFFIX,epicgames.com
 DOMAIN-SUFFIX,epicgames.dev
 DOMAIN-SUFFIX,eu
-DOMAIN-SUFFIX,events.statsigapi.net
 DOMAIN-SUFFIX,execute-api.us-east-1.amazonaws.com
 DOMAIN-SUFFIX,experiencebillmelater.com
 DOMAIN-SUFFIX,ext-twitch.tv
@@ -610,7 +607,6 @@ DOMAIN-SUFFIX,kr
 DOMAIN-SUFFIX,krakenjs.com
 DOMAIN-SUFFIX,kumo.com
 DOMAIN-SUFFIX,latampartneruniversity.com
-DOMAIN-SUFFIX,launchdarkly.com
 DOMAIN-SUFFIX,leaguehighschool.com
 DOMAIN-SUFFIX,leagueoflegends.com
 DOMAIN-SUFFIX,leagueoflegends.net
@@ -754,7 +750,6 @@ DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
 DOMAIN-SUFFIX,oaspapps.com
 DOMAIN-SUFFIX,oaspapps.com.akadns.net
-DOMAIN-SUFFIX,observeit.net
 DOMAIN-SUFFIX,ocnttv.com
 DOMAIN-SUFFIX,office365.com
 DOMAIN-SUFFIX,officecdn-microsoft-com.akamaized.net
@@ -814,7 +809,6 @@ DOMAIN-SUFFIX,playstation.net
 DOMAIN-SUFFIX,playstationnetwork.com
 DOMAIN-SUFFIX,playvalorant.com
 DOMAIN-SUFFIX,playwarcraft3.com
-DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,polymer-project.org
 DOMAIN-SUFFIX,pornhub.com
 DOMAIN-SUFFIX,pornhubpremium.com
@@ -876,7 +870,6 @@ DOMAIN-SUFFIX,scdn.co
 DOMAIN-SUFFIX,sclive.net
 DOMAIN-SUFFIX,seagroup.com
 DOMAIN-SUFFIX,seattlespheres.com
-DOMAIN-SUFFIX,segment.io
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,serverlesslibrary.net
 DOMAIN-SUFFIX,sfbassets.com
@@ -946,6 +939,8 @@ DOMAIN-SUFFIX,steamvideo-a.akamaihd.net
 DOMAIN-SUFFIX,store-images.s-microsoft.com
 DOMAIN-SUFFIX,streaks.jp
 DOMAIN-SUFFIX,stripe.com
+DOMAIN-SUFFIX,stripe.network
+DOMAIN-SUFFIX,stripecdn.com
 DOMAIN-SUFFIX,successwithteams.com
 DOMAIN-SUFFIX,supremacy.com
 DOMAIN-SUFFIX,supremacy.net
