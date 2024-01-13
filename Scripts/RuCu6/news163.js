@@ -1,6 +1,3 @@
-/*
-引用地址https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/news163.js
-*/
 // 2024-01-12 08:50
 
 const url = $request.url;
