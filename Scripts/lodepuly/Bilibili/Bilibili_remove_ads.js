@@ -22,7 +22,7 @@ if (url.includes("/x/resource/show/skin")) {
   }
   // 首页导航栏
   if (obj?.data?.tab?.length > 0) {
-    const sortLists = ["推荐", "热门", "影视", "动画"];
+    const sortLists = ["推荐", "热门", "动画", "影视", "直播"];
     obj.data.tab = obj.data.tab
       .filter((i) => sortLists?.includes(i?.name))
       .sort((a, b) => sortLists.indexOf(a?.name) - sortLists.indexOf(b?.name));
