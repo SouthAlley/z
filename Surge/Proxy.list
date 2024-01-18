@@ -10,9 +10,6 @@ DOMAIN-SUFFIX,uk
 DOMAIN-SUFFIX,us
 DOMAIN-SUFFIX,ca
 
-# Boxjs
-DOMAIN-KEYWORD,jsdelivr.net
-
 # Sub-Store
 DOMAIN-SUFFIX,vercel.app
 
