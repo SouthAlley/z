@@ -14,11 +14,20 @@ const respBody = $response.body;
 //const cacheURL = "https://webcache.googleusercontent.com/search?q=cache:";
 const cacheURL = "https://web.archive.org/web/20991231999999/";
 const alipayScheme = "alipays://platformapi/startapp?appId=20000067&url=";
-const ua = $request.headers['User-Agent'] || $request.headers['user-agent']
-const isStashiOS = 'undefined' !== typeof $environment && $environment['stash-version'] && ua.indexOf('Macintosh') === -1
+
 const isQuanX = typeof $notify != "undefined";
-const isSurgeiOS = typeof $utils != "undefined" && $environment.system == "iOS";
+const isSurgeiOS =
+    "undefined" !== typeof $environment &&
+    $environment["surge-version"] &&
+    $environment.system == "iOS";
 const isLooniOS = typeof $loon != "undefined" && /iPhone/.test($loon);
+const isStashiOS =
+    "undefined" !== typeof $environment &&
+    $environment["stash-version"] &&
+    $environment.system == "iOS";
+const isShadowrocket = "undefined" !== typeof $rocket;
+const isLanceX = "undefined" != typeof $native;
+
 const redirectStatus = isQuanX ? "HTTP/1.1 302 Temporary Redirect" : 302;
 const cgiDataReg = /var cgiData = ([\s\S]*);\s*<\/script>/;
 let cgiData = JSON.parse(cgiDataReg.exec(respBody)[1].replace(/\\/g, ""));
@@ -39,7 +48,11 @@ if (cgiData.type === "gray" || cgiData.type === "newgray" || cgiData.type === "e
     if (/qr\.alipay/.test(trueURL)) {
         notify("", "点击跳转到支付宝打开", trueURL, alipayScheme + encodeURIComponent(trueURL));
         $done({});
-    } else {
+    }  else {
+        if (trueURL.includes('https://spotify.link')) {
+            const pattern = /\$full_url=([^&]+)/;
+            trueURL = decodeURIComponent(trueURL).match(pattern)[1];
+        }
         notify("", "点击跳转到浏览器打开", trueURL, trueURL);
         if (forceRedirect) {
             let redirect = {
@@ -65,11 +78,8 @@ if (cgiData.type === "gray" || cgiData.type === "newgray" || cgiData.type === "e
         await get(url).then((resp) => {
             let obj = JSON.parse(resp.body);
             if (obj.hasOwnProperty("btns")) {
-                let trueURL = decodeURIComponent(/url=(.*)/.exec(obj.btns[0].url)[1]).replace(
-                    /&block_?type(.*)/,
-                    ""
-                );
-                trueURL = trueURL.includes(".") ? trueURL : Base64.decode(trueURL);
+                let trueURL = decodeURIComponent(/url=([A-Za-z0-9+/=]+)/.exec(obj.btns[0].url)[1]);
+                trueURL =Base64.decode(trueURL);
                 trueURL = trueURL.indexOf("http") == 0 ? trueURL : "http://" + trueURL;
                 if (!trueURL.includes("web.archive.org/web")) {
                     notify("", "点击跳转到浏览器打开", trueURL, trueURL);
@@ -108,7 +118,7 @@ function notify(title = "", subtitle = "", content = "", open_url) {
         } else {
             $notify(title, subtitle, content, opts);
         }
-    } else if (isSurgeiOS || isStashiOS) {
+    } else if (isSurgeiOS || isStashiOS || isLanceX) {
         let opts = {};
         if (open_url) opts["url"] = open_url;
         if (JSON.stringify(opts) == "{}") {
@@ -123,6 +133,12 @@ function notify(title = "", subtitle = "", content = "", open_url) {
             $notification.post(title, subtitle, content);
         } else {
             $notification.post(title, subtitle, content, opts);
+        }
+    } else if (isShadowrocket) {
+        if (open_url) {
+            $notification.post(title, subtitle, content, open_url);
+        } else {
+            $notification.post(title, subtitle, content);
         }
     }
 }
