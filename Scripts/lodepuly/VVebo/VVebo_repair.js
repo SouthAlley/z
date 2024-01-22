@@ -1,7 +1,7 @@
 /*
 脚本引用https://raw.githubusercontent.com/suiyuran/stash/main/scripts/fix-vvebo-user-timeline.js
 */
-// 2023-11-27 15:06:27
+// 2024-01-19 22:25:07
 
 let url = $request.url;
 let hasUid = (url) => url.includes("uid");
@@ -23,6 +23,10 @@ if (url.includes("users/show")) {
     .map((card) => card.mblog);
   let sinceId = data.cardlistInfo.since_id;
   $done({ body: JSON.stringify({ statuses, since_id: sinceId, total_number: 100 }) });
+} else if (url.includes("selffans")) {
+    let data = JSON.parse($response.body);
+    let cards = data.cards.filter((card) => card.itemid !== "INTEREST_PEOPLE2");
+    $done({ body: JSON.stringify({ ...data, cards }) });
 } else {
   $done({});
 }

@@ -83,14 +83,14 @@ if (url.includes("/loading") && obj.data) {
   delete obj.data;
 }
 
-$task.fetch({
-  url: '',
-  method: 'POST',
-  handler: function (response) {
+// $task.fetch({
+//   url: '',
+//   method: 'POST',
+//   handler: function (response) {
    
-    $done();
-  }
-});
+//     $done();
+//   }
+// });
 
 if (url.includes("/v1/app/home") && obj.data) {
 if (obj.data) {
