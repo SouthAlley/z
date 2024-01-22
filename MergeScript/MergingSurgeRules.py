@@ -27,7 +27,7 @@ RULES = {
     },
     "RejectRule": {
         "fenliu": "https://raw.githubusercontent.com/vokins/ad/main/dr.list",
-        "MyBlockAds": "https://raw.githubusercontent.com/SouthAlley/q/main/local/delAd.list",
+        "MyBlockAds": "https://raw.githubusercontent.com/RuCu6/QuanX/main/Rules/MyBlockAds.list",
     },
     "StreamingRule": {
         "Netflix": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/PayPal.list",
