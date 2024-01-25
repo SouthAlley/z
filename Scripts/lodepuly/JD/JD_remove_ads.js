@@ -1,7 +1,7 @@
 /*
 脚本引用https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/jingdong.js
 */
-// 2023-12-20 18:45
+// 2024-01-23 09:50
 
 const url = $request.url;
 if (!$response.body) $done({});
@@ -18,9 +18,14 @@ if (url.includes("functionId=deliverLayer") || url.includes("functionId=orderTra
     obj.floors = obj.floors.filter((i) => !["banner", "jdDeliveryBanner"]?.includes(i?.mId));
   }
 } else if (url.includes("functionId=getTabHomeInfo")) {
-  // 发现页悬浮动图
+  // 新品页面
   if (obj?.result?.iconInfo) {
+    // 新品页 悬浮动图
     delete obj.result.iconInfo;
+  }
+  if (obj?.result?.roofTop) {
+    // 新品页 下拉二楼
+    delete obj.result.roofTop;
   }
 } else if (url.includes("functionId=myOrderInfo")) {
   // 订单页面
@@ -144,9 +149,9 @@ if (url.includes("functionId=deliverLayer") || url.includes("functionId=orderTra
           }
         } else if (floor?.mId === "userinfo") {
           // 个人页 顶部背景图
-          if (floor?.data?.bgImgInfo?.bgImg) {
-            delete floor.data.bgImgInfo.bgImg;
-          }
+          // if (floor?.data?.bgImgInfo?.bgImg) {
+          //   delete floor.data.bgImgInfo.bgImg;
+          // }
           // 开通plus会员卡片
           if (floor?.data?.newPlusBlackCard) {
             delete floor.data.newPlusBlackCard;
@@ -182,9 +187,9 @@ if (url.includes("functionId=deliverLayer") || url.includes("functionId=orderTra
     obj.floorList = obj.floorList.filter((i) => !delItems?.includes(i?.type));
   }
   // 首页 顶部背景图
-  if (obj?.topBgImgBig) {
-    delete obj.topBgImgBig;
-  }
+  // if (obj?.topBgImgBig) {
+  //   delete obj.topBgImgBig;
+  // }
   // 首页 下拉二楼
   if (obj?.webViewFloorList?.length > 0) {
     obj.webViewFloorList = [];
