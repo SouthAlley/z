@@ -3,21 +3,35 @@
 脚本二改https://github.com/Keywos/rule/raw/main/JS/ithomes.js
 */
 const isLoon = typeof $loon !== "undefined";
-let lbt = true,
-  zd = true,
-  lbtAd = true;
-if (isLoon) {
-  zd = $persistentStore.read("移除置顶项") === "开启";
-  lbtAd = $persistentStore.read("移除轮播图广告") === "开启";
-  lbt = $persistentStore.read("移除全部轮播图") === "开启";
-}
-let FeedTypes = [];
+let url = $request.url,
+  i = JSON.parse($response.body),
+  FeedTypes = [10023], //直播tip
+  banner = true,
+  top = true,
+  bannerAd = true;
 
-let i = JSON.parse($response.body);
-if (i?.data?.list) {
-  if (lbtAd && !lbt) {
+if (isLoon) {
+  bannerAd = $persistentStore.read("移除轮播图广告") === "开启";
+  banner = $persistentStore.read("移除全部轮播图") === "开启";
+  top = $persistentStore.read("移除置顶项") === "开启";
+} else if (typeof $argument !== "undefined" && $argument !== "") {
+  const ins = getin("$argument");
+  bannerAd = ins.bannerAd != 0;
+  banner = ins.banner != 0;
+  top = ins.top != 0;
+}
+
+if (/api\/douyin\/GetLiveInfo/.test(url)) {
+  if (i?.data) {
+    i.data = "{}";
+    i.success = true;
+    i.showType = null;
+    i.messageType = null;
+  }
+} else if (i?.data?.list) {
+  if (bannerAd && !banner) {
     for (const Type of i.data.list) {
-      if (Type.feedType === 10002) {
+      if (Type.feedType == "10002") {
         Type.feedContent.focusNewsData = Type.feedContent.focusNewsData.filter(
           (i) => {
             return i.isAd === false; // 轮播图广告
@@ -27,8 +41,8 @@ if (i?.data?.list) {
       }
     }
   }
-  lbt && FeedTypes.push(10002); //轮播
-  zd && FeedTypes.push(10003); //置顶
+  banner && FeedTypes.push(10002); //轮播
+  top && FeedTypes.push(10003); //置顶
   i.data.list = i.data.list.filter((item) => {
     return (
       !FeedTypes.includes(item.feedType) &&
@@ -37,3 +51,6 @@ if (i?.data?.list) {
   });
 }
 $done({ body: JSON.stringify(i) });
+
+// prettier-ignore
+function getin() {return Object.fromEntries($argument.split("&").map((i) => i.split("=")).map(([k, v]) => [k, decodeURIComponent(v)]));}

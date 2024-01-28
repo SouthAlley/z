@@ -1,7 +1,7 @@
 /*
 脚本引用https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/myBlockAds.js
 */
-// 2023-12-11 17:00
+// 2024-01-12 09:10
 
 const url = $request.url;
 const isResp = typeof $response !== "undefined";
@@ -9,7 +9,7 @@ let body = $response.body;
 
 switch (isResp) {
   // 淘宝-开屏视频广告
-  case /^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.cloudvideo\.video\.query/g.test(url):
+  case /^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.cloudvideo\.video\.query/.test(url):
     try {
       let obj = JSON.parse(body);
       if (obj?.data?.duration) {
@@ -25,12 +25,12 @@ switch (isResp) {
         obj.data.respTimeInMs = "3818332800000";
       }
       body = JSON.stringify(obj);
-    } catch (error) {
-      console.log(`淘宝-开屏视频广告, 出现异常: ` + error);
+    } catch (err) {
+      console.log(`淘宝-开屏视频广告, 出现异常: ` + err);
     }
     break;
   // 淘宝-开屏图片广告
-  case /^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get/g.test(url):
+  case /^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get/.test(url):
     try {
       let obj = JSON.parse(body);
       if (obj?.data?.containers?.splash_home_base) {
@@ -67,12 +67,12 @@ switch (isResp) {
         }
       }
       body = JSON.stringify(obj);
-    } catch (error) {
-      console.log(`淘宝-开屏图片广告, 出现异常: ` + error);
+    } catch (err) {
+      console.log(`淘宝-开屏图片广告, 出现异常: ` + err);
     }
     break;
   // 淘宝-开屏活动
-  case /^https:\/\/poplayer\.template\.alibaba\.com\/\w+\.json/g.test(url):
+  case /^https:\/\/poplayer\.template\.alibaba\.com\/\w+\.json/.test(url):
     try {
       let obj = JSON.parse(body);
       if (obj?.res?.images?.length > 0) {
@@ -88,8 +88,8 @@ switch (isResp) {
         obj.mainRes.images = [];
       }
       body = JSON.stringify(obj);
-    } catch (error) {
-      console.log(`淘宝-开屏活动, 出现异常: ` + error);
+    } catch (err) {
+      console.log(`淘宝-开屏活动, 出现异常: ` + err);
     }
     break;
   default:
