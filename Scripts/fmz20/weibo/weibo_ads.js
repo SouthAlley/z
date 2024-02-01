@@ -1,7 +1,7 @@
 /**
  * @author fmz200
  * @function 微博去广告
- * @date 2024-01-25 21:41:00
+ * @date 2024-01-31 21:18:00
  */
 
 const titleSubPicMap = {
@@ -65,18 +65,17 @@ function process() {
 
   // 微博热搜页面 “热搜”tab页 https://api.weibo.cn/2/flowpage
   if (url.includes("/2/flowpage")) {
-    for (let j = 0; j < resp_data.items.length; j++) {
-      const subItem = resp_data.items[j];
+    for (let subItem of resp_data.items) {
       if (subItem.itemId === "hotword") {
-        resp_data.items[j].items = subItem.items.filter(group => group.data.promotion == null);
+        subItem.items = subItem.items.filter(group => group.data.promotion == null);
         break;
       } else if (subItem.items) {
-        resp_data.items[j].items = subItem.items.filter(group => group.data.promotion == null);
+        subItem.items = subItem.items.filter(group => group.data.promotion == null);
       }
     }
   }
 
-  // 4、微博超话页面
+  // 4、微博超话页面 https://api.weibo.cn/2/statuses/container_timeline_topicpage
   if (url.includes("/statuses/container_timeline_topicpage") && resp_data.items) {
     resp_data.items = resp_data.items.filter(item => !item.data || item.data.mblogtypename !== "广告");
     console.log('处理微博超话页面广告结束💕💕');
@@ -107,7 +106,7 @@ function process() {
   }
 
   // 8、超话tab页 微博超话tab页 https://api.weibo.cn/2/statuses/container_timeline_topic
-  if (url.includes("/statuses/container_timeline_topic")) {
+  if (url.includes("/statuses/container_timeline_topic?flowId")) {
     let foundFeed = false;
     for (let i = 0; i < resp_data.items.length; i++) {
       const item = resp_data.items[i];
