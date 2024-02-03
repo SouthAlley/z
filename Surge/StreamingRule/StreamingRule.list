@@ -381,6 +381,7 @@ DOMAIN-SUFFIX,cloudapp.net
 DOMAIN-SUFFIX,cloudappsecurity.com
 DOMAIN-SUFFIX,cloudsync-prod.s3.amazonaws.com
 DOMAIN-SUFFIX,cms-twdigitalassets.com
+DOMAIN-SUFFIX,cn
 DOMAIN-SUFFIX,codethemicrobit.com
 DOMAIN-SUFFIX,cognito-identity.us-east-1.amazonaws.com
 DOMAIN-SUFFIX,comments.app
@@ -1048,6 +1049,7 @@ DOMAIN-SUFFIX,venmo.info
 DOMAIN-SUFFIX,venmo.net
 DOMAIN-SUFFIX,venmo.org
 DOMAIN-SUFFIX,venmo.s3.amazonaws.com
+DOMAIN-SUFFIX,vercel.app
 DOMAIN-SUFFIX,videobreakdown.com
 DOMAIN-SUFFIX,videoindexer.ai
 DOMAIN-SUFFIX,videos-rockstargames-com.akamaized.net
