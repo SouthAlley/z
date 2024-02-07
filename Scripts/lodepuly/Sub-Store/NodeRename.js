@@ -502,7 +502,7 @@ async function operator(e = [], targetPlatform, env) {
       $.write(Nullvi.toString(), Nullv);
     }
     if (Nullvi > 3) {
-      $.write(null, "#sub-store-cached-script-resource");
+      $.write("{}", "#sub-store-cached-script-resource");
       klog(`错误${Nullvi}次, 已清理所有节点缓存`);
       Nullvi = 0;
       $.write(Nullvi.toString(), Nullv);
