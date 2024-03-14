@@ -198,6 +198,7 @@ DOMAIN-SUFFIX,abema-tv.com
 DOMAIN-SUFFIX,abema.io
 DOMAIN-SUFFIX,abema.tv
 DOMAIN-SUFFIX,aboutamazon.com
+DOMAIN-SUFFIX,ac-pocketcamp.com
 DOMAIN-SUFFIX,acgvideo.com
 DOMAIN-SUFFIX,acompli.com
 DOMAIN-SUFFIX,acompli.net
@@ -425,6 +426,7 @@ DOMAIN-SUFFIX,devopsms.com
 DOMAIN-SUFFIX,dfp6rglgjqszk.cloudfront.net
 DOMAIN-SUFFIX,diablo3.com
 DOMAIN-SUFFIX,diabloimmortal.com
+DOMAIN-SUFFIX,dialga.com
 DOMAIN-SUFFIX,dialogflow.com
 DOMAIN-SUFFIX,dictate.ms
 DOMAIN-SUFFIX,disco-api.com
@@ -446,6 +448,7 @@ DOMAIN-SUFFIX,dot.net
 DOMAIN-SUFFIX,dragonage.com
 DOMAIN-SUFFIX,dragonagekeep.com
 DOMAIN-SUFFIX,dragonagemovie.com
+DOMAIN-SUFFIX,drmario-world.com
 DOMAIN-SUFFIX,dssott.com
 DOMAIN-SUFFIX,dwh5.com
 DOMAIN-SUFFIX,dynamics.com
@@ -479,6 +482,8 @@ DOMAIN-SUFFIX,femalefounderscomp.com
 DOMAIN-SUFFIX,fifastreet.com
 DOMAIN-SUFFIX,fifastreet3.com
 DOMAIN-SUFFIX,filipino-music.net
+DOMAIN-SUFFIX,fire-emblem-heroes.com
+DOMAIN-SUFFIX,fireemblemawakening.com
 DOMAIN-SUFFIX,firesidegatherings.com
 DOMAIN-SUFFIX,flipwithsurface.com
 DOMAIN-SUFFIX,fluidpreview.com
@@ -516,6 +521,7 @@ DOMAIN-SUFFIX,getmdl.io
 DOMAIN-SUFFIX,gfx.ms
 DOMAIN-SUFFIX,ggpht.com
 DOMAIN-SUFFIX,gigjam.com
+DOMAIN-SUFFIX,giratina.com
 DOMAIN-SUFFIX,gmodules.com
 DOMAIN-SUFFIX,gmoney.org
 DOMAIN-SUFFIX,go.com
@@ -623,6 +629,7 @@ DOMAIN-SUFFIX,kktv.me
 DOMAIN-SUFFIX,kr
 DOMAIN-SUFFIX,krakenjs.com
 DOMAIN-SUFFIX,kumo.com
+DOMAIN-SUFFIX,kyurem.com
 DOMAIN-SUFFIX,latampartneruniversity.com
 DOMAIN-SUFFIX,leagueoflegends.com
 DOMAIN-SUFFIX,leagueoflegends.info
@@ -658,6 +665,11 @@ DOMAIN-SUFFIX,m12.vc
 DOMAIN-SUFFIX,madewithcode.com
 DOMAIN-SUFFIX,makecode.org
 DOMAIN-SUFFIX,managedmeetingrooms.com
+DOMAIN-SUFFIX,marioandluigidreamteam.com
+DOMAIN-SUFFIX,mariobroswii.com
+DOMAIN-SUFFIX,mariokart7.com
+DOMAIN-SUFFIX,mariokart8.com
+DOMAIN-SUFFIX,mariosupersluggers.com
 DOMAIN-SUFFIX,masalladeloslimites.com
 DOMAIN-SUFFIX,masseffect.com
 DOMAIN-SUFFIX,masseffectarchives.com
@@ -748,6 +760,7 @@ DOMAIN-SUFFIX,netflixdnstest7.com
 DOMAIN-SUFFIX,netflixdnstest8.com
 DOMAIN-SUFFIX,netflixdnstest9.com
 DOMAIN-SUFFIX,newpppp.com
+DOMAIN-SUFFIX,newsupermariobrosu.com
 DOMAIN-SUFFIX,nextechafrica.net
 DOMAIN-SUFFIX,nflxext.com
 DOMAIN-SUFFIX,nflximg.com
@@ -841,6 +854,28 @@ DOMAIN-SUFFIX,playstation.net
 DOMAIN-SUFFIX,playstationnetwork.com
 DOMAIN-SUFFIX,playvalorant.com
 DOMAIN-SUFFIX,playwarcraft3.com
+DOMAIN-SUFFIX,pokedex3d.com
+DOMAIN-SUFFIX,pokemon-moon.com
+DOMAIN-SUFFIX,pokemon-sun.com
+DOMAIN-SUFFIX,pokemon-sunmoon.com
+DOMAIN-SUFFIX,pokemon.com
+DOMAIN-SUFFIX,pokemonbank.com
+DOMAIN-SUFFIX,pokemonblackwhite.com
+DOMAIN-SUFFIX,pokemonbw.com
+DOMAIN-SUFFIX,pokemonchampionships.com
+DOMAIN-SUFFIX,pokemongoldsilver.com
+DOMAIN-SUFFIX,pokemonhome.com
+DOMAIN-SUFFIX,pokemonletsgoeevee.com
+DOMAIN-SUFFIX,pokemonletsgopikachu.com
+DOMAIN-SUFFIX,pokemonmysterydungeon.com
+DOMAIN-SUFFIX,pokemonpicross.com
+DOMAIN-SUFFIX,pokemonplatinum.com
+DOMAIN-SUFFIX,pokemonrubysapphire.com
+DOMAIN-SUFFIX,pokemonsunmoon.com
+DOMAIN-SUFFIX,pokemonswordshield.com
+DOMAIN-SUFFIX,pokemonultrasunmoon.com
+DOMAIN-SUFFIX,pokemonvgc.com
+DOMAIN-SUFFIX,pokemonwifi.net
 DOMAIN-SUFFIX,polymer-project.org
 DOMAIN-SUFFIX,pornhub.com
 DOMAIN-SUFFIX,pornhubpremium.com
@@ -922,6 +957,7 @@ DOMAIN-SUFFIX,sndcdn.com
 DOMAIN-SUFFIX,sony.com
 DOMAIN-SUFFIX,sonyentertainmentnetwork.com
 DOMAIN-SUFFIX,soundcloud.com
+DOMAIN-SUFFIX,splatoon2tournament.com
 DOMAIN-SUFFIX,spoprod-a.akamaihd.net
 DOMAIN-SUFFIX,spoti.fi
 DOMAIN-SUFFIX,spotify.com
@@ -964,6 +1000,11 @@ DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,stripe.network
 DOMAIN-SUFFIX,stripecdn.com
 DOMAIN-SUFFIX,successwithteams.com
+DOMAIN-SUFFIX,supermario.com
+DOMAIN-SUFFIX,supermario3dworld.com
+DOMAIN-SUFFIX,supermariogalaxy.com
+DOMAIN-SUFFIX,supermariorun.com
+DOMAIN-SUFFIX,superpapermario.com
 DOMAIN-SUFFIX,surface.com
 DOMAIN-SUFFIX,svc.ms
 DOMAIN-SUFFIX,sway-cdn.com
@@ -1114,6 +1155,7 @@ DOMAIN-SUFFIX,xboxservice.com
 DOMAIN-SUFFIX,xboxservices.com
 DOMAIN-SUFFIX,xboxstudios.com
 DOMAIN-SUFFIX,xbx.lv
+DOMAIN-SUFFIX,xenoblade.com
 DOMAIN-SUFFIX,xn--bnq297cix3a.cn
 DOMAIN-SUFFIX,xoom-experience.com
 DOMAIN-SUFFIX,xoom.com
