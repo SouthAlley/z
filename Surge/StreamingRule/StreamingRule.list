@@ -432,6 +432,7 @@ DOMAIN-SUFFIX,golang.com
 DOMAIN-SUFFIX,golang.net
 DOMAIN-SUFFIX,golang.org
 DOMAIN-SUFFIX,goo.gl
+DOMAIN-SUFFIX,goog
 DOMAIN-SUFFIX,googlevideo.com
 DOMAIN-SUFFIX,graph.org
 DOMAIN-SUFFIX,gstatic.com
@@ -674,7 +675,6 @@ DOMAIN-SUFFIX,periscope.tv
 DOMAIN-SUFFIX,phncdn.com
 DOMAIN-SUFFIX,phonefactor.net
 DOMAIN-SUFFIX,phprcdn.com
-DOMAIN-SUFFIX,pki.goog
 DOMAIN-SUFFIX,playhearthstone.com
 DOMAIN-SUFFIX,playoverwatch.com
 DOMAIN-SUFFIX,playparagon.com
