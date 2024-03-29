@@ -41,7 +41,9 @@ DOMAIN,d3c7rimkq79yfu.cloudfront.net
 DOMAIN,dai3fd1oh325y.cloudfront.net
 DOMAIN,dfp6rglgjqszk.cloudfront.net
 DOMAIN,dmqdd6hw24ucf.cloudfront.net
+DOMAIN,ea-api.arkoselabs.com
 DOMAIN,eaasserts-a.akamaihd.net
+DOMAIN,eacommerce.akamaized.net
 DOMAIN,edge.api.brightcove.com
 DOMAIN,events.statsigapi.net
 DOMAIN,facetime.apple.com
@@ -90,6 +92,10 @@ DOMAIN,survey.qualtrics.com
 DOMAIN,testflight.apple.com
 DOMAIN,theater-kktv.cdn.hinet.net
 DOMAIN,tv.apple.com
+DOMAIN,ubisoft-avatars.akamaized.net
+DOMAIN,ubistatic-a.akamaihd.net
+DOMAIN,ubistatic2-a.akamaihd.net
+DOMAIN,ubistatic3-a.akamaihd.net
 DOMAIN,upos-bstar-mirrorakam.akamaized.net
 DOMAIN,upos-bstar1-mirrorakam.akamaized.net
 DOMAIN,upos-hz-mirrorakam.akamaized.net
@@ -192,6 +198,8 @@ DOMAIN-SUFFIX,anfutong.com
 DOMAIN-SUFFIX,anfutong.com.cn
 DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,apexlegends.com
+DOMAIN-SUFFIX,api-configuration-live01.live01.pc-live.r6.ubi.com
+DOMAIN-SUFFIX,api-discovery.live01.pc-live.r6.ubi.com
 DOMAIN-SUFFIX,apigee.com
 DOMAIN-SUFFIX,app-measurement.net
 DOMAIN-SUFFIX,appcenter.ms
@@ -322,6 +330,7 @@ DOMAIN-SUFFIX,cashify.com
 DOMAIN-SUFFIX,cashify.net
 DOMAIN-SUFFIX,cdn-apple.com
 DOMAIN-SUFFIX,cdn.blz-contentstack.com
+DOMAIN-SUFFIX,cdn.prod.r6.ubi.com
 DOMAIN-SUFFIX,cdngarenanow-a.akamaihd.net
 DOMAIN-SUFFIX,channel4.com
 DOMAIN-SUFFIX,channel5.com
@@ -512,6 +521,7 @@ DOMAIN-SUFFIX,kktv.me
 DOMAIN-SUFFIX,kr
 DOMAIN-SUFFIX,krakenjs.com
 DOMAIN-SUFFIX,kyurem.com
+DOMAIN-SUFFIX,lb-rdv-r6-pc.ubisoft.com
 DOMAIN-SUFFIX,leagueoflegends.com
 DOMAIN-SUFFIX,leagueoflegends.info
 DOMAIN-SUFFIX,leagueoflegends.net
@@ -677,6 +687,7 @@ DOMAIN-SUFFIX,periscope.tv
 DOMAIN-SUFFIX,phncdn.com
 DOMAIN-SUFFIX,phonefactor.net
 DOMAIN-SUFFIX,phprcdn.com
+DOMAIN-SUFFIX,player.prod.r6.ubi.com
 DOMAIN-SUFFIX,playhearthstone.com
 DOMAIN-SUFFIX,playoverwatch.com
 DOMAIN-SUFFIX,playparagon.com
@@ -732,6 +743,8 @@ DOMAIN-SUFFIX,pypl.net
 DOMAIN-SUFFIX,pypl.tv
 DOMAIN-SUFFIX,qobuz.com
 DOMAIN-SUFFIX,quiz.directory
+DOMAIN-SUFFIX,r6logstorage05.blob.core.windows.net
+DOMAIN-SUFFIX,r6s1.battleye.com
 DOMAIN-SUFFIX,recaptcha.net
 DOMAIN-SUFFIX,rgpub.io
 DOMAIN-SUFFIX,riot-games.com
@@ -874,6 +887,7 @@ DOMAIN-SUFFIX,twttr.net
 DOMAIN-SUFFIX,twvid.com
 DOMAIN-SUFFIX,tx.me
 DOMAIN-SUFFIX,ubi.com
+DOMAIN-SUFFIX,ubi.li
 DOMAIN-SUFFIX,ubisoft-orbit-savegames.s3.amazonaws.com
 DOMAIN-SUFFIX,ubisoft-uplay-savegames.s3.amazonaws.com
 DOMAIN-SUFFIX,ubisoft.com
