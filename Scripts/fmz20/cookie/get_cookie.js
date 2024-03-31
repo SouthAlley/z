@@ -1,7 +1,7 @@
 /**
  * @author fmz200
  * @function 获取应用的cookie或token通用脚本
- * @date 2024-02-03 21:30:00
+ * @date 2024-03-30 10:30:00
  */
 
 ////////////////////////////////
@@ -11,7 +11,6 @@ const req_headers = $request.headers;
 const req_body = $request.body;
 const rsp_body = $response ? $response.body : "{}";
 
-// console.log(`当前请求的url: ${req_url}`);
 // 遍历头部对象并打印每个字段和值
 console.log("遍历头部对象并打印每个字段和值开始❇️");
 for (const headerField in req_headers) {
@@ -20,15 +19,6 @@ for (const headerField in req_headers) {
 console.log("遍历头部对象并打印每个字段和值结束🍓");
 
 try {
-  getCookieORToken();
-} catch (e) {
-  console.log('脚本运行出现错误，错误信息：' + e.message);
-}
-$done();
-////////////////////////////////
-
-function getCookieORToken() {
-
   /**
    * 什么值得买
    * 手机APP进入我的页面查看个人资料，即可获取cookie
@@ -48,23 +38,9 @@ function getCookieORToken() {
     let cache = $.read("#fmz200_smzdm_cookie") || "[]";
     console.log("读取缓存数据：" + cache);
     let json_data = JSON.parse(cache);
-    let hasKey = false;
-    // 遍历集合中的每一个对象
-    for (let obj of json_data) {
-      // 如果当前对象的 key 属性值匹配给定的 key
-      if (obj.smzdm_id === smzdm_id) {
-        // 更新该对象的 cookie 值
-        obj.cookie = cookie;
-        hasKey = true;
-        break; // 更新后直接返回，无需继续遍历
-      }
-    }
-    // 如果集合中没有匹配的 key，则新增一个对象
-    if (!hasKey) {
-      json_data.push({smzdm_id: smzdm_id, cookie: cookie});
-    }
+    updateOrAddObject(json_data, "smzdm_id", smzdm_id, "cookie", cookie);
     const cacheValue = JSON.stringify(json_data, null, "\t");
-    
+
     $.write(cookie, '#SMZDM_COOKIE');
     $.write(cacheValue, '#fmz200_smzdm_cookie');
     $.notify('什么值得买 获取cookie成功✅', "", cookie);
@@ -91,17 +67,34 @@ function getCookieORToken() {
 
   /**
    * 美团获取token
-   * 点击“我的”-“个人头像”，在请求头request-header中搜索token
+   * 点击“我的”-“个人头像”-"完善资料"，在请求头request-header中搜索token
    * @keyword meituanCookie
    * @keyword fmz200_meituan_cookie
    */
-  if (req_url.includes("/user/v1/info/audit") || req_url.includes("/mapi/usercenter")) {
+  if (req_url.includes("/user/v1/info/auditting") || req_url.includes("/mapi/usercenter")) {
     console.log('美团获取token 开始');
     const token = req_headers['token'] || req_headers['Token'];
+    console.log("获取到token：" + token);
     $.write(token, '#meituanCookie');
-    $.write(token, '#fmz200_meituan_cookie');
-    $.notify('美团获取token 获取成功✅', token, token);
-    console.log('美团获取token 获取到的内容为：' + token);
+    $.notify('美团获取token成功✅', "单账号更新成功，多账号更新中", token);
+    
+    console.log("开始更新多账号");
+    let data = JSON.parse(rsp_body);
+    if (data.user) {
+      let uid = data.user.id;
+      let username = data.user.username;
+      console.log(`获取到uid：${uid}，username：${username}`);
+      
+      let cache = $.read("#fmz200_meituan_cookie") || "[]";
+      console.log("读取缓存数据：" + cache);
+      
+      let json_data = JSON.parse(cache);
+      updateOrAddObject(json_data, "meituan_id", uid, "username", username, "token", token);
+      const cacheValue = JSON.stringify(json_data, null, "\t");
+
+      $.write(cacheValue, '#fmz200_meituan_cookie');
+      $.notify('美团多账号更新token成功✅', "", "");
+    }
   }
 
   /**
@@ -112,9 +105,28 @@ function getCookieORToken() {
    */
   if (req_url.includes("/users/show")) {
     console.log('微博获取cookie 开始');
-    $.write(req_url, '#fmz200_weibo_token');
-    $.notify('微博获取cookie 获取成功✅', req_url, req_url);
-    console.log('微博获取cookie 获取到的内容为：' + req_url);
+    console.log('获取到的内容为：' + req_url);
+    // 使用正则表达式匹配uid参数值
+    let uidPattern = /uid=(\d+)/;
+    let match = req_url.match(uidPattern);
+
+    // 如果匹配到uid参数值，则提取出来并打印
+    if (match) {
+      let uid = match[1];
+      console.log("获取到以下账号的数据："+ uid);
+      let cache = $.read("#fmz200_weibo_token") || "[]";
+      console.log("读取缓存数据：" + cache);
+
+      let json_data = JSON.parse(cache);
+      updateOrAddObject(json_data, "weibo_id", uid, "signin_url", req_url);
+      const cacheValue = JSON.stringify(json_data, null, "\t");
+      
+      $.write(cacheValue, '#fmz200_weibo_token');
+      $.notify('微博获取cookie 成功✅', "你可以在日志中查看本次获取的数据", "");
+    } else {
+      console.log("No uid found in the URL.");
+      $.notify('微博获取cookie 未获取到UID❗️', "你可以在日志中查看本次获取的数据", "");
+    }
   }
 
   /**
@@ -143,7 +155,7 @@ function getCookieORToken() {
     let uid = data.uid;
     let newToken = data.token;
     console.log(uid + "获取到token：" + newToken);
-    
+
     let cache = $.read("#fmz200_didi_fruit") || "{}";
     $.log("读取缓存数据：" + cache);
     let json_data = parseDataString(cache);
@@ -167,13 +179,13 @@ function getCookieORToken() {
     let uid = data.uid;
     let ticket = data.ticket;
     console.log(uid + "获取到ticket：" + ticket);
-    
+
     let cache = $.read("#fmz200_didi_ticket") || "";
     $.log("读取缓存数据：" + cache);
     let json_data = parseDataString(cache);
     updateToken(uid, ticket, json_data);
     let string_data = convertDataToString(json_data);
-    
+
     $.write(string_data, '#fmz200_didi_ticket');
     $.notify('滴滴打车 获取成功✅', string_data, string_data);
     console.log('滴滴打车 获取到的内容为：' + string_data);
@@ -189,11 +201,16 @@ function getCookieORToken() {
     console.log('晓晓优选 开始');
     const token = req_headers['xx-token'];
     console.log("获取到token：" + token);
-    
+
     $.write(token, '#fmz200_xxyx_token');
     $.notify('晓晓优选token 获取成功✅', '', '');
   }
+
+} catch (e) {
+  console.log('脚本运行出现错误：' + e.message);
+  $.notify('获取Cookie脚本运行出现错误❗️', "", "");
 }
+$.done();
 
 // 将数据字符串解析为对象
 function parseDataString(dataString) {
@@ -208,6 +225,37 @@ function parseDataString(dataString) {
     }
   });
   return data;
+}
+
+// 接受可变数量的参数对（id, key），并使用循环来处理这些参数对。
+// 如果找到了匹配的对象，则在后续参数对中更新对应的属性值；如果未找到，则创建一个新对象并将其添加到集合中。
+function updateOrAddObject(collection, ...args) {
+  if (args.length % 2 !== 0) {
+    throw new Error('Arguments must be provided in pairs.');
+  }
+
+  for (let i = 0; i < args.length; i += 2) {
+    const id = args[i];
+    const key = args[i + 1];
+    const index = collection.findIndex(obj => obj[id] === key);
+
+    if (index !== -1) {
+      // 如果找到了，则更新对应的属性值
+      for (let j = i + 2; j < args.length; j += 2) {
+        const id2 = args[j];
+        const value = args[j + 1];
+        collection[index][id2] = value;
+      }
+    } else {
+      // 如果未找到，则新增一个对象并添加到集合中
+      const newObj = {};
+      for (let j = i; j < args.length; j += 2) {
+        newObj[args[j]] = args[j + 1];
+      }
+      collection.push(newObj);
+      break;
+    }
+  }
 }
 
 // 更新数据对象中指定 UID 的 Token
