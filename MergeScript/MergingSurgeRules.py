@@ -35,7 +35,6 @@ RULES = {
         "Dis": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/Claude.list",
         "YouTube": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/TikTok.list",
         "Spotify": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/ProxyMedia.list",
-        "AppleTV": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/Twitter.list",
         "Netfli": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/Telegram.list",
         "Disne": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/Game.list",
         "Di": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/GameClient.list",
