@@ -10,6 +10,8 @@ DOMAIN-SUFFIX,uk
 DOMAIN-SUFFIX,us
 DOMAIN-SUFFIX,ca
 
+DOMAIN,http-inputs-notion.splunkcloud.com
+
 # Sub-Store
 DOMAIN-SUFFIX,vercel.app
 
