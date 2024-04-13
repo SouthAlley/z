@@ -44,6 +44,7 @@ RULES = {
         "Spoti": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/Apple.list",
         "Apple": "https://raw.githubusercontent.com/SouthAlley/z/main/proxy.list",
         "telegram": "https://raw.githubusercontent.com/SouthAlley/q/main/rule/telegram/fin.txt",
+        "paypal": "https://raw.githubusercontent.com/LM-Firefly/Rules/master/PROXY/PayPal.list",
         "Appl": "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/BilibiliHMT.list",
         "App": "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Streaming/Video/bilibili.list",
         
