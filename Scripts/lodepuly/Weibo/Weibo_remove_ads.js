@@ -1,7 +1,7 @@
 /*
 引用地址：https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/weibo.js
 */
-// 2024-02-07 17:35
+// 2024-04-13 19:05
 
 const url = $request.url;
 if (!$response.body) $done({});
@@ -381,7 +381,12 @@ if (url.includes("/interface/sdk/sdkad.php")) {
         if (item?.category === "card") {
           // 58微博展示时间段提示 216筛选按钮
           if ([58, 216]?.includes(item?.data?.card_type)) {
-            newItems.push(item);
+            if (/没有公开博文，为你推荐以下精彩内容/.test(item?.data?.name)) {
+              // 个人微博页刷完后的推荐信息流
+              continue;
+            } else {
+              newItems.push(item);
+            }
           }
         } else if (item?.category === "group") {
           // 遍历group,保留置顶微博
@@ -443,6 +448,10 @@ if (url.includes("/interface/sdk/sdkad.php")) {
               }
               if (item?.data?.title?.text !== "热门" && item?.data?.title?.structs?.length > 0) {
                 // 移除赞过的微博 保留热门内容
+                continue;
+              }
+              if (item?.data?.cleaned !== true) {
+                // 个人微博页刷完后的推荐微博
                 continue;
               }
               newItems.push(item);
