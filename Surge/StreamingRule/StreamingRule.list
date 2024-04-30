@@ -536,8 +536,6 @@ DOMAIN-SUFFIX,leaguesharp.info
 DOMAIN-SUFFIX,leaguoflegends.com
 DOMAIN-SUFFIX,learnwithleague.com
 DOMAIN-SUFFIX,legra.ph
-DOMAIN-SUFFIX,line-cdn.net
-DOMAIN-SUFFIX,line-scdn.net
 DOMAIN-SUFFIX,linetv.tw
 DOMAIN-SUFFIX,linkedin.com
 DOMAIN-SUFFIX,litv.tv
@@ -888,6 +886,7 @@ DOMAIN-SUFFIX,ppaypal.com
 DOMAIN-SUFFIX,pppds.com
 DOMAIN-SUFFIX,primevideo.com
 DOMAIN-SUFFIX,prod.hjholdings.tv
+DOMAIN-SUFFIX,profile.line-scdn.net
 DOMAIN-SUFFIX,projectapex.com
 DOMAIN-SUFFIX,pronstore.com
 DOMAIN-SUFFIX,pscdn.co
