@@ -1,3 +1,4 @@
+DOMAIN,a.cpic.com.cn
 DOMAIN,aaid.uyunad.com
 DOMAIN,ac.mmstat.com
 DOMAIN,acdn.adnxs.com
@@ -93,6 +94,7 @@ DOMAIN,img.kuaikanzy.net
 DOMAIN,img.liangzipic.com
 DOMAIN,info4.video.qq.com
 DOMAIN,info6.video.qq.com
+DOMAIN,init.supersonicads.com
 DOMAIN,ios.bugly.qq.com
 DOMAIN,ios.video.mpush.qq.com
 DOMAIN,ipv4.music.163.com
@@ -177,6 +179,7 @@ DOMAIN,vip.ffzyread.com
 DOMAIN,vip.imgffzy.com
 DOMAIN,w1.hoopchina.com.cn
 DOMAIN,wgo.mmstat.com
+DOMAIN,ws.tapjoyads.com
 DOMAIN,wspeed.qq.com
 DOMAIN,www.googleadservices.com
 DOMAIN,wxsnsdy.wxs.qq.com
@@ -215,6 +218,8 @@ DOMAIN-SUFFIX,163jiasu.com
 DOMAIN-SUFFIX,ads.linkedin.com
 DOMAIN-SUFFIX,adservice.google.com
 DOMAIN-SUFFIX,advp.apple.com
+DOMAIN-SUFFIX,appsflyer.com
+DOMAIN-SUFFIX,appsflyersdk.com
 DOMAIN-SUFFIX,beacon.qq.com
 DOMAIN-SUFFIX,biz.weibo.com
 DOMAIN-SUFFIX,cztv.com
