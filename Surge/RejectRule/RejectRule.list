@@ -53,6 +53,7 @@ DOMAIN,dfp.suning.com
 DOMAIN,dg.k.jd.com
 DOMAIN,dlswbr.baidu.com
 DOMAIN,dlweb.sogoucdn.com
+DOMAIN,dns.alidns.com
 DOMAIN,dns.jd.com
 DOMAIN,ems.youku.com
 DOMAIN,encounter.bz.mgtv.com
@@ -216,8 +217,11 @@ DOMAIN-KEYWORD,vip.kuaikan-cdn
 DOMAIN-KEYWORD,vip.lz-cdn
 DOMAIN-SUFFIX,163jiasu.com
 DOMAIN-SUFFIX,ads.linkedin.com
+DOMAIN-SUFFIX,ads.vungle.com
 DOMAIN-SUFFIX,adservice.google.com
 DOMAIN-SUFFIX,advp.apple.com
+DOMAIN-SUFFIX,applovin.com
+DOMAIN-SUFFIX,applvn.com
 DOMAIN-SUFFIX,appsflyer.com
 DOMAIN-SUFFIX,appsflyersdk.com
 DOMAIN-SUFFIX,beacon.qq.com
@@ -238,6 +242,7 @@ DOMAIN-SUFFIX,pos.baidu.com
 DOMAIN-SUFFIX,servicewechat.com
 DOMAIN-SUFFIX,shuzilm.cn
 DOMAIN-SUFFIX,u3.ucweb.com
+DOMAIN-SUFFIX,unityads.unity3d.com
 DOMAIN-SUFFIX,ut.taobao.com
 DOMAIN-SUFFIX,wechat.com
 DOMAIN-SUFFIX,weixin.qq.com
