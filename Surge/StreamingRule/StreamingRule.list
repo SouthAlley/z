@@ -1,3 +1,4 @@
+AND,((OR,((IP-ASN,31898),(IP-ASN,20473),(IP-ASN,14061))),(OR,((DEST-PORT,3478),(DEST-PORT,7881))))
 DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com
 DOMAIN,amp-api.podcasts.apple.com
 DOMAIN,api-abematv.bucketeer.jp
@@ -1117,10 +1118,7 @@ DOMAIN-SUFFIX,youtubekids.com
 DOMAIN-SUFFIX,yt.be
 DOMAIN-SUFFIX,ytimg.com
 DOMAIN-SUFFIX,易付通.cn
-IP-ASN,14061
-IP-ASN,20473
 IP-ASN,211157
-IP-ASN,31898
 IP-ASN,44907
 IP-ASN,59930
 IP-ASN,62014
