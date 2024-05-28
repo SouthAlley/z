@@ -9,7 +9,12 @@ const $ = new API("获取Cookie或Token通用脚本");
 const req_url = $request.url;
 const req_headers = $request.headers;
 const req_body = $request.body;
-const rsp_body = $response ? $response.body : "{}";
+let rsp_body = "{}";
+// 检查 $response 是否已定义
+if (typeof $response !== 'undefined' && $response !== null) {
+  // 如果 $response 已定义且不为 null，则使用 $response.body
+  rsp_body = $response.body;
+}
 
 // 遍历头部对象并打印每个字段和值
 console.log("遍历头部对象并打印每个字段和值开始❇️");
@@ -207,13 +212,14 @@ try {
     if (token && rsp_data) {
       let mobile = rsp_data.mobile;
       let username = rsp_data.nick;
+      let avatar = rsp_data.avatar;
       console.log(`获取到uid：${mobile}，username：${username}`);
 
       let cache = $.read("#fmz200_xxyx_token") || "[]";
       console.log("读取缓存数据：" + cache);
 
       let json_data = JSON.parse(cache);
-      updateOrAddObject(json_data, "mobile", mobile, "username", username, "token", token);
+      updateOrAddObject(json_data, "mobile", mobile, "username", username, "token", token, "avatar", avatar);
       const cacheValue = JSON.stringify(json_data, null, "\t");
       
       $.write(cacheValue, '#fmz200_xxyx_token');
