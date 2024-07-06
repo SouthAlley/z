@@ -14,10 +14,7 @@ DOMAIN,bdtj.tagtic.cn
 DOMAIN,boxer.baidu.com
 DOMAIN,cdn.jsdelivr.net
 DOMAIN,click.simba.taobao.com
-DOMAIN,cm.emby.ws
-DOMAIN,ct.emby.ws
 DOMAIN,ctyunxs.cn
-DOMAIN,cu.emby.ws
 DOMAIN,cz.cz01.site
 DOMAIN,ddys.art
 DOMAIN,deo.shopeemobile.com
@@ -126,7 +123,6 @@ DOMAIN-SUFFIX,bootcss.com
 DOMAIN-SUFFIX,bytegoofy.com
 DOMAIN-SUFFIX,byteimg.com
 DOMAIN-SUFFIX,cdn-apple.com
-DOMAIN-SUFFIX,cm.steampowered.com
 DOMAIN-SUFFIX,dizhensubao.getui.com
 DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com
 DOMAIN-SUFFIX,f.video.weibocdn.com
@@ -158,7 +154,6 @@ DOMAIN-SUFFIX,smoot.apple.cn
 DOMAIN-SUFFIX,snapdrop.net
 DOMAIN-SUFFIX,spoprod-a.akamaihd.net
 DOMAIN-SUFFIX,staticfile.org
-DOMAIN-SUFFIX,steamserver.net
 DOMAIN-SUFFIX,storage.live.com
 DOMAIN-SUFFIX,storage.msn.com
 DOMAIN-SUFFIX,tracking-protection.cdn.mozilla.net
@@ -183,11 +178,8 @@ DOMAIN-SUFFIX,zohostatic.com
 DOMAIN-SUFFIX,zohostatic.in
 DOMAIN-SUFFIX,zohouniversity.com
 DOMAIN-SUFFIX,zohowebstatic.com
-IP-CIDR,182.254.116.0/24
 IP-CIDR,192.168.0.1/24
 IP-CIDR,192.168.1.1/24
-IP-CIDR,203.205.238.0/23
-IP-CIDR,203.205.254.0/23
 USER-AGENT,OneDrive*
 USER-AGENT,OneDriveiOSApp*
 USER-AGENT,archero*
