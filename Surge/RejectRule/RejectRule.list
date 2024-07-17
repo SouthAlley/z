@@ -21,6 +21,7 @@ DOMAIN,adui.tg.meitu.com
 DOMAIN,advertising.apple.com
 DOMAIN,afd.baidu.com
 DOMAIN,afdconf.baidu.com
+DOMAIN,affcpatrk.com
 DOMAIN,ain.bgm.tv
 DOMAIN,aip.baidubce.com
 DOMAIN,amap-aos-info-nogw.amap.com
@@ -222,6 +223,7 @@ DOMAIN-SUFFIX,163jiasu.com
 DOMAIN-SUFFIX,ads.linkedin.com
 DOMAIN-SUFFIX,ads.vungle.com
 DOMAIN-SUFFIX,adservice.google.com
+DOMAIN-SUFFIX,adukwai.com
 DOMAIN-SUFFIX,advp.apple.com
 DOMAIN-SUFFIX,applovin.com
 DOMAIN-SUFFIX,applvn.com
