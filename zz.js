@@ -24,7 +24,7 @@ data.respData.itemGroupList = data.respData.itemGroupList.map(itemGroup => {
         itemGroup.itemList = itemGroup.itemList.slice(0, 4);
     }
     return itemGroup;
-})。filter(Boolean); // 过滤掉为null的元素
+}).filter(Boolean); // 过滤掉为null的元素
 
 responseBody = JSON.stringify(data);
 
