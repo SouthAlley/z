@@ -1,5 +1,6 @@
 DOMAIN,a.cpic.com.cn
 DOMAIN,aaid.uyunad.com
+DOMAIN,abyss.cyapi.cn
 DOMAIN,ac.mmstat.com
 DOMAIN,acdn.adnxs.com
 DOMAIN,acs.m.taobao.com
@@ -10,6 +11,7 @@ DOMAIN,ad-r.soulapp.cn
 DOMAIN,ad.cyapi.cn
 DOMAIN,ad.tencentmusic.com
 DOMAIN,ad.zijieapi.com
+DOMAIN,adapi.izuiyou.com
 DOMAIN,ads.95516.com
 DOMAIN,ads.pubmatic.com
 DOMAIN,adservice.sigmob.cn
@@ -55,12 +57,15 @@ DOMAIN,deo.shopeemobile.com
 DOMAIN,dflow.bz.mgtv.com
 DOMAIN,dfp.suning.com
 DOMAIN,dg.k.jd.com
+DOMAIN,dig.bdurl.net
 DOMAIN,dlswbr.baidu.com
 DOMAIN,dlweb.sogoucdn.com
 DOMAIN,dns.alidns.com
 DOMAIN,dns.jd.com
+DOMAIN,dsp-x.jd.com
 DOMAIN,ems.youku.com
 DOMAIN,encounter.bz.mgtv.com
+DOMAIN,et.tanx.com
 DOMAIN,f3.video.weibocdn.com
 DOMAIN,fairplay.l.qq.com
 DOMAIN,floor.bz.mgtv.com
@@ -69,6 +74,7 @@ DOMAIN,g.koowo.com
 DOMAIN,g3.letv.com
 DOMAIN,gameeve.beacon.qq.com
 DOMAIN,gamestr.beacon.qq.com
+DOMAIN,gdfp.gifshow.com
 DOMAIN,geetest.com
 DOMAIN,gm.mmstat.com
 DOMAIN,h-adashx.ut.taobao.com
@@ -107,6 +113,7 @@ DOMAIN,ipv6.music.163.com
 DOMAIN,is.snssdk.com
 DOMAIN,iyes.youku.com
 DOMAIN,jadeite.migu.cn
+DOMAIN,janapi.jd.com
 DOMAIN,lain.bgm.tv
 DOMAIN,launch.apple.com
 DOMAIN,layer.bz.mgtv.com
@@ -126,6 +133,7 @@ DOMAIN,mbd.baidu.com
 DOMAIN,mc.atm.youku.com
 DOMAIN,md-i-s.apptimize.com
 DOMAIN,mediation.adnxs.com
+DOMAIN,mercury-gateway.ixiaochuan.cn
 DOMAIN,metrics-picture.d.meituan.net
 DOMAIN,mgxhtj.kuwo.cn
 DOMAIN,mipcache.bdstatic.com
@@ -155,6 +163,7 @@ DOMAIN,rich.kuwo.cn
 DOMAIN,rprain.bz.mgtv.com
 DOMAIN,rprain.log.mgtv.com
 DOMAIN,sdk.alibaba.com.ailbaba.me
+DOMAIN,sdk.e.qq.com
 DOMAIN,sdkconfig.ad.xiaomi.com
 DOMAIN,sf6-ttcdn-tos.pstatp.com
 DOMAIN,shared.ydstatic.com
@@ -189,6 +198,7 @@ DOMAIN,ws.tapjoyads.com
 DOMAIN,wspeed.qq.com
 DOMAIN,www.googleadservices.com
 DOMAIN,x0.ifengimg.com
+DOMAIN,xlog.jd.com
 DOMAIN,yandexmetrica.com
 DOMAIN,yk-ssp.ad.youku.com
 DOMAIN,ykad-data.youku.com
@@ -247,12 +257,14 @@ DOMAIN-SUFFIX,pos.baidu.com
 DOMAIN-SUFFIX,servicewechat.com
 DOMAIN-SUFFIX,shuzilm.cn
 DOMAIN-SUFFIX,u3.ucweb.com
+DOMAIN-SUFFIX,ubixioe.com
 DOMAIN-SUFFIX,unityads.unity3d.com
 DOMAIN-SUFFIX,ut.taobao.com
 DOMAIN-SUFFIX,wechat.com
 DOMAIN-SUFFIX,weixin.qq.com
 DOMAIN-SUFFIX,weixin.qq.com.cn
 DOMAIN-SUFFIX,weixinbridge.com
+DOMAIN-SUFFIX,zijieapi.com
 IP-CIDR,101.124.19.122/32
 IP-CIDR,103.37.155.60/32
 IP-CIDR,103.41.167.237/32
