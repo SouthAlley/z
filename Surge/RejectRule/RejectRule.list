@@ -14,7 +14,10 @@ DOMAIN,ad.zijieapi.com
 DOMAIN,adapi.izuiyou.com
 DOMAIN,ads.95516.com
 DOMAIN,ads.pubmatic.com
+DOMAIN,ads.service.kugou.com
 DOMAIN,adservice.sigmob.cn
+DOMAIN,adserviceretry.kglink.cn
+DOMAIN,adserviceretry.kugou.com
 DOMAIN,adsmind.gdtimg.com
 DOMAIN,adsmind.ugdtimg.com
 DOMAIN,adtracker.adfunlink.com
@@ -62,6 +65,7 @@ DOMAIN,dlswbr.baidu.com
 DOMAIN,dlweb.sogoucdn.com
 DOMAIN,dns.alidns.com
 DOMAIN,dns.jd.com
+DOMAIN,dns.weixin.qq.com.cn
 DOMAIN,dsp-x.jd.com
 DOMAIN,ems.youku.com
 DOMAIN,encounter.bz.mgtv.com
@@ -198,7 +202,6 @@ DOMAIN,ws.tapjoyads.com
 DOMAIN,wspeed.qq.com
 DOMAIN,www.googleadservices.com
 DOMAIN,x0.ifengimg.com
-DOMAIN,xlog.jd.com
 DOMAIN,yandexmetrica.com
 DOMAIN,yk-ssp.ad.youku.com
 DOMAIN,ykad-data.youku.com
@@ -263,6 +266,7 @@ DOMAIN-SUFFIX,wechat.com
 DOMAIN-SUFFIX,weixin.qq.com
 DOMAIN-SUFFIX,weixin.qq.com.cn
 DOMAIN-SUFFIX,weixinbridge.com
+DOMAIN-SUFFIX,wxs.qq.com
 DOMAIN-SUFFIX,zijieapi.com
 IP-CIDR,101.124.19.122/32
 IP-CIDR,103.37.155.60/32
