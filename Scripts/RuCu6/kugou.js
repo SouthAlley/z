@@ -1,4 +1,4 @@
-// 2024-08-03 08:30
+// 2024-08-06 19:15
 
 const url = $request.url;
 if (!$response) $done({});
@@ -17,10 +17,7 @@ if (
       item.end_time = 3818419199; // Unix 时间戳 2090-12-31 23:59:59
     }
   }
-} else if (
-  url.includes("/adserviceretry.kglink.cn/v4/mobile_splash?") ||
-  url.includes("/adserviceretry.kglink.cn/v4/mobile_splash_sort?")
-) {
+} else if (url.includes("/adserviceretry.kglink.cn/v4/mobile_splash")) {
   // 开屏广告
   if (obj?.data?.ads?.length > 0) {
     // 开屏广告-请求1
@@ -50,7 +47,22 @@ if (
     // 开屏广告拉取配置
     obj.data.config = {};
   }
-} else if (url.includes("/gateway.kugou.com/adp/ad/v1/mine_top_banner?")) {
+  if (obj?.data?.front_ads?.length > 0) {
+    // 开屏广告-请求3
+    for (let item of obj.data.front_ads) {
+      item.duration = 0;
+      item.image = "";
+      item.miit_button_extra_info = {};
+      item.miit_button_text = "";
+      item.show_times = 0;
+      item.start_time = "2090-12-31 00:00:00";
+      item.end_time = "2090-12-31 23:59:59";
+    }
+  }
+} else if (
+  url.includes("/gateway.kugou.com/adp/ad/v1/mine_top_banner") ||
+  url.includes("/gateway.kugou.com/ads.gateway/v2/home_card")
+) {
   // 我的页面顶部横图
   if (obj?.data?.ads?.length > 0) {
     for (let item of obj.data.ads) {
