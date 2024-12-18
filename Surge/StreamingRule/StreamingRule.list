@@ -227,6 +227,7 @@ DOMAIN-SUFFIX,appstore.com
 DOMAIN-SUFFIX,apzones.com
 DOMAIN-SUFFIX,aspnetcdn.com
 DOMAIN-SUFFIX,assets-yammer.com
+DOMAIN-SUFFIX,au
 DOMAIN-SUFFIX,autodraw.com
 DOMAIN-SUFFIX,avatargarenanow-a.akamaihd.net
 DOMAIN-SUFFIX,azure-api.net
@@ -458,6 +459,7 @@ DOMAIN-SUFFIX,golang.org
 DOMAIN-SUFFIX,goo.gl
 DOMAIN-SUFFIX,goog
 DOMAIN-SUFFIX,googlevideo.com
+DOMAIN-SUFFIX,gov
 DOMAIN-SUFFIX,graph.org
 DOMAIN-SUFFIX,gstatic.com
 DOMAIN-SUFFIX,gv.com
@@ -509,6 +511,7 @@ DOMAIN-SUFFIX,intercomcdn.com
 DOMAIN-SUFFIX,iole.tv
 DOMAIN-SUFFIX,ipstatp.com
 DOMAIN-SUFFIX,isnssdk.com
+DOMAIN-SUFFIX,it
 DOMAIN-SUFFIX,itunes.com
 DOMAIN-SUFFIX,itv.com
 DOMAIN-SUFFIX,itvstatic.com
