@@ -32,7 +32,7 @@ RULES = {
     "StreamingRule": {
         "Netflix": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/PayPal.list",
         "Disney": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/OpenAI.list",
-        "Dis": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/Claude.list",
+        "Dis": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/Ai.list",
         "YouTube": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/TikTok.list",
         "Spotify": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/ProxyMedia.list",
         "Netfli": "https://raw.githubusercontent.com/Jard1n/VPN_Tool/main/Surge/Rule/Telegram.list",
