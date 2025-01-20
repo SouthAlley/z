@@ -1,8 +1,14 @@
+AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-),(DOMAIN-SUFFIX,webpubsub.azure.com))
 AND,((OR,((IP-ASN,31898),(IP-ASN,20473),(IP-ASN,14061))),(OR,((DEST-PORT,3478),(DEST-PORT,7881))))
 DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com
+DOMAIN,ai.google.dev
+DOMAIN,aida.googleapis.com
+DOMAIN,aistudio.google.com
+DOMAIN,alkalimakersuite-pa.clients6.google.com
 DOMAIN,amp-api.podcasts.apple.com
 DOMAIN,api-abematv.bucketeer.jp
 DOMAIN,api-jooxtt.sanook.com
+DOMAIN,api.githubcopilot.com
 DOMAIN,api.revenuecat.com
 DOMAIN,api.statsig.com
 DOMAIN,apm-misaka.biliapi.net
@@ -31,6 +37,8 @@ DOMAIN,cdn.v82u1l.com
 DOMAIN,cf-images.ap-southeast-1.prod.boltdns.net
 DOMAIN,cloudsync-prod.s3.amazonaws.com
 DOMAIN,content.jwplatform.com
+DOMAIN,copilot-proxy.githubusercontent.com
+DOMAIN,copilot.microsoft.com
 DOMAIN,d151l6v8er5bdm.cloudfront.net
 DOMAIN,d17lx9ucc6k9fc.cloudfront.net
 DOMAIN,d1k2us671qcoau.cloudfront.net
@@ -54,6 +62,7 @@ DOMAIN,facetime.apple.com
 DOMAIN,fls-na.amazon.com
 DOMAIN,gamer-cds.cdn.hinet.net
 DOMAIN,gamer2-cds.cdn.hinet.net
+DOMAIN,generativelanguage.googleapis.com
 DOMAIN,gog.salesmanago.com
 DOMAIN,guzzoni.apple.com
 DOMAIN,hamifans.emome.net
@@ -67,6 +76,7 @@ DOMAIN,hbogoprod-vod.akamaized.net
 DOMAIN,hbolb.onwardsmg.com
 DOMAIN,hbounify-prod.evergent.com
 DOMAIN,http-inputs-notion.splunkcloud.com
+DOMAIN,imagine.meta.com
 DOMAIN,itunes.apple.com
 DOMAIN,itvpnpmobile-a.akamaihd.net
 DOMAIN,lf16-effectcdn.byteeffecttos-g.com
@@ -74,6 +84,7 @@ DOMAIN,lf16-pkgcdn.pitaya-clientai.com
 DOMAIN,lf19-pkgcdn.pitaya-clientai.com
 DOMAIN,litvfreemobile-hichannel.cdn.hinet.net
 DOMAIN,lookup-api.apple.com
+DOMAIN,makersuite.google.com
 DOMAIN,mytvsuperlimited.hb.omtrdc.net
 DOMAIN,mytvsuperlimited.sc.omtrdc.net
 DOMAIN,netflix.com.edgesuite.net
@@ -85,6 +96,7 @@ DOMAIN,news-events.apple.com
 DOMAIN,np-edge.itunes.apple.com
 DOMAIN,o1158394.ingest.us.sentry.io
 DOMAIN,o33249.ingest.sentry.io
+DOMAIN,o33249.ingest.us.sentry.io
 DOMAIN,origin-a.akamaihd.net
 DOMAIN,originasserts.akamaized.net
 DOMAIN,p-bstarstatic.akamaized.net
@@ -94,6 +106,7 @@ DOMAIN,players.brightcove.net
 DOMAIN,radio.itunes.apple.com
 DOMAIN,rtm.tnt-ea.com
 DOMAIN,s3-ap-southeast-1.amazonaws.com
+DOMAIN,sydney.bing.com
 DOMAIN,testflight.apple.com
 DOMAIN,theater-kktv.cdn.hinet.net
 DOMAIN,tv.apple.com
@@ -105,6 +118,7 @@ DOMAIN,upos-bstar-mirrorakam.akamaized.net
 DOMAIN,upos-bstar1-mirrorakam.akamaized.net
 DOMAIN,upos-hz-mirrorakam.akamaized.net
 DOMAIN,videos-f.jwpsrv.com
+DOMAIN,www.bing.com
 DOMAIN,yt3.ggpht.com
 DOMAIN-KEYWORD,-spotify-
 DOMAIN-KEYWORD,abematv.akamaized.net
@@ -187,6 +201,7 @@ DOMAIN-SUFFIX,accountpaypal.org
 DOMAIN-SUFFIX,acgvideo.com
 DOMAIN-SUFFIX,acompli.com
 DOMAIN-SUFFIX,acompli.net
+DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,aiv-cdn.net
 DOMAIN-SUFFIX,aiv-delivery.net
 DOMAIN-SUFFIX,aka.ms
@@ -246,6 +261,7 @@ DOMAIN-SUFFIX,azurewebsites.net
 DOMAIN-SUFFIX,b.akamaiedge.net
 DOMAIN-SUFFIX,bahamut.com.tw
 DOMAIN-SUFFIX,bamgrid.com
+DOMAIN-SUFFIX,bard.google.com
 DOMAIN-SUFFIX,battle.net
 DOMAIN-SUFFIX,battlebreakers.com
 DOMAIN-SUFFIX,battlefield.com
@@ -368,6 +384,7 @@ DOMAIN-SUFFIX,dcblivedazn.akamaized.net
 DOMAIN-SUFFIX,deadspacegame.com
 DOMAIN-SUFFIX,debug.com
 DOMAIN-SUFFIX,deepmind.com
+DOMAIN-SUFFIX,deepmind.google
 DOMAIN-SUFFIX,deezer.com
 DOMAIN-SUFFIX,devtools-paypal.com
 DOMAIN-SUFFIX,diablo3.com
@@ -440,6 +457,8 @@ DOMAIN-SUFFIX,garena.tv
 DOMAIN-SUFFIX,garena.tw
 DOMAIN-SUFFIX,garena.vn
 DOMAIN-SUFFIX,garenanow.com
+DOMAIN-SUFFIX,gemini.google.com
+DOMAIN-SUFFIX,generativeai.google
 DOMAIN-SUFFIX,getbraintree.com
 DOMAIN-SUFFIX,gfx.ms
 DOMAIN-SUFFIX,ggpht.com
@@ -587,6 +606,7 @@ DOMAIN-SUFFIX,me.com
 DOMAIN-SUFFIX,media-amazon.com
 DOMAIN-SUFFIX,media-rockstargames-com.akamaized.net
 DOMAIN-SUFFIX,mesh.com
+DOMAIN-SUFFIX,meta.ai
 DOMAIN-SUFFIX,minecraft.net
 DOMAIN-SUFFIX,minecraftshop.com
 DOMAIN-SUFFIX,mirrorsedge.com
@@ -849,6 +869,8 @@ DOMAIN-SUFFIX,payppal.com
 DOMAIN-SUFFIX,payypal.com
 DOMAIN-SUFFIX,pbs.org
 DOMAIN-SUFFIX,pdncommunity.com
+DOMAIN-SUFFIX,perplexity.ai
+DOMAIN-SUFFIX,perplexity.com
 DOMAIN-SUFFIX,phncdn.com
 DOMAIN-SUFFIX,phonefactor.net
 DOMAIN-SUFFIX,phprcdn.com
@@ -893,8 +915,10 @@ DOMAIN-SUFFIX,powerapps.com
 DOMAIN-SUFFIX,powerautomate.com
 DOMAIN-SUFFIX,pp-soc.com
 DOMAIN-SUFFIX,ppaypal.com
+DOMAIN-SUFFIX,pplx.ai
 DOMAIN-SUFFIX,pppds.com
 DOMAIN-SUFFIX,primevideo.com
+DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com
 DOMAIN-SUFFIX,prod.hjholdings.tv
 DOMAIN-SUFFIX,profile.line-scdn.net
 DOMAIN-SUFFIX,projectapex.com
@@ -1129,6 +1153,9 @@ DOMAIN-SUFFIX,youtubekids.com
 DOMAIN-SUFFIX,yt.be
 DOMAIN-SUFFIX,ytimg.com
 DOMAIN-SUFFIX,易付通.cn
+IP-ASN,14061
+IP-ASN,20473
+IP-ASN,31898
 IP-CIDR,103.151.150.0/23
 IP-CIDR,103.4.114.233/32
 IP-CIDR,103.4.115.248/32
