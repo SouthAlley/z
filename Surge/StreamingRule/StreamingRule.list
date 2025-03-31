@@ -1,5 +1,6 @@
 AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-),(DOMAIN-SUFFIX,webpubsub.azure.com))
 AND,((OR,((IP-ASN,31898),(IP-ASN,20473),(IP-ASN,14061))),(OR,((DEST-PORT,3478),(DEST-PORT,7881))))
+AND,((OR,((IP-ASN,31898),(IP-ASN,20473),(IP-ASN,14061))),(OR,((DEST-PORT,3478),(DEST-PORT,7881))),(OR,((PROTOCOL,STUN),(PROTOCOL,TCP))))
 DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com
 DOMAIN,ai.google.dev
 DOMAIN,aida.googleapis.com
