@@ -1,4 +1,5 @@
 AND,((DOMAIN-KEYWORD,chatgpt-async-webps-prod-),(DOMAIN-SUFFIX,webpubsub.azure.com))
+AND,((DOMAIN-KEYWORD,openaicom-api-),(DOMAIN-SUFFIX,azurefd.net))
 AND,((OR,((IP-ASN,31898),(IP-ASN,20473),(IP-ASN,14061))),(OR,((DEST-PORT,3478),(DEST-PORT,7881))))
 AND,((OR,((IP-ASN,31898),(IP-ASN,20473),(IP-ASN,14061))),(OR,((DEST-PORT,3478),(DEST-PORT,7881))),(OR,((PROTOCOL,STUN),(PROTOCOL,TCP))))
 DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com
@@ -6,6 +7,7 @@ DOMAIN,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe
 DOMAIN,ai.google.dev
 DOMAIN,aida.googleapis.com
 DOMAIN,aistudio.google.com
+DOMAIN,alkalicore-pa.clients6.google.com
 DOMAIN,alkalimakersuite-pa.clients6.google.com
 DOMAIN,amp-api.podcasts.apple.com
 DOMAIN,api-abematv.bucketeer.jp
@@ -22,6 +24,7 @@ DOMAIN,apps.apple.com
 DOMAIN,atv-ps.amazon.com
 DOMAIN,avodmp4s3ww-a.akamaihd.net
 DOMAIN,bahamut.akamaized.net
+DOMAIN,bard.google.com
 DOMAIN,bcbolt446c5271-a.akamaihd.net
 DOMAIN,bcbolthboa-a.akamaihd.net
 DOMAIN,beta.apple.com
@@ -31,12 +34,12 @@ DOMAIN,books.itunes.apple.com
 DOMAIN,browser-intake-datadoghq.com
 DOMAIN,cdn.auth0.com
 DOMAIN,cdn.ciz8qkg.com
-DOMAIN,cdn.honey.io
 DOMAIN,cdn.iz8qkg.com
 DOMAIN,cdn.kin6c1.com
 DOMAIN,cdn.registerdisney.go.com
 DOMAIN,cdn.v82u1l.com
 DOMAIN,cf-images.ap-southeast-1.prod.boltdns.net
+DOMAIN,chatgpt.livekit.cloud
 DOMAIN,cloudsync-prod.s3.amazonaws.com
 DOMAIN,content.jwplatform.com
 DOMAIN,copilot-proxy.githubusercontent.com
@@ -53,6 +56,8 @@ DOMAIN,d2anahhhmp1ffz.cloudfront.net
 DOMAIN,d349g9zuie06uo.cloudfront.net
 DOMAIN,d3c7rimkq79yfu.cloudfront.net
 DOMAIN,dai3fd1oh325y.cloudfront.net
+DOMAIN,deepmind.com
+DOMAIN,deepmind.google
 DOMAIN,dfp6rglgjqszk.cloudfront.net
 DOMAIN,dmqdd6hw24ucf.cloudfront.net
 DOMAIN,ea-api.arkoselabs.com
@@ -64,8 +69,12 @@ DOMAIN,facetime.apple.com
 DOMAIN,fls-na.amazon.com
 DOMAIN,gamer-cds.cdn.hinet.net
 DOMAIN,gamer2-cds.cdn.hinet.net
+DOMAIN,geller-pa.googleapis.com
+DOMAIN,gemini.google.com
+DOMAIN,generativeai.google
 DOMAIN,generativelanguage.googleapis.com
 DOMAIN,gog.salesmanago.com
+DOMAIN,gspe1-ssl.ls.apple.com
 DOMAIN,guzzoni.apple.com
 DOMAIN,hamifans.emome.net
 DOMAIN,hboasia1-i.akamaihd.net
@@ -77,6 +86,7 @@ DOMAIN,hboasialive.akamaized.net
 DOMAIN,hbogoprod-vod.akamaized.net
 DOMAIN,hbolb.onwardsmg.com
 DOMAIN,hbounify-prod.evergent.com
+DOMAIN,host.livekit.cloud
 DOMAIN,http-inputs-notion.splunkcloud.com
 DOMAIN,imagine.meta.com
 DOMAIN,itunes.apple.com
@@ -99,18 +109,24 @@ DOMAIN,np-edge.itunes.apple.com
 DOMAIN,o1158394.ingest.us.sentry.io
 DOMAIN,o33249.ingest.sentry.io
 DOMAIN,o33249.ingest.us.sentry.io
+DOMAIN,openai.com.cdn.cloudflare.net
+DOMAIN,openaiapi-site.azureedge.net
+DOMAIN,openaicomproductionae4b.blob.core.windows.net
 DOMAIN,origin-a.akamaihd.net
 DOMAIN,originasserts.akamaized.net
 DOMAIN,p-bstarstatic.akamaized.net
 DOMAIN,p.bstarstatic.com
 DOMAIN,play-edge.itunes.apple.com
 DOMAIN,players.brightcove.net
+DOMAIN,proactivebackend-pa.googleapis.com
+DOMAIN,production-openaicom-storage.azureedge.net
 DOMAIN,radio.itunes.apple.com
 DOMAIN,rtm.tnt-ea.com
 DOMAIN,s3-ap-southeast-1.amazonaws.com
 DOMAIN,sydney.bing.com
 DOMAIN,testflight.apple.com
 DOMAIN,theater-kktv.cdn.hinet.net
+DOMAIN,turn.livekit.cloud
 DOMAIN,tv.apple.com
 DOMAIN,ubisoft-avatars.akamaized.net
 DOMAIN,ubistatic-a.akamaihd.net
@@ -203,7 +219,6 @@ DOMAIN-SUFFIX,accountpaypal.org
 DOMAIN-SUFFIX,acgvideo.com
 DOMAIN-SUFFIX,acompli.com
 DOMAIN-SUFFIX,acompli.net
-DOMAIN-SUFFIX,ai.com
 DOMAIN-SUFFIX,aiv-cdn.net
 DOMAIN-SUFFIX,aiv-delivery.net
 DOMAIN-SUFFIX,aka.ms
@@ -263,7 +278,6 @@ DOMAIN-SUFFIX,azurewebsites.net
 DOMAIN-SUFFIX,b.akamaiedge.net
 DOMAIN-SUFFIX,bahamut.com.tw
 DOMAIN-SUFFIX,bamgrid.com
-DOMAIN-SUFFIX,bard.google.com
 DOMAIN-SUFFIX,battle.net
 DOMAIN-SUFFIX,battlebreakers.com
 DOMAIN-SUFFIX,battlefield.com
@@ -363,6 +377,7 @@ DOMAIN-SUFFIX,cdn.prod.r6.ubi.com
 DOMAIN-SUFFIX,cdngarenanow-a.akamaihd.net
 DOMAIN-SUFFIX,channel4.com
 DOMAIN-SUFFIX,channel5.com
+DOMAIN-SUFFIX,chat.com
 DOMAIN-SUFFIX,chatgpt.com
 DOMAIN-SUFFIX,chatgpt.livekit.cloud
 DOMAIN-SUFFIX,chrome.com
@@ -386,7 +401,6 @@ DOMAIN-SUFFIX,dcblivedazn.akamaized.net
 DOMAIN-SUFFIX,deadspacegame.com
 DOMAIN-SUFFIX,debug.com
 DOMAIN-SUFFIX,deepmind.com
-DOMAIN-SUFFIX,deepmind.google
 DOMAIN-SUFFIX,deezer.com
 DOMAIN-SUFFIX,devtools-paypal.com
 DOMAIN-SUFFIX,diablo3.com
@@ -459,8 +473,6 @@ DOMAIN-SUFFIX,garena.tv
 DOMAIN-SUFFIX,garena.tw
 DOMAIN-SUFFIX,garena.vn
 DOMAIN-SUFFIX,garenanow.com
-DOMAIN-SUFFIX,gemini.google.com
-DOMAIN-SUFFIX,generativeai.google
 DOMAIN-SUFFIX,getbraintree.com
 DOMAIN-SUFFIX,gfx.ms
 DOMAIN-SUFFIX,ggpht.com
@@ -701,6 +713,7 @@ DOMAIN-SUFFIX,onenote.com
 DOMAIN-SUFFIX,onenote.net
 DOMAIN-SUFFIX,onestore.ms
 DOMAIN-SUFFIX,op.gg
+DOMAIN-SUFFIX,openai.com
 DOMAIN-SUFFIX,opgg-static.akamaized.net
 DOMAIN-SUFFIX,origin.com
 DOMAIN-SUFFIX,orithegame.com
@@ -921,7 +934,6 @@ DOMAIN-SUFFIX,ppaypal.com
 DOMAIN-SUFFIX,pplx.ai
 DOMAIN-SUFFIX,pppds.com
 DOMAIN-SUFFIX,primevideo.com
-DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com
 DOMAIN-SUFFIX,prod.hjholdings.tv
 DOMAIN-SUFFIX,profile.line-scdn.net
 DOMAIN-SUFFIX,projectapex.com
@@ -977,6 +989,7 @@ DOMAIN-SUFFIX,smoot.apple.com
 DOMAIN-SUFFIX,sndcdn.com
 DOMAIN-SUFFIX,sony.com
 DOMAIN-SUFFIX,sonyentertainmentnetwork.com
+DOMAIN-SUFFIX,sora.com
 DOMAIN-SUFFIX,soundcloud.com
 DOMAIN-SUFFIX,splatoon2tournament.com
 DOMAIN-SUFFIX,spoprod-a.akamaihd.net
@@ -1174,6 +1187,7 @@ IP-CIDR,144.178.36.0/22
 IP-CIDR,144.178.48.0/20
 IP-CIDR,149.154.160.0/20
 IP-CIDR,150.116.92.250/32
+IP-CIDR,160.79.104.0/23
 IP-CIDR,164.52.33.178/32
 IP-CIDR,164.52.33.182/32
 IP-CIDR,164.52.76.18/32
@@ -1244,6 +1258,7 @@ IP-CIDR6,2001:67c:4e8::/48
 IP-CIDR6,2001:b28:f23c::/47
 IP-CIDR6,2001:b28:f23f::/48
 IP-CIDR6,2403:300::/32
+IP-CIDR6,2607:6bc0::/48
 IP-CIDR6,2620:149::/32
 IP-CIDR6,2a01:b740::/32
 IP-CIDR6,2a01:b747::/32
