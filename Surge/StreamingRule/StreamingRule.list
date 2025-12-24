@@ -118,6 +118,7 @@ DOMAIN,p-bstarstatic.akamaized.net
 DOMAIN,p.bstarstatic.com
 DOMAIN,play-edge.itunes.apple.com
 DOMAIN,players.brightcove.net
+DOMAIN,pplx-res.cloudinary.com
 DOMAIN,proactivebackend-pa.googleapis.com
 DOMAIN,production-openaicom-storage.azureedge.net
 DOMAIN,radio.itunes.apple.com
@@ -136,7 +137,6 @@ DOMAIN,upos-bstar-mirrorakam.akamaized.net
 DOMAIN,upos-bstar1-mirrorakam.akamaized.net
 DOMAIN,upos-hz-mirrorakam.akamaized.net
 DOMAIN,videos-f.jwpsrv.com
-DOMAIN,www.bing.com
 DOMAIN,yt3.ggpht.com
 DOMAIN-KEYWORD,-spotify-
 DOMAIN-KEYWORD,abematv.akamaized.net
