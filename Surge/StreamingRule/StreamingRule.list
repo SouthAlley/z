@@ -3,7 +3,6 @@ AND,((DOMAIN-KEYWORD,openaicom-api-),(DOMAIN-SUFFIX,azurefd.net))
 AND,((OR,((IP-ASN,31898),(IP-ASN,20473),(IP-ASN,14061))),(OR,((DEST-PORT,3478),(DEST-PORT,7881))))
 AND,((OR,((IP-ASN,31898),(IP-ASN,20473),(IP-ASN,14061))),(OR,((DEST-PORT,3478),(DEST-PORT,7881))),(OR,((PROTOCOL,STUN),(PROTOCOL,TCP))))
 DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com
-DOMAIN,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe
 DOMAIN,ai.google.dev
 DOMAIN,aida.googleapis.com
 DOMAIN,aistudio.google.com
