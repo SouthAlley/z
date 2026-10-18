@@ -5,89 +5,94 @@ INSTALL_PATH="/usr/local/bin/cfy"
 if [ "$0" != "$INSTALL_PATH" ]; then
     echo "正在安装 [cfy 节点优选生成器]..."
     if [ "$(id -u)" -ne 0 ]; then
-        echo "错误: 安装需要管理员权限。请使用 'curl ... | sudo bash' 或 'sudo bash <(curl ...)' 命令来运行。"
-        exit 1
+        echo "错误: 安装需要管理员权限。请使用 'curl ... | sudo bash' 来运行。"; exit 1
     fi
     echo "正在将脚本写入到 $INSTALL_PATH..."
-    if [[ "$(basename "$0")" == "bash" || "$(basename "$0")" == "sh" || "$(basename "$0")" == "-bash" ]]; then
-        if ! cat /proc/self/fd/0 > "$INSTALL_PATH"; then
-            echo "❌ 写入脚本失败 (管道模式)，请重试。"; exit 1
-        fi
+    if [[ "$(basename "$0")" == "bash" || "$(basename "$0")" == "sh" ]]; then
+        if ! cat /proc/self/fd/0 > "$INSTALL_PATH"; then echo "❌ 写入失败(管道模式)"; exit 1; fi
     else
-        if ! cp "$0" "$INSTALL_PATH"; then
-            echo "❌ 复制脚本失败 (文件模式)，请重试。"; exit 1
-        fi
+        if ! cp "$0" "$INSTALL_PATH"; then echo "❌ 复制失败(文件模式)"; exit 1; fi
     fi
     chmod +x "$INSTALL_PATH"
-    echo "✅ 安装成功! 您现在可以随时随地运行 'cfy' 命令。"
-    echo "---"; echo "首次运行..."
-    exec "$INSTALL_PATH"
-    exit 0
+    echo "✅ 安装成功! 现在可以运行 'cfy'。"
+    echo "---"; echo "首次运行..."; exec "$INSTALL_PATH"; exit 0
 fi
 
 # --- 主程序从这里开始 ---
 
 GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RED='\033[0;31m'; CYAN='\033[0;36m'; NC='\033[0m'
 
-# ================== 韩国 / 香港 / 日本 优选配置 ==================
-# 目标国家, 按优先级排列 (反代IP 的国家归属)
-TARGET_COUNTRIES="KR HK JP"
-# 目标机房, 按优先级排列 (官方IP 实测 colo 归属)
-TARGET_COLOS="ICN SEL HKG NRT KIX TPE"
-# 次选亚太机房
-ASIA_EXTRA_COLOS="SIN BKK MNL SGN HAN CGK KUL OKA MFM"
-# true = 严格只保留目标地区; false = 目标地区优先, 其余按延迟垫底
-STRICT_REGION="true"
-PROBE_TIMEOUT=3      # 单 IP 握手超时(秒)
-PROBE_JOBS=20        # 并发数
-TEST_SNI=""          # 实测 SNI, 留空=自动取节点的 host
+# ================== 配置 ==================
+ROUNDS=3                 # 每个IP测几轮, 取最小值(降低抖动)
+PROBE_TIMEOUT=3          # 单轮超时(秒)
+PROBE_JOBS=24            # 并发数
+SAMPLE_PER_CIDR=10       # 每个官方网段随机采样几个
+MAX_CANDIDATES=500       # 候选池上限
+TEST_SNI=""              # 留空=自动用节点域名, 再退回 www.cloudflare.com
 
-URL_IPDB_BESTPROXY="https://ipdb.api.030101.xyz/?type=bestproxy&country=true"
+URL_IPDB_BESTCF="https://ipdb.api.030101.xyz/?type=bestcf&country=true"
 URL_WETEST_V4="https://www.wetest.vip/page/cloudflare/address_v4.html"
 URL_WETEST_V6="https://www.wetest.vip/page/cloudflare/address_v6.html"
 URL_WETEST_TOTAL_V4="https://www.wetest.vip/page/cloudflare/total_v4.html"
 URL_CF_V4="https://www.cloudflare.com/ips-v4"
-# ==============================================================
+URL_SPEED="https://speed.cloudflare.com/__down?bytes=10000000"
+# ==========================================
 
 WITH_V6=false
 
 check_deps() {
-    for cmd in jq curl base64 grep sed mktemp shuf xargs awk sort head tr cut; do
-        if ! command -v "$cmd" &> /dev/null; then
-            echo -e "${RED}错误: 命令 '$cmd' 未找到. 请先安装它.${NC}"; exit 1
-        fi
+    for cmd in jq curl base64 grep sed mktemp awk sort head tr cut xargs; do
+        command -v "$cmd" &> /dev/null || { echo -e "${RED}错误: 缺少命令 '$cmd'.${NC}"; exit 1; }
     done
 }
 
-# ---------- 解析 wetest 表格: 输出 "IP|机房" ----------
-parse_wetest_page() {
+# ---------- 本机出口位置自检 ----------
+check_self_location() {
+    local trace loc ip
+    trace=$(curl -s --max-time 8 https://www.cloudflare.com/cdn-cgi/trace)
+    loc=$(printf '%s' "$trace" | sed -n 's/^loc=//p')
+    ip=$(printf '%s' "$trace" | sed -n 's/^ip=//p')
+    echo -e "${CYAN}本机出口: ${ip:-未知}  地区: ${loc:-未知}${NC}"
+    if [ "$loc" != "CN" ]; then
+        echo -e "${RED}⚠ 注意: 本机出口不在中国大陆 (loc=${loc:-?})。${NC}"
+        echo -e "${RED}  下面测到的是『本机→IP』的延迟, 不代表国内线路。${NC}"
+        echo -e "${YELLOW}  要得到国内真实效果, 请把 cfy 放在国内那台设备"
+        echo -e "  (sing-box 客户端所在的 PC / 路由器) 上运行。${NC}"
+        echo ""
+        read -p "仍然继续? [y/N]: " _c
+        [[ "$_c" =~ ^[Yy]$ ]] || exit 1
+    fi
+}
+
+# ---------- 解析 wetest 三网优选页: 输出 "IP|运营商|机房" ----------
+parse_wetest_addr() {
+    curl -s --max-time 20 "$1" | tr -d '\n\r' \
+      | sed 's/<tr>/\n<TR>/g' | grep -a '^<TR>' \
+      | while IFS= read -r row; do
+            local ip isp colo
+            ip=$(printf '%s' "$row" | sed -n 's/.*data-label="优选地址">\([^<]*\)<.*/\1/p')
+            [ -z "$ip" ] && continue
+            isp=$(printf '%s' "$row" | sed -n 's/.*data-label="线路名称">\([^<]*\)<.*/\1/p')
+            colo=$(printf '%s' "$row" | sed -n 's/.*data-label="数据中心">\([A-Za-z0-9]\{1,6\}\)<.*/\1/p')
+            printf '%s|%s|%s\n' "$ip" "${isp:-三网}" "${colo:-UNK}"
+        done
+}
+
+# ---------- 解析 wetest 统计页(三网同表): 输出 "IP|三网|机房" ----------
+parse_wetest_total() {
     curl -s --max-time 20 "$1" | tr -d '\n\r' \
       | sed 's/<tr>/\n<TR>/g' | grep -a '^<TR>' \
       | while IFS= read -r row; do
             local ip colos
             ip=$(printf '%s' "$row" | sed -n 's/.*data-label="优选地址">\([^<]*\)<.*/\1/p')
             [ -z "$ip" ] && continue
-            colos=$(printf '%s' "$row" | sed -n 's/.*data-label="数据中心">\([A-Za-z0-9]\{1,6\}\)<.*/\1/p')
-            if [ -z "$colos" ]; then
-                colos=$(printf '%s' "$row" \
-                    | grep -o 'data-label="[^"]*机房">[A-Za-z0-9]\{1,6\}<' \
-                    | sed 's/.*>\([A-Za-z0-9]\{1,6\}\)<$/\1/' | awk '!u[$0]++' | tr '\n' ' ')
-            fi
-            printf '%s|%s\n' "$ip" "${colos:-UNK}"
+            colos=$(printf '%s' "$row" | grep -o 'data-label="[^"]*机房">[A-Za-z0-9]\{1,6\}<' \
+                    | sed 's/.*>\([A-Za-z0-9]\{1,6\}\)<$/\1/' | awk '!u[$0]++' | head -n1)
+            printf '%s|三网|%s\n' "$ip" "${colos:-UNK}"
         done
 }
 
-# ---------- IPDB 按国家取反代 IP ----------
-get_ipdb_country_ips() {   # $1 = 输出文件
-    curl -s --max-time 20 "$URL_IPDB_BESTPROXY" | tr ' ' '\n' \
-      | grep -aE '^[0-9A-Za-z:.]+#[A-Z]{2}$' \
-      | awk -F'#' -v want="$TARGET_COUNTRIES" '
-            BEGIN{ n=split(want,W," "); for(i=1;i<=n;i++) pri[W[i]]=i-1 }
-            ($2 in pri){ printf "%d %s %s\n", pri[$2], $1, $2 }' \
-      | sort -k1,1n | awk '{ if(!u[$2]++) print $2" "$3 }' > "$1"
-}
-
-# ---------- 在 CIDR 内随机取一个 IP ----------
+# ---------- CIDR 内随机取 IP ----------
 rand_ip_in_cidr() {
     awk -v c="$1" -v seed="$RANDOM$RANDOM" 'BEGIN{
         srand(seed+0); split(c,p,"/"); split(p[1],o,".")
@@ -97,57 +102,77 @@ rand_ip_in_cidr() {
     }'
 }
 
-# ---------- 并发实测: 输入 "IP 标签", 输出 "IP colo 秒 标签" ----------
-probe_batch() {   # $1=候选文件 $2=SNI $3=输出文件
-    local cand="$1" sni="$2" out="$3" helper
-    helper=$(mktemp)
-    cat > "$helper" <<EOS
+# ---------- 构建候选池: "IP|运营商|机房" ----------
+build_candidates() {
+    local out="$1" tmp; tmp=$(mktemp)
+    {
+        parse_wetest_addr  "$URL_WETEST_V4"
+        $WITH_V6 && parse_wetest_addr "$URL_WETEST_V6"
+        parse_wetest_total "$URL_WETEST_TOTAL_V4"
+        curl -s --max-time 15 "$URL_IPDB_BESTCF" | tr ' ' '\n' \
+          | grep -aE '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | awk '{print $0"|三网|UNK"}'
+        local ranges; ranges=$(curl -s --max-time 15 "$URL_CF_V4")
+        if [ -n "$ranges" ]; then
+            while IFS= read -r cidr; do
+                [ -z "$cidr" ] && continue
+                local k
+                for ((k=0;k<SAMPLE_PER_CIDR;k++)); do
+                    echo "$(rand_ip_in_cidr "$cidr")|三网|UNK"
+                done
+            done <<< "$ranges"
+        fi
+    } > "$tmp"
+    awk -F'|' 'NF && !u[$1]++' "$tmp" | head -n "$MAX_CANDIDATES" > "$out"
+    rm -f "$tmp"
+}
+
+# ---------- 第一阶段: 只测握手延迟 ----------
+probe_latency() {   # $1=候选 $2=SNI $3=输出
+    local helper; helper=$(mktemp)
+    cat > "$helper" <<'EOS'
 #!/bin/bash
-ip="\$1"; tag="\${2:-NA}"
-sni="$sni"; tmo="$PROBE_TIMEOUT"
-case "\$ip" in
-  *:*) host="[\$ip]" ;;
-  *)   host="\$ip" ;;
-esac
-raw=\$(curl -sk --max-time "\$tmo" --connect-timeout "\$tmo" --resolve "\$sni:443:\$host" \
-       -A "Mozilla/5.0" -w \$'\\n__CT__%{time_connect}' "https://\$sni/cdn-cgi/trace" 2>/dev/null)
-ct=\$(printf '%s' "\$raw" | sed -n 's/^__CT__//p' | tail -n1)
-colo=\$(printf '%s' "\$raw" | sed -n 's/^colo=//p' | head -n1)
-[ -z "\$ct" ] && exit 0
-[ -z "\$colo" ] && colo=UNK
-printf '%s %s %s %s\\n' "\$ip" "\$colo" "\$ct" "\$tag"
+IFS='|' read -r ip isp colo <<< "$1"
+sni="$2"; rounds="$3"; tmo="$4"
+case "$ip" in *:*) host="[$ip]" ;; *) host="$ip" ;; esac
+best=""
+for ((r=0; r<rounds; r++)); do
+    t=$(curl -sk -o /dev/null --max-time "$tmo" --connect-timeout "$tmo" \
+        --resolve "$sni:443:$host" -A "Mozilla/5.0" \
+        -w '%{time_appconnect}' "https://$sni/cdn-cgi/trace" 2>/dev/null) || continue
+    ms=$(awk -v t="$t" 'BEGIN{printf "%d", t*1000+0.5}')
+    [ "$ms" -le 0 ] && continue
+    { [ -z "$best" ] || [ "$ms" -lt "$best" ]; } && best="$ms"
+done
+[ -z "$best" ] && exit 0
+printf '%s %s %s %s\n' "$best" "$ip" "$isp" "${colo:-UNK}"
 EOS
     chmod +x "$helper"
-    xargs -P "$PROBE_JOBS" -L 1 bash "$helper" < "$cand" > "$out" 2>/dev/null
+    xargs -P "$PROBE_JOBS" -d '\n' -I@ bash "$helper" @ "$2" "$ROUNDS" "$PROBE_TIMEOUT" \
+        < "$1" > "$3" 2>/dev/null
     rm -f "$helper"
 }
 
-# ---------- 排序: 国家优先 -> 机房优先 -> 延迟升序, 输出 "IP colo ms 标签" ----------
-rank_results() {   # $1=原始结果 $2=输出
-    awk -v tc="$TARGET_COLOS" -v ac="$ASIA_EXTRA_COLOS" -v strict="$STRICT_REGION" \
-        -v corder="$TARGET_COUNTRIES" -v unk_r="${1:-3}" '
-    BEGIN{
-        n=split(tc,T," "); for(i=1;i<=n;i++) rk[T[i]]=0
-        m=split(ac,A," "); for(i=1;i<=m;i++) if(!(A[i] in rk)) rk[A[i]]=1
-        k=split(corder,C," "); for(i=1;i<=k;i++) crk[C[i]]=i-1
-    }
-    NF>=3{
-        ip=$1; colo=$2; ms=int($3*1000+0.5); tag=$4
-        r=(colo in rk)?rk[colo]:((colo=="UNK")?unk_r:2)
-        c=(tag in crk)?crk[tag]:9
-        if (strict=="true" && c==9 && r>1) next
-        printf "%d %d %d %s %s %s\n", c, r, ms, ip, colo, tag
-    }' "$2" | sort -k1,1n -k2,2n -k3,3n \
-       | awk '{ printf "%s %s %s %s\n", $4, $5, $3, $6 }'
+# ---------- 第二阶段: 取机房代码 / 下载测速 ----------
+fetch_colo() {   # $1=IP $2=SNI -> 输出 colo
+    local h; case "$1" in *:*) h="[$1]" ;; *) h="$1" ;; esac
+    curl -sk --max-time 4 --resolve "$2:443:$h" -A "Mozilla/5.0" \
+        "https://$2/cdn-cgi/trace" 2>/dev/null | sed -n 's/^colo=//p' | head -n1
+}
+speed_test() {   # $1=IP $2=SNI -> 输出 Mbps
+    local h; case "$1" in *:*) h="[$1]" ;; *) h="$1" ;; esac
+    local bps
+    bps=$(curl -sk -o /dev/null --max-time 8 --resolve "$2:443:$h" -A "Mozilla/5.0" \
+          -w '%{speed_download}' "$URL_SPEED" 2>/dev/null)
+    awk -v b="${bps:-0}" 'BEGIN{ printf "%d", b*8/1000000 }'
 }
 
 ask_count() {
     local def="$1" n
     while true; do
-        read -p "请输入您想生成的 URL 数量 (默认 ${def}): " n
+        read -p "想生成几个? (默认 ${def}): " n
         [ -z "$n" ] && n="$def"
-        if [[ "$n" =~ ^[0-9]+$ ]] && [ "$n" -gt 0 ]; then echo "$n"; return 0; fi
-        echo -e "${RED}请输入一个有效的正整数.${NC}"
+        [[ "$n" =~ ^[0-9]+$ ]] && [ "$n" -gt 0 ] && { echo "$n"; return 0; }
+        echo -e "${RED}请输入正整数.${NC}"
     done
 }
 
@@ -156,21 +181,24 @@ main() {
     declare -a valid_urls valid_ps_names
 
     echo -e "${GREEN}=================================================="
-    echo -e " 节点优选生成器 (cfy) · 韩国/香港/日本 优选版"
+    echo -e " 节点优选生成器 (cfy) · 国内低延迟优选版"
     echo -e " (适配老王的4合一sing-box)"
     echo -e " "
     echo -e " 作者: byJoey (github.com/byJoey)"
-    echo -e " 目标: ${TARGET_COUNTRIES} / 机房 ${TARGET_COLOS}"
+    echo -e " 逻辑: 候选池(中国三网数据) → 本机实测握手 → 延迟升序"
     echo -e "==================================================${NC}"
     echo ""
 
+    check_self_location
+
+    # ---------- 选节点 ----------
     if [ -f "$url_file" ]; then
         mapfile -t urls < "$url_file"
         for url in "${urls[@]}"; do
             decoded_json=$(echo "${url#"vmess://"}" | base64 -d 2>/dev/null)
             if [ $? -eq 0 ] && [ -n "$decoded_json" ]; then
                 ps=$(echo "$decoded_json" | jq -r .ps 2>/dev/null)
-                if [ $? -eq 0 ] && [ -n "$ps" ]; then valid_urls+=("$url"); valid_ps_names+=("$ps"); fi
+                [ $? -eq 0 ] && [ -n "$ps" ] && { valid_urls+=("$url"); valid_ps_names+=("$ps"); }
             fi
         done
     fi
@@ -179,251 +207,122 @@ main() {
     if [ ${#valid_urls[@]} -gt 0 ]; then
         if [ ${#valid_urls[@]} -eq 1 ]; then
             selected_url=${valid_urls[0]}
-            echo -e "${YELLOW}检测到只有一个有效节点, 已自动选择: ${valid_ps_names[0]}${NC}"
+            echo -e "${YELLOW}只有一个有效节点, 已自动选择: ${valid_ps_names[0]}${NC}"
         else
-            echo -e "${YELLOW}请选择一个节点作为:${NC}"
+            echo -e "${YELLOW}请选择节点:${NC}"
             for i in "${!valid_ps_names[@]}"; do printf "%3d) %s\n" "$((i+1))" "${valid_ps_names[$i]}"; done
             local choice
             while true; do
-                read -p "请输入选项编号 (1-${#valid_urls[@]}): " choice
+                read -p "编号 (1-${#valid_urls[@]}): " choice
                 if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le ${#valid_urls[@]} ]; then
                     selected_url=${valid_urls[$((choice-1))]}; break
-                else echo -e "${RED}无效的输入, 请重试.${NC}"; fi
+                fi
+                echo -e "${RED}无效输入.${NC}"
             done
         fi
     else
-        echo -e "${YELLOW}在 $url_file 中未找到有效节点.${NC}"
+        echo -e "${YELLOW}$url_file 中无有效节点.${NC}"
         while true; do
-            read -p "请手动粘贴一个 vmess:// 链接作为: " selected_url
-            if [[ "$selected_url" != vmess://* ]]; then echo -e "${RED}格式错误, 必须以 vmess:// 开头.${NC}"; continue; fi
+            read -p "粘贴一个 vmess:// 链接: " selected_url
+            [[ "$selected_url" != vmess://* ]] && { echo -e "${RED}必须以 vmess:// 开头.${NC}"; continue; }
             decoded_json=$(echo "${selected_url#"vmess://"}" | base64 -d 2>/dev/null)
-            if [ $? -ne 0 ] || [ -z "$decoded_json" ]; then echo -e "${RED}无法解码链接, 请检查链接是否完整有效.${NC}"; continue; fi
-            ps_check=$(echo "$decoded_json" | jq -e .ps >/dev/null 2>&1)
-            if [ $? -ne 0 ]; then echo -e "${RED}解码成功, 但JSON内容不完整或格式错误. 请重试.${NC}"; continue; fi
+            if [ $? -ne 0 ] || [ -z "$decoded_json" ]; then echo -e "${RED}解码失败.${NC}"; continue; fi
+            jq -e .ps >/dev/null 2>&1 <<< "$decoded_json" || { echo -e "${RED}JSON 不完整.${NC}"; continue; }
             break
         done
     fi
 
-    local base64_part=${selected_url#"vmess://"}
-    local original_json=$(echo "$base64_part" | base64 -d)
-    local original_ps=$(echo "$original_json" | jq -r .ps)
+    local original_json original_ps
+    original_json=$(echo "${selected_url#"vmess://"}" | base64 -d)
+    original_ps=$(echo "$original_json" | jq -r .ps)
     echo -e "${GREEN}已选择: $original_ps${NC}"
 
-    # ---------- 选择 IP 来源 ----------
-    echo -e "${YELLOW}请选择 IP 地址来源:${NC}"
-    echo "  1) 反代IP 按国家 (KR/HK/JP) + 本地实测   ${CYAN}[韩国首选]${NC}"
-    echo "  2) Cloudflare 官方IP + 实测筛 ICN/HKG/NRT ${CYAN}[纯净, 但亚太池子小]${NC}"
-    echo "  3) 云优选数据 wetest.vip, 只筛亚太机房 (不实测)"
-    echo "  4) Cloudflare 官方网段随机生成 (自行测速)"
-
-    local ip_src mode
-    while true; do
-        read -p "请输入选项编号 (1-4): " ip_src
-        case "$ip_src" in
-            1) mode="proxy";  break ;;
-            2) mode="official"; break ;;
-            3) mode="wetest"; break ;;
-            4) mode="random"; break ;;
-            *) echo -e "${RED}无效的输入, 请重试.${NC}" ;;
-        esac
-    done
-
-    if [ "$mode" = "official" ] || [ "$mode" = "wetest" ]; then
-        local ans
-        read -p "候选 IP 是否包含 IPv6? 客户端支持再选 y [y/N]: " ans
-        [[ "$ans" =~ ^[Yy]$ ]] && WITH_V6=true
-    fi
-
-    # ---------- 确定 SNI ----------
+    # ---------- SNI ----------
     local sni="$TEST_SNI"
     if [ -z "$sni" ]; then
         sni=$(echo "$original_json" | jq -r '.host // empty' 2>/dev/null)
         sni="${sni%%:*}"
         if [ -z "$sni" ] || [[ "$sni" =~ ^[0-9.]+$ ]]; then sni="www.cloudflare.com"; fi
     fi
+    echo -e "${CYAN}实测 SNI: $sni${NC}"
 
-    declare -a ip_list colo_list lat_list tag_list
-    local num_to_generate=0
+    # ---------- 运营商偏好 ----------
+    local isp_want="不限"
+    echo -e "${YELLOW}你的宽带运营商? (只用于同延迟时优先排序, 可跳过)${NC}"
+    echo "  0) 不限 / 不确定    1) 电信    2) 联通    3) 移动"
+    local ic
+    read -p "编号 (默认 0): " ic
+    case "$ic" in 1) isp_want="电信" ;; 2) isp_want="联通" ;; 3) isp_want="移动" ;; esac
 
-    # ================= 1) 反代IP 按国家 =================
-    if [ "$mode" = "proxy" ]; then
-        local cand_file raw_file sorted_file
-        cand_file=$(mktemp); raw_file=$(mktemp); sorted_file=$(mktemp)
+    local ans
+    read -p "候选是否包含 IPv6? [y/N]: " ans
+    [[ "$ans" =~ ^[Yy]$ ]] && WITH_V6=true
 
-        echo -e "${YELLOW}正在获取 IPDB 反代 IP 并按 ${TARGET_COUNTRIES} 筛选...${NC}"
-        get_ipdb_country_ips "$cand_file"
-        local n_cand; n_cand=$(awk 'NF' "$cand_file" | wc -l | tr -d ' ')
-        if [ "$n_cand" -eq 0 ]; then
-            echo -e "${RED}没有取到 ${TARGET_COUNTRIES} 的反代 IP, 可稍后重试或改用选项 2.${NC}"
-            rm -f "$cand_file" "$raw_file" "$sorted_file"; exit 1
-        fi
-        echo -e "${GREEN}拿到 ${n_cand} 个候选.${NC}"
-        awk '{printf "  %-16s %s\n", $1, $2}' "$cand_file" | head -n 10
+    # ---------- 采集 + 实测 ----------
+    local cand raw sorted
+    cand=$(mktemp); raw=$(mktemp); sorted=$(mktemp)
 
-        echo -e "${YELLOW}正在用 SNI=${sni} 实测 (并发 ${PROBE_JOBS}, 超时 ${PROBE_TIMEOUT}s)...${NC}"
-        probe_batch "$cand_file" "$sni" "$raw_file"
+    echo -e "${YELLOW}正在采集候选 IP (wetest三网 + CF优选 + 官方段抽样)...${NC}"
+    build_candidates "$cand"
+    local n; n=$(awk 'NF' "$cand" | wc -l | tr -d ' ')
+    [ "$n" -eq 0 ] && { echo -e "${RED}候选为空, 请检查网络.${NC}"; rm -f "$cand" "$raw" "$sorted"; exit 1; }
+    echo -e "${GREEN}候选 ${n} 个.${NC}"
 
-        rank_results 3 "$raw_file" > "$sorted_file"
-        local ok; ok=$(awk 'NF' "$sorted_file" | wc -l | tr -d ' ')
-        if [ "$ok" -eq 0 ]; then
-            echo -e "${YELLOW}严格模式下无结果, 已放宽为全部可用节点按延迟排序.${NC}"
-            sed 's/^/ /' /dev/null
-            STRICT_REGION="false"; rank_results 3 "$raw_file" > "$sorted_file"
-            ok=$(awk 'NF' "$sorted_file" | wc -l | tr -d ' ')
-        fi
-        if [ "$ok" -eq 0 ]; then
-            echo -e "${RED}全部握手失败. 反代 IP 变动很快, 建议改用选项 2.${NC}"
-            rm -f "$cand_file" "$raw_file" "$sorted_file"; exit 1
-        fi
+    echo -e "${YELLOW}正在实测握手延迟 (每IP ${ROUNDS} 轮取最小, 并发 ${PROBE_JOBS})...${NC}"
+    probe_latency "$cand" "$sni" "$raw"
 
-        echo -e "${GREEN}实测可用 ${ok} 个 (国家 / 机房 / 延迟):${NC}"
-        head -n 15 "$sorted_file" | awk '{printf "  %2d) %-16s %-3s %-4s %s ms\n", NR, $1, $4, $2, $3}'
-        [ "$ok" -gt 15 ] && echo "  ... (仅显示前 15 条)"
+    local ok; ok=$(awk 'NF' "$raw" | wc -l | tr -d ' ')
+    [ "$ok" -eq 0 ] && { echo -e "${RED}全部失败: 检查该节点是否是 ws+tls, 或 443 是否被墙.${NC}"; rm -f "$cand" "$raw" "$sorted"; exit 1; }
 
-        num_to_generate=$(ask_count 10)
-        [ "$num_to_generate" -gt "$ok" ] && { echo -e "${YELLOW}可用只有 ${ok} 个, 已调整.${NC}"; num_to_generate=$ok; }
+    # 排序: 运营商匹配优先 -> 延迟升序
+    awk -v w="$isp_want" '{ p=(w!="不限" && $3==w)?0:1; printf "%d %s %s %s %s\n", p, $1, $2, $3, $4 }' "$raw" \
+        | sort -k1,1n -k2,2n | awk '{print $2, $3, $4, $5}' > "$sorted"
 
-        local idx=0 ip colo ms tag
-        while read -r ip colo ms tag; do
-            [ "$idx" -ge "$num_to_generate" ] && break
-            ip_list+=("$ip"); colo_list+=("$colo"); lat_list+=("$ms"); tag_list+=("$tag")
-            idx=$((idx+1))
-        done < "$sorted_file"
+    echo -e "${GREEN}可用 ${ok} 个, 延迟最低的 15 个:${NC}"
+    head -n 15 "$sorted" | awk '{printf "  %2d) %-16s %5s ms   %-5s %s\n", NR, $2, $1, $3, $4}'
 
-        rm -f "$cand_file" "$raw_file" "$sorted_file"
+    local num; num=$(ask_count 10)
+    [ "$num" -gt "$ok" ] && { echo -e "${YELLOW}可用只有 ${ok} 个, 已调整.${NC}"; num=$ok; }
 
-    # ================= 2) 官方IP 实测筛机房 =================
-    elif [ "$mode" = "official" ]; then
-        local cand_file raw_file sorted_file
-        cand_file=$(mktemp); raw_file=$(mktemp); sorted_file=$(mktemp)
+    # ---------- 复核机房 + 可选测速 ----------
+    read -p "对最终结果做一次下载测速? (较慢, 约 ${num}×8s) [y/N]: " ans
+    local do_speed=false; [[ "$ans" =~ ^[Yy]$ ]] && do_speed=true
 
-        echo -e "${YELLOW}正在收集候选 IP (wetest 优选 + 官方段抽样)...${NC}"
-        {
-            parse_wetest_page "$URL_WETEST_V4"       | cut -d'|' -f1 | awk '{print $0" NA"}'
-            parse_wetest_page "$URL_WETEST_TOTAL_V4" | cut -d'|' -f1 | awk '{print $0" NA"}'
-            if $WITH_V6; then parse_wetest_page "$URL_WETEST_V6" | cut -d'|' -f1 | awk '{print $0" NA"}'; fi
-            local ranges; ranges=$(curl -s --max-time 15 "$URL_CF_V4")
-            if [ -n "$ranges" ]; then
-                while IFS= read -r cidr; do
-                    [ -z "$cidr" ] && continue
-                    echo "$(rand_ip_in_cidr "$cidr") NA"
-                    echo "$(rand_ip_in_cidr "$cidr") NA"
-                done <<< "$ranges"
-            fi
-        } > "$cand_file"
+    declare -a ip_list ms_list isp_list colo_list spd_list
+    local i ip ms isp colo sp
+    i=0
+    while read -r ms ip isp colo; do
+        [ "$i" -ge "$num" ] && break
+        [ "$colo" = "UNK" ] && colo=$(fetch_colo "$ip" "$sni") && [ -z "$colo" ] && colo="UNK"
+        sp=""
+        $do_speed && sp=$(speed_test "$ip" "$sni")
+        ip_list+=("$ip"); ms_list+=("$ms"); isp_list+=("$isp"); colo_list+=("$colo"); spd_list+=("$sp")
+        i=$((i+1))
+    done < "$sorted"
 
-        awk 'NF && !u[$1]++' "$cand_file" | head -n 200 > "$cand_file.cap" && mv "$cand_file.cap" "$cand_file"
-        local total; total=$(awk 'NF' "$cand_file" | wc -l | tr -d ' ')
+    rm -f "$cand" "$raw" "$sorted"
 
-        echo -e "${YELLOW}正在实测 ${total} 个 IP (SNI=${sni})...${NC}"
-        probe_batch "$cand_file" "$sni" "$raw_file"
-
-        rank_results 3 "$raw_file" > "$sorted_file"
-        local ok; ok=$(awk 'NF' "$sorted_file" | wc -l | tr -d ' ')
-        if [ "$ok" -eq 0 ]; then
-            echo -e "${YELLOW}目标机房无结果, 已放宽为全部机房按延迟排序.${NC}"
-            STRICT_REGION="false"; rank_results 1 "$raw_file" > "$sorted_file"
-            ok=$(awk 'NF' "$sorted_file" | wc -l | tr -d ' ')
-        fi
-        if [ "$ok" -eq 0 ]; then
-            echo -e "${RED}实测全部失败, 请确认能访问 443.${NC}"
-            rm -f "$cand_file" "$raw_file" "$sorted_file"; exit 1
-        fi
-
-        echo -e "${GREEN}实测可用 ${ok} 个:${NC}"
-        head -n 15 "$sorted_file" | awk '{printf "  %2d) %-40s %-4s %s ms\n", NR, $1, $2, $3}'
-        [ "$ok" -gt 15 ] && echo "  ... (仅显示前 15 条)"
-
-        num_to_generate=$(ask_count 10)
-        [ "$num_to_generate" -gt "$ok" ] && { echo -e "${YELLOW}可用只有 ${ok} 个, 已调整.${NC}"; num_to_generate=$ok; }
-
-        local idx=0 ip colo ms tag
-        while read -r ip colo ms tag; do
-            [ "$idx" -ge "$num_to_generate" ] && break
-            ip_list+=("$ip"); colo_list+=("$colo"); lat_list+=("$ms"); tag_list+=("")
-            idx=$((idx+1))
-        done < "$sorted_file"
-
-        rm -f "$cand_file" "$raw_file" "$sorted_file"
-
-    # ================= 3) wetest 数据筛选 =================
-    elif [ "$mode" = "wetest" ]; then
-        echo -e "${YELLOW}正在获取 wetest.vip 数据并筛选亚太机房...${NC}"
-        local pairs; pairs=$(mktemp)
-        {
-            parse_wetest_page "$URL_WETEST_V4"
-            parse_wetest_page "$URL_WETEST_TOTAL_V4"
-            if $WITH_V6; then parse_wetest_page "$URL_WETEST_V6"; fi
-        } | awk 'NF' > "$pairs"
-        if ! [ -s "$pairs" ]; then echo -e "${RED}获取失败.${NC}"; rm -f "$pairs"; exit 1; fi
-
-        local filtered
-        filtered=$(awk -v tc="$TARGET_COLOS" -v ac="$ASIA_EXTRA_COLOS" -v strict="$STRICT_REGION" '
-            BEGIN{
-                n=split(tc,T," "); for(i=1;i<=n;i++) rk[T[i]]=0
-                m=split(ac,A," "); for(i=1;i<=m;i++) if(!(A[i] in rk)) rk[A[i]]=1
-            }
-            {
-                split($0,f,"|"); ip=f[1]; nc=split(f[2],C," "); best=9
-                for(j=1;j<=nc;j++){ r=(C[j] in rk)?rk[C[j]]:2; if(r<best) best=r }
-                if (strict=="true" && best>1) next
-                printf "%d %s %s\n", best, ip, f[2]
-            }' "$pairs" | sort -k1,1n | awk '!u[$2]++')
-
-        local cnt; cnt=$(printf '%s\n' "$filtered" | awk 'NF' | wc -l | tr -d ' ')
-        if [ "$cnt" -eq 0 ]; then
-            echo -e "${YELLOW}目标机房无数据, 放宽为全部.${NC}"
-            filtered=$(awk -F'|' '{printf "9 %s %s\n", $1, $2}' "$pairs" | awk '!u[$2]++')
-            cnt=$(printf '%s\n' "$filtered" | awk 'NF' | wc -l | tr -d ' ')
-        fi
-        echo -e "${GREEN}筛选后 ${cnt} 个:${NC}"
-        printf '%s\n' "$filtered" | head -n 15 | awk '{printf "  %2d) %-45s %s\n", NR, $2, $3}'
-
-        num_to_generate=$(ask_count 10)
-        [ "$num_to_generate" -gt "$cnt" ] && { echo -e "${YELLOW}可用只有 ${cnt} 个, 已调整.${NC}"; num_to_generate=$cnt; }
-
-        local idx=0 r ip colo_str
-        while read -r r ip colo_str; do
-            [ "$idx" -ge "$num_to_generate" ] && break
-            ip_list+=("$ip"); colo_list+=("$(printf '%s' "$colo_str" | awk '{print $1}')")
-            lat_list+=(""); tag_list+=("")
-            idx=$((idx+1))
-        done <<< "$filtered"
-        rm -f "$pairs"
-
-    # ================= 4) 官方网段随机 =================
-    else
-        echo -e "${YELLOW}正在获取 Cloudflare IPv4 网段...${NC}"
-        local cf_ips; cf_ips=$(curl -s --max-time 20 "$URL_CF_V4")
-        if [ -z "$cf_ips" ]; then echo -e "${RED}无法获取 Cloudflare IP 列表.${NC}"; exit 1; fi
-        mapfile -t ip_list <<< "$cf_ips"
-        echo -e "${GREEN}获取到 ${#ip_list[@]} 个网段.${NC}"
-        num_to_generate=$(ask_count 10)
-    fi
-
-    # ---------- 生成链接 ----------
-    echo "---"; echo -e "${YELLOW}生成的新节点链接如下:${NC}"
-    local i
-    for ((i=0; i<num_to_generate; i++)); do
-        local current_ip="${ip_list[$i]}"
-        local colo="${colo_list[$i]:-}" tag="${tag_list[$i]:-}" ms="${lat_list[$i]:-}"
-        local new_ps modified_json new_base64 lbl=""
-
-        if [ "$mode" = "random" ]; then
-            modified_json=$(echo "$original_json" | jq --arg a "${current_ip%/*}" '.add = $a')
-        else
-            if [ -n "$tag" ] && [ -n "$colo" ]; then lbl="$tag-$colo"
-            elif [ -n "$tag" ]; then lbl="$tag"
-            else lbl="${colo:-优选}"; fi
-            if [ -n "$ms" ]; then new_ps="${original_ps}-${lbl}-${ms}ms"; else new_ps="${original_ps}-${lbl}"; fi
-            modified_json=$(echo "$original_json" | jq --arg a "$current_ip" --arg p "$new_ps" '.add = $a | .ps = $p')
-        fi
-
-        new_base64=$(echo -n "$modified_json" | base64 | tr -d '\n')
-        echo "vmess://${new_base64}"
+    # ---------- 汇总 ----------
+    echo ""
+    echo -e "${CYAN}最终清单:${NC}"
+    for ((i=0; i<${#ip_list[@]}; i++)); do
+        printf "  %2d) %-16s %5sms  %-5s %-4s %s\n" "$((i+1))" "${ip_list[$i]}" \
+            "${ms_list[$i]}" "${isp_list[$i]}" "${colo_list[$i]}" \
+            "${spd_list[$i]:+${spd_list[$i]}Mbps}"
     done
 
-    echo "---"; echo -e "${GREEN}共 ${num_to_generate} 个链接已生成完毕.${NC}"
+    echo ""
+    echo "---"; echo -e "${YELLOW}生成的新节点链接如下:${NC}"
+    for ((i=0; i<${#ip_list[@]}; i++)); do
+        local lbl="${ms_list[$i]}ms"
+        [ -n "${colo_list[$i]}" ] && [ "${colo_list[$i]}" != "UNK" ] && lbl="${colo_list[$i]}-${lbl}"
+        local new_ps="${original_ps}-${lbl}"
+        local mj; mj=$(echo "$original_json" | jq --arg a "${ip_list[$i]}" --arg p "$new_ps" '.add=$a | .ps=$p')
+        echo "vmess://$(echo -n "$mj" | base64 | tr -d '\n')"
+    done
+
+    echo "---"; echo -e "${GREEN}共 ${#ip_list[@]} 个链接已生成完毕.${NC}"
+    echo -e "${YELLOW}提示: 客户端切换节点后建议重新跑一次, 早晚高峰路由会变。${NC}"
 }
 
 check_deps
